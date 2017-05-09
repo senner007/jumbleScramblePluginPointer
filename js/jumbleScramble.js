@@ -680,106 +680,104 @@
 
  	JumbleScramble.prototype.addHandlers = function () {
 	
-		var targetOffsetY; 
-		var targetOffsetX;
-		var $document = $('body');
+		var targetOffsetY, targetOffsetX;
 		var div = this.div;
 		var ul = this.ul;
 		var adjCon = this.adjCon;
 		var o = this.options;
 		var thisElts = this.elts	
-		var move;
+		var move, elt;
 		var movePos = {};
-		var elt;
-		var moveIsDragged = false;
 		var eStart = 'pointerdown',
 			eMove = 'pointermove',
 			eEnd = 'pointerup'
-		var delegate = isTouch ? '.dragging' : '';			// mousemove loses control if delegated 
 		var dontTouch = false;
-		var liSelector = o.isVertical == true ? '.listItem' : '.listItem-horizontal'
-			ul[0].style.zIndex = '1'
-	
+		var classDefine = o.isVertical == true ? 'listItem' : 'listItem-horizontal',
+			liSelector = o.isVertical == true ? '.listItem' : '.listItem-horizontal';
+		var startX, startY;
 		
-		ul.on(eStart,liSelector, start);
+		ul[0].style.zIndex = '1'
 	
-		
-		function start(me){
-		
-			 me.preventDefault;
-			console.log('start')
-			if (dontTouch == true) {return;}					// flag to prevent multi 
-			dontTouch = true;
-			move = $(this);
-
-	
-			move[0].style[transitionPrefix] = '0s';
-			move[0].style.zIndex = 5;			
-			//move.addClass('dragging');
-			move[0].className = 'listItem dragging'
+		function findIndex () {
+			var index;
+			for (i = 0; i < thisElts.length; i++) { 
+				if (thisElts[i][0].className == classDefine +  ' dragging') {
+					index = i
+				}
+			};
+			return index;
+		}
 			
-			if ( instanceArr[adjCon]) { instanceArr[adjCon].ul[0].style.zIndex = '-1'}	// this causes a tiny lag on drag in chrome ios
-																						// it will also prevent the adjacent ul from
+		ul.on(eStart,liSelector, function (e) {	
+			if (dontTouch == true) {return;}					// flag to prevent multi 		
+			e.preventDefault;			
+
+			dontTouch = true;
+			move = this;
+	
+			move.style[transitionPrefix] = '0s';
+			move.style.zIndex = 5;			
+			//move.addClass('dragging');
+			move.className = classDefine + ' dragging';
+			
+			if ( instanceArr[adjCon]) { instanceArr[adjCon].ul[0].style.zIndex = '-1'}	//will also prevent the adjacent ul from
 																						// responding to touch events
  
-			if (me.type == 'touchstart') { me = me.originalEvent.touches[0] }
-				startX = me.pageX, startY = me.pageY;
+			//if (e.type == 'touchstart') { e = e.originalEvent.touches[0] }
+			startX = e.pageX, startY = e.pageY;		
+			targetOffsetY  = e.target.offsetTop;
+			targetOffsetX = e.target.offsetLeft;
+			moveInit = true;
 			
-			targetOffsetY  = me.target.offsetTop;
-			targetOffsetX = me.target.offsetLeft;
-			
-			elt = thisElts[move.index()]
-	
+		});
 		
-			$document.on(eMove,function(e){
-				e.preventDefault();
-				console.log('dragging')
-				
-				moveIsDragged = true;
-				//if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}	
-				var newDx = e.pageX - startX,
-					newDy = e.pageY - startY;
+		ul.on(eMove,liSelector, function(e){
+			if (!dontTouch) {return;}
+			e.preventDefault();
 			
-				if (transSupport) {					
-					move[0].style[transformPrefix] = 'translate3d(' + newDx + 'px, ' + newDy + 'px, 0px) translateZ(0)';				
-				}
-				else {
-					move[0].style.top = targetOffsetY + movePos.dy + 'px'
-					move[0].style.left = targetOffsetX + movePos.dx + 'px'
-				}
-
-				// we need to save last made offset
-				movePos = {dx: newDx, dy: newDy };
-							
-			
-				
-				elt.currentPos.top = targetOffsetY + newDy;
-				elt.currentPos.left = targetOffsetX + newDx;
-
-				onDrag(elt, thisElts, o); 				
+			elt = thisElts[findIndex()]
+			//if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}	
+			newDx = e.pageX - startX;
+			newDy = e.pageY - startY;
 		
-			});
+			if (transSupport) {					
+				move.style[transformPrefix] = 'translate3d(' + newDx + 'px, ' + newDy + 'px, 0px) translateZ(0)';				
+			}
+			else {
+				move.style.top = targetOffsetY + movePos.dy + 'px';
+				move.style.left = targetOffsetX + movePos.dx + 'px';
+			}
+
+			// we need to save last made offset
+			movePos = {dx: newDx, dy: newDy };
+
+			elt.currentPos.top = targetOffsetY + newDy;
+			elt.currentPos.left = targetOffsetX + newDx;
+
+			onDrag(elt, thisElts, o); 				
+		
+		});
 			
-			move.on(eEnd,function(e){
-				e.preventDefault;
-				console.log('end')
-				move[0].style[transitionPrefix] = 'box-shadow 250ms';
-				move[0].style.zIndex = 1;
-					if ( instanceArr[adjCon]) { instanceArr[adjCon].ul[0].style.zIndex = '1'};
-				ul[0].style.zIndex = '1'
-				move.removeClass('dragging');
-				$document.off("pointermove pointerup");
-								
-				if (transSupport) {
-					move[0].style[transformPrefix] = 'translateZ(0) translate3d(' + 0 + 'px, ' + 0 + 'px, 0px)';		
-				}
-				move[0].style.top = targetOffsetY + movePos.dy + 'px'
-				move[0].style.left = targetOffsetX + movePos.dx + 'px'
-				
-				dontTouch = false;
-				onStop(e, elt, div, o)
-			});
-		}
+		ul.on(eEnd,liSelector, function(e){
+			e.preventDefault;
+			
+			move.style[transitionPrefix] = 'box-shadow 250ms';
+			move.style.zIndex = 1;
+			if ( instanceArr[adjCon]) { instanceArr[adjCon].ul[0].style.zIndex = '1'};
+			ul[0].style.zIndex = '1';
+			
+			move.className = classDefine;
+									
+			if (transSupport) {
+				move.style[transformPrefix] = 'translateZ(0) translate3d(' + 0 + 'px, ' + 0 + 'px, 0px)';		
+			}
+			move.style.top = targetOffsetY + movePos.dy + 'px';
+			move.style.left = targetOffsetX + movePos.dx + 'px';
+			
+			dontTouch = false;
+		
+			onStop(e, elt, div, o);
+		});		
 			
 	}; 
 	
