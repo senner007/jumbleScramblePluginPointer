@@ -1,3 +1,6 @@
+*This version uses jQuery pointer polyfill as a dependency*
+
+
 Todo:
 + add global vars for 'top'/'left' and 'completeHeight'/'completeWidth'
 + lock method prototype
