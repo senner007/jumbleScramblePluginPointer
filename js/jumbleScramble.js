@@ -715,7 +715,8 @@
 	
 			move[0].style[transitionPrefix] = '0s';
 			move[0].style.zIndex = 5;			
-			move.addClass('dragging');
+			//move.addClass('dragging');
+			move[0].className = 'listItem dragging'
 			
 			if ( instanceArr[adjCon]) { instanceArr[adjCon].ul[0].style.zIndex = '-1'}	// this causes a tiny lag on drag in chrome ios
 																						// it will also prevent the adjacent ul from
