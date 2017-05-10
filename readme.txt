@@ -14,7 +14,12 @@ Todo:
 + set width of list item in vertical layout if width is not set in css
 + test in slider
 + Multiple container drop ( long term )
++ Improve add and remove method. eg. all or an array as parameter
 + Add callbacks to add, remove, drop (before and after animate)
++ Add containment option to specify containment for the draggeble elements.
++ Add option to toggle dragging on elements
++ Retrieve information on layaout and content from JSON
+
 
 Working:
 + List items in vertical or horizontal layout
@@ -29,8 +34,12 @@ Working:
 + Automatically remove and prepend items to containers to prevent overflow (cutOff option)
 + Multiple instances of jumbleScramble on the same page
 
+Testing:
++ Create responsive layout and test on mobile devices
++ Insert into sliders eg. SLY
 
 Dependency:
 jQuery ? - latest
+jQuery pointer events polyfill
 
   
