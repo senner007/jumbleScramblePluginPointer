@@ -17,8 +17,6 @@ Todo:
 + Improve add and remove method. eg. all or an array as parameter
 + Add callbacks to add, remove, drop (before and after animate)
 + Add containment option to specify containment for the draggeble elements.
-+ Add option to toggle dragging on elements
-+ Retrieve information on layaout and content from JSON
 
 
 Working:
