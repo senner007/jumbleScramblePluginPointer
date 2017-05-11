@@ -733,6 +733,7 @@
 		
 		ul.on(eMove,liSelector, function(e){
 			if (!dontTouch) {return;}
+			//if ($(move).offset().top <  div.offset().top ) {return;}   //containment
 			e.preventDefault();
 			
 			elt = thisElts[findIndex()]
