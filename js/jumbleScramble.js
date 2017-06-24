@@ -740,7 +740,7 @@
       if (dontTouch == true) {
         return;
       } // flag to prevent multi
-			e.stopPropagation();
+		//	e.stopPropagation();
       e.preventDefault();
 
       dontTouch = true;
@@ -761,7 +761,7 @@
       targetOffsetX = e.target.offsetLeft;
       moveInit = true;
 
-      document.documentElement.addEventListener(eEnd, pointerupFunction);
+      document.documentElement.addEventListener(eEnd, pointerupFunction); // refactor to add the once: true object to similar to jquery once. Wait for browser compatibility
       document.documentElement.addEventListener(eMove, pointermoveFunction);
 
     });

@@ -21,6 +21,7 @@ Todo:
 + Click items to delete
 + Create new items from textbox and then add
 + working example where text is retrieved from json file with option to save
++ refactor to add the once: true object to similar to jquery once to events. Wait for browser compatibility
 
 
 Working:
@@ -36,7 +37,7 @@ Working:
 + Automatically remove and prepend items to containers to prevent overflow (cutOff option)
 + Multiple instances of jumbleScramble on the same page
 
-Fixed: 
+Fixed:
 + allow dragging and dropping over other instances - Fixed
 + double cliking elements throws errors - Fixed
 
