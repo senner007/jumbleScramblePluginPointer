@@ -17,7 +17,6 @@ Todo:
 + Improve add and remove method. eg. all or an array as parameter
 + Add callbacks to add, remove, drop (before and after animate)
 + Add containment option to specify containment for the draggeble elements.
-+ Possibly set event handlers to body and not each ul to save memory
 + Click items to delete
 + Create new items from textbox and then add
 + working example where text is retrieved from json file with option to save
