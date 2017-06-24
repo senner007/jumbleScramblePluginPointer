@@ -724,6 +724,7 @@
       liSelector = o.isVertical == true ? '.listItem' : '.listItem-horizontal';
     var startX, startY;
     var hasMoved;
+    var docElem = document.documentElement;
 
     ul[0].style.zIndex = '1'
 
@@ -761,8 +762,9 @@
       targetOffsetX = e.target.offsetLeft;
       moveInit = true;
 
-      document.documentElement.addEventListener(eEnd, pointerupFunction); // refactor to add the once: true object to similar to jquery once. Wait for browser compatibility
-      document.documentElement.addEventListener(eMove, pointermoveFunction);
+      docElem.addEventListener(eEnd, pointerupFunction); // refactor to add the once: true object to similar to jquery once. Wait for browser compatibility
+      docElem.addEventListener(eMove, pointermoveFunction);
+
 
     });
 
@@ -830,8 +832,8 @@
         move.className = classDefine;
         dontTouch = false;
       };
-      document.documentElement.removeEventListener(eMove, pointermoveFunction);
-      document.documentElement.removeEventListener(eEnd, pointerupFunction);
+      docElem.removeEventListener(eMove, pointermoveFunction);
+      docElem.removeEventListener(eEnd, pointerupFunction);
 
     }
 
