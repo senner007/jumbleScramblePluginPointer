@@ -19,7 +19,7 @@ Todo:
 + Add containment option to specify containment for the draggeble elements.
 + Possibly set event handlers to body and not each ul to save memory
 + Click items to delete
-+ Create new items from textbox and then add 
++ Create new items from textbox and then add
 + working example where text is retrieved from json file with option to save
 
 
@@ -36,6 +36,12 @@ Working:
 + Automatically remove and prepend items to containers to prevent overflow (cutOff option)
 + Multiple instances of jumbleScramble on the same page
 
+Fixed: 
++ allow dragging and dropping over other instances - Fixed
++ double cliking elements throws errors - Fixed
+
+
+
 Testing:
 + Create responsive layout and test on mobile devices
 + Insert into sliders eg. SLY
@@ -43,5 +49,3 @@ Testing:
 Dependency:
 jQuery ? - latest
 jQuery pointer events polyfill
-
-  
