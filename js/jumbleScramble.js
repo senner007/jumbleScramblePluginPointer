@@ -736,12 +736,12 @@
       };
       return index;
     }
-
     ul.on(eStart, liSelector, function(e) {
       if (dontTouch == true) {
         return;
       } // flag to prevent multi
-      e.preventDefault;
+			e.stopPropagation();
+      e.preventDefault();
 
       dontTouch = true;
       move = this;
