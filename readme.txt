@@ -21,6 +21,7 @@ Todo:
 + Create new items from textbox and then add
 + working example where text is retrieved from json file with option to save
 + refactor to add the once: true object to similar to jquery once to events. Wait for browser compatibility
++ create jumbleScramble layout from from css grid layout
 
 
 Working:
