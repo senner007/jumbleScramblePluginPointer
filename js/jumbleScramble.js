@@ -694,12 +694,13 @@
       elt[0].style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
     }
     this.addHandlers();
-
+  
     this.options.isVertical ? this.ul.css({
       height: ulSize
     }) : this.ul.css({
       width: ulSize,
-      height: thisElts[0].outerHeight() + 'px'
+      height: thisElts[0].outerHeight() + 'px',
+      marginLeft: (this.ul.parent().width() - ulSize) / 2
     }); // Update the ul size
 
 
