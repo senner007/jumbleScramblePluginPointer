@@ -18,12 +18,12 @@
     return false;
   })();
 
-  var isTouch = (function is_touch_device() {
-    return (('ontouchstart' in window) ||
-      (navigator.MaxTouchPoints > 0) ||
-      (navigator.msMaxTouchPoints > 0));
-  })();
-  //console.log(isTouch)
+  // var isTouch = (function is_touch_device() {
+  //   return (('ontouchstart' in window) ||
+  //     (navigator.MaxTouchPoints > 0) ||
+  //     (navigator.msMaxTouchPoints > 0));
+  // })();
+  // //console.log(isTouch)
 
 
 
@@ -694,7 +694,7 @@
       elt[0].style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
     }
     this.addHandlers();
-  
+
     this.options.isVertical ? this.ul.css({
       height: ulSize
     }) : this.ul.css({
