@@ -18,9 +18,6 @@ var module = (function($) { // Compliant with jquery.noConflict()
     return false;
   })();
 
-
-
-
   var ifGpu = transSupport ? 'translate3d(0px,0px,0px) translateZ(0)' : 'translate(0px,0px)';
   var testElement = document.createElement('div');
   var transitionPrefix = "webkitTransition" in testElement.style ? "webkitTransition" : "transition";
@@ -38,7 +35,6 @@ var module = (function($) { // Compliant with jquery.noConflict()
   };
 
   function addToObject(thisElts, elt, n, $thisHeight, $thisWidth, o, thisContainer, adjCon, posTop, posLeft) {
-
 
     thisElts[n] = elt;
     thisElts[n].completeWidth = $thisWidth || 0; // its size (with the margin)
