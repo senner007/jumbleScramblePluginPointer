@@ -22,6 +22,8 @@ Todo:
 + working example where text is retrieved from json file with option to save
 + refactor to add the once: true object to similar to jquery once to events. Wait for browser compatibility
 + create jumbleScramble layout from from css grid layout
++ refactor withou jquery plugin structure. Instead create obj instances with new JumbleScramble('div', params)
++ create vertical example without setting height and width of elements. Set size and clear size on dragging only.
 
 
 Working:
