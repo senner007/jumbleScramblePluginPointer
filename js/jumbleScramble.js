@@ -1,4 +1,4 @@
-(function($) { // Compliant with jquery.noConflict()
+var module = (function($) { // Compliant with jquery.noConflict()
 
   var transSupport = (function() {
     var b = document.body || document.documentElement,
@@ -18,12 +18,6 @@
     return false;
   })();
 
-  // var isTouch = (function is_touch_device() {
-  //   return (('ontouchstart' in window) ||
-  //     (navigator.MaxTouchPoints > 0) ||
-  //     (navigator.msMaxTouchPoints > 0));
-  // })();
-  // //console.log(isTouch)
 
 
 
@@ -43,14 +37,14 @@
 
   };
 
-  function addToObject(thisElts, elt, n, $thisHeight, $thisWidth, o, thisContainer, adjCon) {
+  function addToObject(thisElts, elt, n, $thisHeight, $thisWidth, o, thisContainer, adjCon, posTop, posLeft) {
 
 
     thisElts[n] = elt;
     thisElts[n].completeWidth = $thisWidth || 0; // its size (with the margin)
     thisElts[n].completeHeight = $thisHeight || 0; // its height (with the margin)
-    thisElts[n].pos = getOffset(elt); // its position (left and top position)
-    o.isVertical == true ? thisElts[n].pos.left = 0 : thisElts[n].pos.left = thisElts[n].pos.left;
+    thisElts[n].pos = {top: posTop, left: posLeft}; // its position (left and top position)
+    o.isVertical == true ? thisElts[n].pos = {top: posTop, left: 0} : thisElts[n].pos = {top: 0, left: posLeft};
     thisElts[n].initialN = n; // its initial position (as per the other elements)
     thisElts[n].n = n; // its current position (as per the other elements)
     thisElts[n].o = o; // its current position (as per the other elements)
@@ -90,6 +84,7 @@
       top: elt.currentPos.top,
       left: elt.currentPos.left
     }
+
 
     var thisElt = this; //must be saved to a variable to avoid random
     // occurrences of non moving objects on ipad
@@ -181,7 +176,9 @@
   var onDragElts = {
     eltsMoveUp: function(elt, elts, flag) { // flag disregards elt position check
       if (elt.n > 0) {
+
         var eltPrev = elts[elt.n - 1];
+
         var eltPrevBound = eltPrev.pos.top + eltPrev.completeHeight / 2;
         if (elt.currentPos.top < eltPrevBound || flag) {
           if (eltPrev.hasClass('locked')) {
@@ -276,6 +273,8 @@
   var onDragAdj = {
 
     triggerOn: function(elt, adjConElts, elts, o) {
+
+
       var tempArr = [];
       var objOffset = o.isVertical ? 'top' : 'left';
       var objDimension = o.isVertical ? 'completeHeight' : 'completeWidth';
@@ -381,17 +380,18 @@
 
 
   function onStop(evt, elt, div, o) { // Stop
-
     animateBack(elt, o);
     elt.transToZero();
-
+     console.log( 'old ' + $('ul')[0].style.width )
     if (o.setChars) {
       setChars(elt);
-      console.log('setting chars');
+
     } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
 
     transSupport ? elt.one('transitionend', function() {
+
       appendRemove()
+
     }) : appendRemove() // only wait for transitionend if supported (not ie9)
 
     function appendRemove() {
@@ -402,24 +402,29 @@
       if (crossTrigger) {
 
         instanceArr[elt.belongsTo].removeLiElem(elt, false)
+
         instanceArr[elt.movesTo].addLiElem(elt.text(), elt.insertPos, false);
+
         crossTrigger = false;
 
         instanceArr[elt.movesTo].cutOffEnd()
       }
     };
+
   };
 
   function animateBack(elt, o) {
+
     var eltMarginLeft = o.isVertical ? 0 : elt.completeWidth - elt[0].offsetWidth; // set margin for horizontal
     if (crossTrigger) {
+
       var instMovesTo = instanceArr[elt.movesTo];
       var adjEltBefore = instMovesTo.elts[elt.insertPos - 1];
       if (o.isVertical) {
 
         var adjacentDir = instMovesTo.divOffset.left - instanceArr[elt.belongsTo].divOffset.left;
         var animateToPos = elt.insertPos > 0 ? adjEltBefore.pos.top + adjEltBefore.completeHeight : 0;
-
+        console.log(instMovesTo.divOffset.left)
         var thisLeft = adjacentDir,
           thisTop = animateToPos,
           thisX = elt.currentPos.left - adjacentDir,
@@ -444,21 +449,24 @@
     elt[0].style.left = thisLeft + 'px'
     elt[0].style.top = thisTop + 'px'
     elt[0].style[transformPrefix] = 'translate3d(' + (thisX - eltMarginLeft) + 'px,' + thisY + 'px,0px)';
+
+
   }
 
-  function getOffset(elt) {
-    return {
-      left: parseInt(elt.css('left')),
-      top: elt.css('top') == 'auto' ? 0 : parseInt(elt.css('top'))
-    };
-  };
+  // function getOffset(elt) {
+  //   return {
+  //     left: parseInt(elt.css('left')),
+  //     top: elt.css('top') == 'auto' ? 0 : parseInt(elt.css('top'))
+  //   };
+  // };
 
   var defaults = {
     isVertical: false,
     setChars: false,
     cutOff: false,
     dropLimit: false,
-    layoutComplete: function() {}
+    hasAdjacent: true,
+    layoutComplete: function() { }
   }
 
   var conCount = 0;
@@ -478,6 +486,7 @@
     this.ul[0].style[transformPrefix] = 'translate3d(0px,0px,0px)';
 
     conCount++;
+    instanceArr.push(this);
 
   };
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
@@ -578,17 +587,13 @@
       elt.remove();
     }
 
-    this.ul.css({
-      'width': '-=' + eltWidth + 'px',
-      'height': '-=' + eltHeight + 'px'
-
-    });
+      this.options.isVertical ? this.ul.css({'height': '-=' + eltHeight + 'px'}) : this.ul.css({ 'width': '-=' + eltWidth + 'px'});
   };
 
 
   JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans) { // Add new li to previous collection
 
-
+    console.log('added')
     var thisElts = this.elts;
     var n = Math.min(Math.max(parseInt(liPosition), 0), thisElts.length);
     var o = this.options;
@@ -633,14 +638,15 @@
       }
     }
 
+    o.isVertical ? this.ul.css({ 'height': '+=' + $thisHeight + 'px'  }) :  this.ul.css({'width': '+=' + $thisWidth + 'px'})
 
-    this.ul.css({
-      'width': '+=' + $thisWidth + 'px',
-      'height': '+=' + $thisHeight + 'px'
 
-    })
 
-    addToObject(thisElts, elt, n, $thisHeight, $thisWidth, o, this.container, this.adjCon);
+    var newTopPos = parseInt(eltObj.top),
+        newLeftPos = parseInt(eltObj.left)
+
+    addToObject(thisElts, elt, n, $thisHeight, $thisWidth, o, this.container, this.adjCon,newTopPos, newLeftPos);
+
 
 
     for (var i = 0; i < tempArr.length; i++) {
@@ -667,7 +673,9 @@
     var left = 0,
       top = 0,
       n = 0,
-      ulSize = 0;
+      ulSize = 0,
+      posTop = 0,
+      posLeft = 0;
 
     var thisElts = this.elts = new Array(li.length);
 
@@ -675,20 +683,23 @@
       var elt = li.eq(i);
 
       if (this.options.isVertical) {
-        elt.css('top', top + 'px'); // get each li height in case of individual heights.
+        elt.css('top', posTop + 'px'); // get each li height in case of individual heights.
+
         var $thisHeight = elt.outerHeight(true);
-        top += $thisHeight;
+        posTop += $thisHeight;
+
 
         ulSize += $thisHeight;
       } else {
-        elt.css('left', left + 'px'); // get each li width in case of individual widths. (default)
+        elt.css('left', posLeft + 'px'); // get each li width in case of individual widths. (default)
         var $thisWidth = elt.outerWidth(true);
-        left += $thisWidth;
+        posLeft += $thisWidth;
 
         ulSize += $thisWidth; // calculate the size of the ul element
       }
-
-      addToObject(thisElts, elt, n, $thisHeight, $thisWidth, this.options, this.container, this.adjCon);
+       var newPosTop = posTop - $thisHeight;
+       var newPosLeft = posLeft - $thisWidth;
+      addToObject(thisElts, elt, n, $thisHeight, $thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
 
       n = n + 1;
       elt[0].style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
@@ -700,10 +711,60 @@
     }) : this.ul.css({
       width: ulSize,
       height: thisElts[0].outerHeight() + 'px',
-      marginLeft: (this.ul.parent().width() - ulSize) / 2
+    //  marginLeft: (this.ul.parent().width() - ulSize) / 2
     }); // Update the ul size
 
+    this.div.trigger('layoutComplete', [this.ul.css('height')] )
+  };
 
+  JumbleScramble.prototype.reLayout = function() {
+
+    //var li = this.div.find('li'); // Variables declaration
+    var left = 0,
+      top = 0,
+      n = 0,
+      ulSize = 0,
+      posTop = 0,
+      posLeft = 0;
+
+
+    var thisElts = this.elts;
+    var thisEltsLength = thisElts.length;
+
+    for (var i = 0; i < thisEltsLength; i++) {
+      var elt = thisElts[i];
+
+      if (this.options.isVertical) {
+        elt.css('top', posTop + 'px'); // get each li height in case of individual heights.
+        var $thisHeight = elt.outerHeight(true);
+        posTop += $thisHeight;
+
+        ulSize += $thisHeight;
+      } else {
+        elt.css('left', posLeft + 'px'); // get each li width in case of individual widths. (default)
+        var $thisWidth = elt.outerWidth(true);
+        posLeft += $thisWidth;
+
+        ulSize += $thisWidth; // calculate the size of the ul element
+      }
+      var newPosTop = posTop - $thisHeight;
+      var newPosLeft = posLeft - $thisWidth;
+      addToObject(thisElts, elt, n, $thisHeight, $thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
+
+      n = n + 1;
+    elt[0].style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
+    }
+
+
+    this.options.isVertical ? this.ul.css({
+      height: ulSize
+    }) : this.ul.css({
+      width: ulSize,
+      height: thisElts[0].outerHeight() + 'px',
+
+    }); // Update the ul size
+
+    this.divOffset = this.div.offset();
 
   };
 
@@ -714,7 +775,8 @@
     var ul = this.ul;
     var adjCon = this.adjCon;
     var o = this.options;
-    var thisElts = this.elts
+    var thisElts;
+    var $this = this;
     var move, elt;
     var movePos = {};
     var eStart = 'pointerdown',
@@ -743,7 +805,9 @@
         return;
       } // flag to prevent multi
 		//	e.stopPropagation();
+
       e.preventDefault();
+      thisElts = $this.elts;
 
       dontTouch = true;
       move = this;
@@ -841,38 +905,40 @@
   };
 
 
-  var instanceArr = [];
-
-  $.fn.jumbleScramble = function(options, arg1, arg2, arg3) { // jumbleScramble fn
-
-    if (typeof options === 'string') { // if a metod is called
-
-      var self = this
-      var thisId = (options == 'remove' ? this.parent().parent() : this);
-
-      $.each(instanceArr, function(i, e) {
-
-        if (this.div[0] == thisId[0]) {
-
-          instanceArr[i][options + 'LiElem'](arg1 || self, arg2, arg3) // self is for the remove method, arg2 is then undefined.
-        }
-      });
-      //	console.log(this.length)
+var instanceArr = [];
 
 
-      return this;
-    } else {
+  // $.fn.jumbleScramble = function(options, arg1, arg2, arg3) { // jumbleScramble fn
+  //
+  //   if (typeof options === 'string') { // if a metod is called
+  //
+  //     var self = this
+  //     var thisId = (options == 'remove' ? this.parent().parent() : this);
+  //
+  //     $.each(instanceArr, function(i, e) {
+  //
+  //       if (this.div[0] == thisId[0]) {
+  //
+  //         instanceArr[i][options + 'LiElem'](arg1 || self, arg2, arg3) // self is for the remove method, arg2 is then undefined.
+  //       }
+  //     });
+  //     //	console.log(this.length)
+  //
+  //
+  //     return this;
+  //   }
+  //   else {
+  //
+  //
+  //     this.instanceArr = instanceArr
+  //
+  //     instanceArr.push(new JumbleScramble(this, options, arg1, arg2))
+  //    return this
+  //
+  //   }
+  //
+  // };
 
-      return this.each(function(i, e) {
-
-
-        instanceArr.push(new JumbleScramble(this, options, arg1, arg2))
-      }).promise().done(function() {
-        if (!!options.layoutComplete) options.layoutComplete(instanceArr);
-
-      });
-    }
-
-  };
+  return JumbleScramble
 
 })(jQuery);

@@ -9,9 +9,7 @@ Todo:
 + dirSwitch on constructor
 + setChars function should update elt object as well, it does not work when moving to another container
 + Dragging enable/disable method
-+ cutOffEnd on init
 + shuffle method
-+ set width of list item in vertical layout if width is not set in css
 + test in slider
 + Multiple container drop ( long term )
 + Improve add and remove method. eg. all or an array as parameter
@@ -20,11 +18,11 @@ Todo:
 + Click items to delete
 + Create new items from textbox and then add
 + working example where text is retrieved from json file with option to save
-+ refactor to add the once: true object to similar to jquery once to events. Wait for browser compatibility
-+ create jumbleScramble layout from from css grid layout
-+ refactor withou jquery plugin structure. Instead create obj instances with new JumbleScramble('div', params)
-+ create vertical example without setting height and width of elements. Set size and clear size on dragging only.
-
++ cutOff on init and reLayout
++ add examples of add and remove method calls
++ Add callbacks to init, relayout, add, remove, drop (before and after animate)
++ relayout is duplicating code from init - FIX ME!
++ do not run init on object instantiation (run after as obj.init())- FIX ME!
 
 Working:
 + List items in vertical or horizontal layout
@@ -38,6 +36,8 @@ Working:
 + Callback function after animation on remove method
 + Automatically remove and prepend items to containers to prevent overflow (cutOff option)
 + Multiple instances of jumbleScramble on the same page
++ reLayout method is added to allow repositioning and updates to position data in object instances. Can be fired after window resize event(which is also fired on orientation change on mobile devices)
++ No longer uses jquery plugin structure. Instantiate object using new keyword. Ex var myList = new JumbleScramble(divElem, options)
 
 Fixed:
 + allow dragging and dropping over other instances - Fixed
