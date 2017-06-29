@@ -24,6 +24,7 @@ Todo:
 + relayout is duplicating code from init - FIX ME!
 + do not run init on object instantiation (run after as obj.init())- FIX ME!
 + add boolean to cutOffEnd method which prevents the function from running if the cut-off element(s) will make adjacent container fire its cutoffEnd method and thereby creating an infinite loop.
++ add option to fire layoutComplete after all instances have been initialized. Probably using jquery.deferred http://api.jquery.com/deferred.promise/
 
 Working:
 + List items in vertical or horizontal layout
