@@ -30,6 +30,17 @@ $(document).ready(function() {
     cutOff: [winHeight, winHeight]
   })
 
+
+ //example of using the addLiElem method on the object's prototype
+  hello2.addLiElem('added', 0, true)
+
+  //example of using the removeLiElem method on the object's prototype
+  var toDelete = elem.find('li').first()
+  hello.removeLiElem(toDelete, true, function (){
+    console.log('done')
+  })
+
+
   console.log(hello)
   console.log(hello2)
 
