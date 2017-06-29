@@ -21,12 +21,12 @@ $(document).ready(function() {
 
   var hello = new module(elem, {
     isVertical: false,
-    cutOff: [winHeight, winHeight]
+    cutOff: winHeight
   })
 
   var hello2 = new module(elem2, {
     isVertical: false,
-    cutOff: [winHeight, winHeight]
+    cutOff: winHeight
   })
 
   console.log(hello)
