@@ -29,7 +29,8 @@ $(document).ready(function() {
     isVertical: true,
     cutOff: winHeight
   })
-
+  hello.init()
+  hello2.init()
 
  //example of using the addLiElem method on the object's prototype
   hello2.addLiElem('added', 0, true)

@@ -28,6 +28,8 @@ $(document).ready(function() {
     isVertical: false,
     cutOff: winHeight
   })
+  hello.init();
+  hello2.init();
 
   console.log(hello)
   console.log(hello2)
