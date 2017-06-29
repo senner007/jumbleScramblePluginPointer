@@ -7,13 +7,12 @@ Todo:
 + make dropLimit work in horizontal mode
 + add margin for elt to constructor the first time it is calculated in animateback
 + dirSwitch on constructor
-+ setChars function should update elt object as well, it does not work when moving to another container
++ setChars function should update elt object as well, it does not work when moving to another container. should propably work in conjunction with the relayout method.
 + Dragging enable/disable method
 + shuffle method
 + test in slider
 + Multiple container drop ( long term )
-+ Improve add and remove method. eg. all or an array as parameter
-+ Add callbacks to add, remove, drop (before and after animate)
++ Improve add and remove method. eg. all or an array as parameter.
 + Add containment option to specify containment for the draggeble elements.
 + Click items to delete
 + Create new items from textbox and then add
