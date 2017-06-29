@@ -476,7 +476,7 @@ var module = (function($) { // Compliant with jquery.noConflict()
     this.adjCon = this.container % 2 == 0 ? this.container + 1 : this.container - 1;
 
     this.options = $.extend({}, defaults, options);
-    
+
     this.cutOff = this.options.cutOff
     this.dropLimit = this.options.dropLimit[0];
     this.ul[0].style[transformPrefix] = 'translate3d(0px,0px,0px)';
@@ -707,6 +707,8 @@ var module = (function($) { // Compliant with jquery.noConflict()
 
     this.div.trigger('layoutComplete', [this.ul.css('height')] )
   };
+
+
 
   JumbleScramble.prototype.reLayout = function() {
 

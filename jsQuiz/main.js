@@ -29,17 +29,33 @@ $(document).ready(function() {
     isVertical: true,
     cutOff: winHeight
   })
-  hello.init()
-  hello2.init()
 
- //example of using the addLiElem method on the object's prototype
-  hello2.addLiElem('added', 0, true)
+  hello.div.on('layoutComplete', function () {
+      console.log('complete')
 
-  //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
-  var toDelete = elem.find('li').first()
-  hello.removeLiElem(toDelete, true, function (){
-    console.log('done')
+       //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
+       var toDelete = elem.find('li').first()
+       hello.removeLiElem(toDelete, true, function (){
+         console.log('done')
+       })
+
   })
+
+  hello2.div.on('layoutComplete', function () {
+      console.log('complete')
+
+      //example of using the addLiElem method on the object's prototype
+       hello2.addLiElem('added', 0, true)
+
+
+  })
+  console.log('hello before init')
+  hello.init();
+  console.log('hello after init')
+  hello2.init();
+
+
+
 
 
   console.log(hello)
