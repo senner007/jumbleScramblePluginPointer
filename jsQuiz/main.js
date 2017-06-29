@@ -22,12 +22,12 @@ $(document).ready(function() {
 
   var hello = new module(elem, {
     isVertical: true,
-    cutOff: [winHeight, winHeight]
+    cutOff: winHeight
   })
 
   var hello2 = new module(elem2, {
     isVertical: true,
-    cutOff: [winHeight, winHeight]
+    cutOff: winHeight
   })
 
 
@@ -43,9 +43,12 @@ $(document).ready(function() {
 
   console.log(hello)
   console.log(hello2)
-
+console.log(hello.cutOff)
   $(window).on('resize', function() {
-
+    winHeight = window.innerHeight - 50;
+    hello.cutOff = winHeight;
+    hello2.cutOff = winHeight;
+    console.log(hello.cutOff)
     hello.reLayout()
     hello2.reLayout()
 

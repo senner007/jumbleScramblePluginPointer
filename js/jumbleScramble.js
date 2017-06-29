@@ -477,7 +477,7 @@ var module = (function($) { // Compliant with jquery.noConflict()
 
     this.options = $.extend({}, defaults, options);
     this.init();
-    this.cutOff = conCount % 2 ? this.options.cutOff[1] : this.options.cutOff[0]; // for instance if container count is 3 then it is an odd number and will get the second number in cutOff array
+    this.cutOff = this.options.cutOff
     this.dropLimit = this.options.dropLimit[0];
     this.ul[0].style[transformPrefix] = 'translate3d(0px,0px,0px)';
 
@@ -492,7 +492,7 @@ var module = (function($) { // Compliant with jquery.noConflict()
     for (var i = 0; i < this.elts.length; i++) {
       eltsSize += this.elts[i][eltDim];
     }
-    
+
     var tArr = [];
     while (eltsSize > this.cutOff) {
       tArr.push(instanceArr[this.adjCon].addLiElem(this.elts[this.elts.length - 1].text(), 0, transSupport)[0]);
