@@ -18,7 +18,7 @@ $(document).ready(function() {
   var elem = $("#jMyPuzzleId0");
   var elem2 = $("#jMyPuzzleId1");
 
-  var winHeight = window.innerHeight - 50; // recalculate windows height for cutoff on resize. Also run cutoff on resize
+  var winHeight = window.innerHeight - 50; // recalculate windows height for cutoff on resize.
 
   var hello = new module(elem, {
     isVertical: true,
@@ -34,7 +34,7 @@ $(document).ready(function() {
  //example of using the addLiElem method on the object's prototype
   hello2.addLiElem('added', 0, true)
 
-  //example of using the removeLiElem method on the object's prototype
+  //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
   var toDelete = elem.find('li').first()
   hello.removeLiElem(toDelete, true, function (){
     console.log('done')
@@ -45,8 +45,14 @@ $(document).ready(function() {
   console.log(hello2)
 
   $(window).on('resize', function() {
+
     hello.reLayout()
     hello2.reLayout()
+
+    // example of using the cutOffEnd method on the object's prototype.
+    //Here, upon resize, it cuts the list when height is above specified value and prepends to adjacent container
+    hello.cutOffEnd()
+    hello2.cutOffEnd()
   });
 
 

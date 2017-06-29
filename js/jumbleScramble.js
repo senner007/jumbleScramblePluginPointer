@@ -485,28 +485,23 @@ var module = (function($) { // Compliant with jquery.noConflict()
     instanceArr.push(this);
 
   };
+
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
     var eltsSize = 0;
     var eltDim = this.options.isVertical ? 'completeHeight' : 'completeWidth';
     for (var i = 0; i < this.elts.length; i++) {
       eltsSize += this.elts[i][eltDim];
-
     }
+    
     var tArr = [];
     while (eltsSize > this.cutOff) {
-
       tArr.push(instanceArr[this.adjCon].addLiElem(this.elts[this.elts.length - 1].text(), 0, transSupport)[0]);
-
       this.removeLiElem(this.elts[this.elts.length - 1], transSupport)
       eltsSize -= this.elts[this.elts.length - 1][eltDim];
-
     }
-
     this.animAdded(tArr, this.adjCon);
-
-
-
   };
+
   JumbleScramble.prototype.animAdded = function(elems, parentCont) {
 
     var tArr = elems;
