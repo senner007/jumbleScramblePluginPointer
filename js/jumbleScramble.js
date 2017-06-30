@@ -713,7 +713,12 @@ var module = (function($) { // Compliant with jquery.noConflict()
     var $this = this;
 
     if(whendfd == undefined) { //flag to prevent the when function from running on each instance init. whendfd is a global var
-      whendfd = $.when( instanceArr[0].dfd, instanceArr[1].dfd ).done(function () {
+      // a new array is created containing the derred functions from all the instances in the instanceArr
+      var instanceArrDfd = $.map(instanceArr, function (val, ind) {
+          return val.dfd
+      });
+      // the deferred instances is passed in as an array 
+      whendfd = $.when.apply($, instanceArrDfd).done(function () {
         console.log('all resolved')
         // all the instances have been initialized
         // trigger the callback on all divs on all instances in the current instanceArr
