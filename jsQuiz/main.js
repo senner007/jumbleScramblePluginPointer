@@ -13,7 +13,7 @@ $(document).ready(function() {
   $('ul').on('touchmove', function(e) {
     e.preventDefault();
   });
-  var hello;
+
 
   var elem = $("#jMyPuzzleId0");
   var elem2 = $("#jMyPuzzleId1");
@@ -31,7 +31,7 @@ $(document).ready(function() {
   })
 
   hello.div.on('layoutComplete', function () {
-      console.log('complete')
+      console.log('complete hello')
 
        //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
        var toDelete = elem.find('li').first()
@@ -41,14 +41,22 @@ $(document).ready(function() {
 
   })
 
+
   hello2.div.on('layoutComplete', function () {
-      console.log('complete')
+      console.log('complete hello2')
 
       //example of using the addLiElem method on the object's prototype
        hello2.addLiElem('added', 0, true)
 
 
   })
+  // example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
+  hello2.div.on('layoutCompleteAll', function () {
+      console.log('layout of all objects completed')
+
+
+  })
+
   console.log('hello before init')
   hello.init();
   console.log('hello after init')

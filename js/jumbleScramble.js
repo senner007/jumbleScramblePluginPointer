@@ -466,7 +466,7 @@ var module = (function($) { // Compliant with jquery.noConflict()
   }
 
   var conCount = 0;
-
+  var whendfd;
   function JumbleScramble(element, options) { // Constructor function
 
     this.div = $(element);
@@ -480,11 +480,13 @@ var module = (function($) { // Compliant with jquery.noConflict()
     this.cutOff = this.options.cutOff
     this.dropLimit = this.options.dropLimit[0];
     this.ul[0].style[transformPrefix] = 'translate3d(0px,0px,0px)';
+    this.dfd = $.Deferred()
 
     conCount++;
     instanceArr.push(this);
 
   };
+
 
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
     var eltsSize = 0;
@@ -658,6 +660,7 @@ var module = (function($) { // Compliant with jquery.noConflict()
   }
 
 
+
   JumbleScramble.prototype.init = function() {
 
     var li = this.div.find('li'); // Variables declaration
@@ -704,8 +707,23 @@ var module = (function($) { // Compliant with jquery.noConflict()
       height: thisElts[0].outerHeight() + 'px',
     //  marginLeft: (this.ul.parent().width() - ulSize) / 2
     }); // Update the ul size
+    this.div.trigger('layoutComplete', [this.ul.css('height')])
+    console.log(instanceArr[1].dfd.state())
+    this.dfd.resolve();
+    var $this = this;
 
-    this.div.trigger('layoutComplete', [this.ul.css('height')] )
+    if(whendfd == undefined) { //flag to prevent the when function from running on each instance init. whendfd is a global var
+      whendfd = $.when( instanceArr[0].dfd, instanceArr[1].dfd ).done(function () {
+        console.log('all resolved')
+        // all the instances have been initialized
+        // trigger the callback on all divs on all instances in the current instanceArr
+        $.each(instanceArr, function( index, value ) {
+              value.div.trigger('layoutCompleteAll')
+            });
+
+      });
+    }
+
   };
 
 
@@ -901,6 +919,7 @@ var module = (function($) { // Compliant with jquery.noConflict()
 var instanceArr = [];
 
 
+
   // $.fn.jumbleScramble = function(options, arg1, arg2, arg3) { // jumbleScramble fn
   //
   //   if (typeof options === 'string') { // if a metod is called
@@ -931,6 +950,8 @@ var instanceArr = [];
   //   }
   //
   // };
+
+
 
   return JumbleScramble
 
