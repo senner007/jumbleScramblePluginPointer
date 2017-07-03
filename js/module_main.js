@@ -28,7 +28,7 @@
 
   var instanceArr = []; // fix this export /import weirdness!!!
 
-var module_jumble_scramble = (function($) { // Compliant with jquery.noConflict()
+var module_main = (function($) { // Compliant with jquery.noConflict()
 
   JumbleScramble.prototype.addHandlers = addHandlers;
 
@@ -381,5 +381,5 @@ var module_jumble_scramble = (function($) { // Compliant with jquery.noConflict(
 })(jQuery);
 
 export {
-  module_jumble_scramble
+  module_main
 };

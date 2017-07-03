@@ -310,8 +310,6 @@ function onStop(evt, elt, div, o) { // Stop
         }
     }
 
-
-
  appendRemove()
 
   }) : appendRemove() // only wait for transitionend if supported (not ie9)
