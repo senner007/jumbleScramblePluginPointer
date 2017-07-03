@@ -26,7 +26,9 @@
     instanceArr
   };
 
-  var instanceArr = [];
+  var instanceArr = []; // fix this export /import weirdness!!!
+
+var module_jumble_scramble = (function($) { // Compliant with jquery.noConflict()
 
   JumbleScramble.prototype.addHandlers = addHandlers;
 
@@ -372,7 +374,7 @@
   };
 
 
-var module_jumble_scramble = (function($) { // Compliant with jquery.noConflict()
+
 
   return JumbleScramble
 
