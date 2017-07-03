@@ -1,37 +1,34 @@
   import {
     defaults,
-    setChars,
-    transSupport,
-    ifGpu,
-    transitionPrefix,
-    transformPrefix,
+    setChars
   } from "./modules.js"
 
   import {
     onDrag,
     posObj
-  } from "./drag_modules.js"
+  } from "./module_dragging.js"
+
+  import {
+    addHandlers
+  } from "./module_handlers.js"
+
+  import {
+    animateBack,
+    transSupport,
+    ifGpu,
+    transitionPrefix,
+    transformPrefix,
+    transToZero
+  } from "./module_animation.js"
 
   export {
-    module_jumble_scramble,
+    animateBack,
     instanceArr
   };
 
   var instanceArr = [];
 
-
-
-
-  $.fn.transToZero = function() {
-    var elt = this[0];
-
-    window.getComputedStyle(elt)[transformPrefix] // needed to apply the transition style dynamically
-
-    elt.style[transitionPrefix] = '250ms ease';
-
-    elt.style[transformPrefix] = ifGpu // translateZ doesn't work for ie9
-
-  };
+  JumbleScramble.prototype.addHandlers = addHandlers;
 
 
   function addToObject(thisElts, elt, n, $thisHeight, $thisWidth, o, thisContainer, adjCon, posTop, posLeft) {
@@ -50,101 +47,6 @@
     thisElts[n].currentPos = {};
 
   };
-
-
-
-
-
-
-
-
-
-
-
-
-
-  function onStop(evt, elt, div, o) { // Stop
-    animateBack(elt, o);
-    elt.transToZero();
-     console.log( 'old ' + $('ul')[0].style.width )
-    if (o.setChars) {
-      setChars(elt);
-
-    } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
-
-    transSupport ? elt.one('transitionend', function() {
-
-      appendRemove()
-
-    }) : appendRemove() // only wait for transitionend if supported (not ie9)
-
-    function appendRemove() {
-
-      if (!!o.autoValidate) {
-        o.autoValidate(); // calls the autovalidate function in the plugin calling script
-      }
-      if (posObj.crossTrigger) {
-
-        instanceArr[elt.belongsTo].removeLiElem(elt, false)
-
-        instanceArr[elt.movesTo].addLiElem(elt.text(), elt.insertPos, false);
-
-        posObj.crossTrigger = false;
-
-        instanceArr[elt.movesTo].cutOffEnd()
-      }
-    };
-
-  };
-
-  function animateBack(elt, o) {
-
-    var eltMarginLeft = o.isVertical ? 0 : elt.completeWidth - elt[0].offsetWidth; // set margin for horizontal
-    if (posObj.crossTrigger) {
-
-      var instMovesTo = instanceArr[elt.movesTo];
-      var adjEltBefore = instMovesTo.elts[elt.insertPos - 1];
-      if (o.isVertical) {
-
-        var adjacentDir = instMovesTo.divOffset.left - instanceArr[elt.belongsTo].divOffset.left;
-        var animateToPos = elt.insertPos > 0 ? adjEltBefore.pos.top + adjEltBefore.completeHeight : 0;
-        console.log(instMovesTo.divOffset.left)
-        var thisLeft = adjacentDir,
-          thisTop = animateToPos,
-          thisX = elt.currentPos.left - adjacentDir,
-          thisY = elt.currentPos.top - animateToPos;
-      } else {
-
-        var adjacentDir = instMovesTo.divOffset.top - instanceArr[elt.belongsTo].divOffset.top;
-        var animateToPos = elt.insertPos > 0 ? adjEltBefore.pos.left + adjEltBefore.completeWidth : 0;
-
-        var thisLeft = animateToPos,
-          thisTop = adjacentDir,
-          thisX = elt.currentPos.left - animateToPos,
-          thisY = elt.currentPos.top - adjacentDir;
-      }
-    } else {
-      var thisLeft = elt.pos.left,
-        thisTop = elt.pos.top,
-        thisX = elt.currentPos.left - elt.pos.left,
-        thisY = elt.currentPos.top - elt.pos.top;
-    }
-
-    elt[0].style.left = thisLeft + 'px'
-    elt[0].style.top = thisTop + 'px'
-    elt[0].style[transformPrefix] = 'translate3d(' + (thisX - eltMarginLeft) + 'px,' + thisY + 'px,0px)';
-
-
-  }
-
-  // function getOffset(elt) {
-  //   return {
-  //     left: parseInt(elt.css('left')),
-  //     top: elt.css('top') == 'auto' ? 0 : parseInt(elt.css('top'))
-  //   };
-  // };
-
-
 
   var conCount = 0;
   var whendfd;
@@ -195,7 +97,6 @@
       for (var i = 0; i < tArr.length; i++) {
         tArr[i].style[transitionPrefix] = '0ms';
         tArr[i].style[transformPrefix] = 'scale(0,0)';
-
       }
 
       if (instanceArr[parentCont].elts[tArr.length] && !$(tArr).is(':last-child')) {
@@ -207,7 +108,6 @@
           animAddedElems();
         }, 1);
 
-
       }
     }
 
@@ -218,34 +118,42 @@
 
       }
     }
-
-
   }
-
 
   JumbleScramble.prototype.removeLiElem = function() { // Remove new li to previous collection
 
     var elt = arguments[0];
     var removeTrans = arguments[1];
     var callBack = arguments[2];
+    if (typeof arguments[2] == 'function') { // flag to see if the third argument is a function, which is when it is called as a method from outside
+      var callBack = arguments[2];           // if nott the third arghuments passed is set to asPartofDragging
+    }
+    else {
+      var asPartofDragging = arguments[2];
+    }
 
     var n = elt.index();
-    var thisElts = this.elts;
-    var eltHeight = thisElts[n].completeHeight;
-    var eltWidth = thisElts[n].completeWidth;
 
-    for (var i = n + 1; i < thisElts.length; i++) {
-      var el = thisElts[i];
-      el[0].style[transitionPrefix] = removeTrans ? '250ms' : '0s';
-      thisElts[i - 1] = el;
-      el.n = i - 1;
-      el[0].style.top = el.pos.top - eltHeight + 'px';
-      el[0].style.left = el.pos.left - eltWidth + 'px';
-      el[0].style[transformPrefix] = 'translate(0px,0px,0px)';
-      el.pos.top = el.pos.top - eltHeight;
-      el.pos.left = el.pos.left - eltWidth;
-    };
-    thisElts.length = thisElts.length - 1;
+    var thisElts = this.elts;
+    var eltHeight = asPartofDragging ? elt.completeHeight : thisElts[n].completeHeight;
+    var eltWidth = asPartofDragging ? elt.completeWidth : thisElts[n].completeWidth;
+
+
+    if (asPartofDragging != true) {           // not sure what this does - refactor
+      for (var i = n + 1; i < thisElts.length; i++) {
+        var el = thisElts[i];
+
+        el[0].style[transitionPrefix] = removeTrans ? '250ms' : '0s';
+        thisElts[i - 1] = el;
+        el.n = i - 1;
+        el[0].style.top = el.pos.top - eltHeight + 'px';
+        el[0].style.left = el.pos.left - eltWidth + 'px';
+        el[0].style[transformPrefix] = 'translate(0px,0px,0px)';
+        el.pos.top = el.pos.top - eltHeight;
+        el.pos.left = el.pos.left - eltWidth;
+      };
+    }
+   thisElts.length = thisElts.length - 1;
 
     if (removeTrans) {
       elt[0].style[transformPrefix] = 'scale(0.5,0.5)';
@@ -262,6 +170,7 @@
     }
 
       this.options.isVertical ? this.ul.css({'height': '-=' + eltHeight + 'px'}) : this.ul.css({ 'width': '-=' + eltWidth + 'px'});
+        console.log(this.ul.css('height'))
   };
 
 
@@ -291,11 +200,8 @@
     } // if there are no elements present at drop
     else(n > 0 ? elt.insertAfter(thisElts[n - 1]).css(eltObj) : elt.insertBefore(thisElts[n]).css(eltObj));
 
-
     var $thisWidth = o.isVertical ? 0 : elt.outerWidth(true);
     var $thisHeight = o.isVertical ? elt.outerHeight(true) : 0;
-
-
 
     for (var i = n; i < thisElts.length; i++) {
       var ets0 = thisElts[i][0];
@@ -308,7 +214,7 @@
       if (addTrans) {
         //console.log(ets0)
         ets0.style[transformPrefix] = 'translate(' + -($thisWidth) + 'px,' + -($thisHeight) + 'px)';
-        thisElts[i].transToZero();
+        transToZero(thisElts[i]);
       }
     }
 
@@ -465,179 +371,13 @@
 
   };
 
-  JumbleScramble.prototype.addHandlers = function() {
-
-    var targetOffsetY, targetOffsetX, newDx, newDy;
-    var div = this.div;
-    var ul = this.ul;
-    var adjCon = this.adjCon;
-    var o = this.options;
-    var thisElts;
-    var $this = this;
-    var move, elt;
-    var movePos = {};
-    var eStart = 'pointerdown',
-      eMove = 'pointermove',
-      eEnd = 'pointerup'
-    var dontTouch = false;
-    var classDefine = o.isVertical == true ? 'listItem' : 'listItem-horizontal',
-      liSelector = o.isVertical == true ? '.listItem' : '.listItem-horizontal';
-    var startX, startY;
-    var hasMoved;
-    var docElem = document.documentElement;
-
-    ul[0].style.zIndex = '1'
-
-    function findIndex() {
-      var index;
-      for (var i = 0; i < thisElts.length; i++) {
-        if (thisElts[i][0].className == classDefine + ' dragging') {
-          index = i
-        }
-      };
-      return index;
-    }
-    ul.on(eStart, liSelector, function(e) {
-      if (dontTouch == true) {
-        return;
-      } // flag to prevent multi
-		//	e.stopPropagation();
-
-      e.preventDefault();
-      thisElts = $this.elts;
-
-      dontTouch = true;
-      move = this;
-
-      move.style[transitionPrefix] = '0s';
-      move.style.zIndex = 5;
-      //move.addClass('dragging');
-      move.className = classDefine + ' dragging';
-
-      if (instanceArr[adjCon]) {
-        instanceArr[adjCon].ul[0].style.zIndex = '-1'
-      } //will also prevent the adjacent ul from
-      // responding to touch events
-      //if (e.type == 'touchstart') { e = e.originalEvent.touches[0] }
-      startX = e.pageX, startY = e.pageY;
-      targetOffsetY = e.target.offsetTop;
-      targetOffsetX = e.target.offsetLeft;
-
-
-      docElem.addEventListener(eEnd, pointerupFunction); // refactor to add the once: true object to similar to jquery once. Wait for browser compatibility
-      docElem.addEventListener(eMove, pointermoveFunction);
-
-
-    });
-
-    function pointermoveFunction(e) {
-
-      if (!dontTouch) {
-        return;
-      }
-      //if ($(move).offset().top <  div.offset().top ) {return;}   //containment
-      e.preventDefault();
-      hasMoved = true; // hasMoved is a flag to clicking items without moving them
-      elt = thisElts[findIndex()]
-      //if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}
-      newDx = e.pageX - startX;
-      newDy = e.pageY - startY;
-
-      if (transSupport) {
-        move.style[transformPrefix] = 'translate3d(' + newDx + 'px, ' + newDy + 'px, 0px) translateZ(0)';
-      } else {
-        move.style.top = targetOffsetY + movePos.dy + 'px';
-        move.style.left = targetOffsetX + movePos.dx + 'px';
-      }
-
-      // we need to save last made offset
-      movePos = {
-        dx: newDx,
-        dy: newDy
-      };
-      //	console.log(e.pageX)
-
-      elt.currentPos.top = targetOffsetY + newDy;
-      elt.currentPos.left = targetOffsetX + newDx;
-      //	console.log('moving')
-
-      onDrag(elt, thisElts, o);
-
-    };
-
-    function pointerupFunction(e) {
-      if (hasMoved) {
-        e.preventDefault();
-        hasMoved = false;
-        clearClass();
-        if (transSupport) {
-          move.style[transformPrefix] = 'translateZ(0) translate3d(' + 0 + 'px, ' + 0 + 'px, 0px)';
-        }
-        move.style.top = targetOffsetY + movePos.dy + 'px';
-        move.style.left = targetOffsetX + movePos.dx + 'px';
-        if (!elt) {
-          return;
-        }
-        onStop(e, elt, div, o);
-      } else { // if it hasn't moved
-        clearClass();
-      }
-
-      function clearClass() {
-        move.style[transitionPrefix] = 'box-shadow 250ms';
-        move.style.zIndex = 1;
-        if (instanceArr[adjCon]) {
-          instanceArr[adjCon].ul[0].style.zIndex = '1'
-        };
-        ul[0].style.zIndex = '1';
-
-        move.className = classDefine;
-        dontTouch = false;
-      };
-      docElem.removeEventListener(eMove, pointermoveFunction);
-      docElem.removeEventListener(eEnd, pointerupFunction);
-
-    }
-
-  };
-
-
-
-
-
-  // $.fn.jumbleScramble = function(options, arg1, arg2, arg3) { // jumbleScramble fn
-  //
-  //   if (typeof options === 'string') { // if a metod is called
-  //
-  //     var self = this
-  //     var thisId = (options == 'remove' ? this.parent().parent() : this);
-  //
-  //     $.each(instanceArr, function(i, e) {
-  //
-  //       if (this.div[0] == thisId[0]) {
-  //
-  //         instanceArr[i][options + 'LiElem'](arg1 || self, arg2, arg3) // self is for the remove method, arg2 is then undefined.
-  //       }
-  //     });
-  //     //	console.log(this.length)
-  //
-  //
-  //     return this;
-  //   }
-  //   else {
-  //
-  //
-  //     this.instanceArr = instanceArr
-  //
-  //     instanceArr.push(new JumbleScramble(this, options, arg1, arg2))
-  //    return this
-  //
-  //   }
-  //
-  // };
 
 var module_jumble_scramble = (function($) { // Compliant with jquery.noConflict()
 
   return JumbleScramble
 
 })(jQuery);
+
+export {
+  module_jumble_scramble
+};

@@ -1,4 +1,4 @@
-import {module_jumble_scramble} from "../js/jumbleScramble.js"
+import {module_jumble_scramble} from "../js/module_main.js"
 $(document).ready(function() {
 
   (function($) {

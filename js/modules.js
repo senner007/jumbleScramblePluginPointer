@@ -1,3 +1,8 @@
+export {
+  defaults,
+  setChars,
+};
+
 var defaults = {
   isVertical: false,
   setChars: false,
@@ -26,38 +31,3 @@ function setChars(elt) {
     left += this.outerWidth(true);
   });
 };
-
-var transSupport = (function() {
-  var b = document.body || document.documentElement,
-    s = b.style,
-    p = 'transition';
-  if (typeof s[p] == 'string') {
-    return true;
-  }
-  // Tests for vendor specific prop
-  var v = ['Moz', 'webkit', 'Webkit', 'Khtml', 'O', 'ms'];
-  p = p.charAt(0).toUpperCase() + p.substr(1);
-  for (var i = 0; i < v.length; i++) {
-    if (typeof s[v[i] + p] == 'string') {
-      return true;
-    }
-  }
-  return false;
-})();
-
-var ifGpu = transSupport ? 'translate3d(0px,0px,0px) translateZ(0)' : 'translate(0px,0px)';
-var testElement = document.createElement('div');
-var transitionPrefix = "webkitTransition" in testElement.style ? "webkitTransition" : "transition";
-var transformPrefix = "webkitTransform" in testElement.style ? "webkitTransform" : "-ms-transform" in testElement.style && transSupport == false ? "-ms-transform" : "transform"; //if ie9
-
-
-
-
-export {
-  defaults,
-  setChars,
-  transSupport,
-  ifGpu,
-  transitionPrefix,
-  transformPrefix
-}

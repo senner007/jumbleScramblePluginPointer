@@ -1,14 +1,13 @@
-import {instanceArr} from "./jumbleScramble.js"
-import {transSupport, transitionPrefix, transformPrefix} from "./modules.js"
+import {instanceArr, animateBack} from "./module_main.js"
+import {transSupport, transitionPrefix, transformPrefix, transToZero} from "./module_animation.js"
 
 export {
   onDrag,
   onDragAdj,
   onDragElts,
+  onStop,
   posObj
-}
-
-
+};
 
 var posObj = {}
 posObj.crossTrigger = false;
@@ -75,37 +74,13 @@ function onDrag(elt, elts, o) { // Drag
 
   /*--------------------------------------------------------------------*/
   if (move == 'forward') { //  move forward
-    if (posObj.crossTrigger) {
-      onDragAdj.moveForward(elt, adjConElts);
-    } else {
-      onDragElts.eltsMoveForward(elt, elts)
-    }
-
-  }
+    posObj.crossTrigger ? onDragAdj.moveForward(elt, adjConElts) : onDragElts.eltsMoveForward(elt, elts); };
   if (move == "backward") { //  move backward
-    if (posObj.crossTrigger) {
-      onDragAdj.moveBack(elt, adjConElts);
-    } else {
-      onDragElts.eltsMoveBack(elt, elts)
-      /* onDragElts.eltsMoveBack(elt, elts)
-      onDragElts.eltsMoveBack(elt, elts) */
-    }
-  }
+    posObj.crossTrigger ? onDragAdj.moveBack(elt, adjConElts) : onDragElts.eltsMoveBack(elt, elts); } ;
   if (move == 'up') { //  move up
-    if (posObj.crossTrigger) {
-      onDragAdj.moveUp(elt, adjConElts);
-    } else {
-      onDragElts.eltsMoveUp(elt, elts)
-    }
-  }
+    posObj.crossTrigger ? onDragAdj.moveUp(elt, adjConElts) : onDragElts.eltsMoveUp(elt, elts); };
   if (move == 'down') { //  move down
-    if (posObj.crossTrigger) {
-      onDragAdj.moveDown(elt, adjConElts);
-    } else {
-      onDragElts.eltsMoveDown(elt, elts)
-    }
-  }
-
+    posObj.crossTrigger ? onDragAdj.moveDown(elt, adjConElts) : onDragElts.eltsMoveDown(elt, elts); };
 };
 
 var onDragElts = {
@@ -116,10 +91,10 @@ var onDragElts = {
 
       var eltPrevBound = eltPrev.pos.top + eltPrev.completeHeight / 2;
       if (elt.currentPos.top < eltPrevBound || flag) {
-        if (eltPrev.hasClass('locked')) {
-          return;
-        }
-        elt.insertBefore(eltPrev);
+        // if (eltPrev.hasClass('locked')) {
+        //   return;
+        // }
+    //  elt.insertBefore(eltPrev);
         elt.pos.top = eltPrev.pos.top;
         eltPrev.pos.top += elt.completeHeight;
         elts[elt.n] = eltPrev;
@@ -136,10 +111,10 @@ var onDragElts = {
       var eltNext = elts[elt.n + 1];
       var eltNextBound = eltNext.pos.top + eltNext.completeHeight / 2;
       if (elt.currentPos.top + elt.completeHeight > eltNextBound || flag) {
-        if (eltNext.hasClass('locked')) {
-          return;
-        }
-        elt.insertAfter(eltNext);
+        // if (eltNext.hasClass('locked')) {
+        //   return;
+        // }
+    //    elt.insertAfter(eltNext);
         eltNext.pos.top = elt.pos.top;
         elt.pos.top += eltNext.completeHeight;
         elts[elt.n] = eltNext;
@@ -157,10 +132,10 @@ var onDragElts = {
       var eltPrevBound = eltPrev.pos.left + eltPrev.completeWidth / 2;
       if (elt.currentPos.left < eltPrevBound) {
 
-        if (eltPrev.hasClass('locked')) {
-          return;
-        }
-        elt.insertBefore(eltPrev);
+        // if (eltPrev.hasClass('locked')) {
+        //   return;
+        // }
+      //  elt.insertBefore(eltPrev);
         elt.pos.left = eltPrev.pos.left;
         eltPrev.pos.left += elt.completeWidth;
         elts[elt.n] = eltPrev;
@@ -177,10 +152,10 @@ var onDragElts = {
       var eltNext = elts[elt.n + 1];
       var eltNextBound = eltNext.pos.left + eltNext.completeWidth / 2;
       if (elt.currentPos.left + elt.completeWidth > eltNextBound || flag) {
-        if (eltNext.hasClass('locked')) {
-          return;
-        } // don't move beyond green colored items for difficulty setting 0
-        elt.insertAfter(eltNext);
+        // if (eltNext.hasClass('locked')) {
+        //   return;
+        // }
+      //  elt.insertAfter(eltNext);
         eltNext.pos.left = elt.pos.left;
         elt.pos.left += eltNext.completeWidth; //invert datas in the correspondence array
         elts[elt.n] = eltNext;
@@ -199,7 +174,7 @@ var onDragElts = {
     elem[0].style[transitionPrefix] = '0s';
     elem[0].style[dir] = elem.pos[dir] + 'px';
     elem[0].style[transformPrefix] = elem.o.isVertical ? 'translate3d(0px,' + eltDimension + 'px, 0px)' : 'translate3d(' + eltDimension + 'px, 0px, 0px)'
-    elem.transToZero();
+    transToZero(elem);
   }
 }
 
@@ -251,7 +226,7 @@ var onDragAdj = {
       if (obj.moved == true) {
         obj.moved = false;
         obj.pos[objOffset] = obj.pos[objOffset] - elt[objDimension];
-        obj.transToZero();
+        transToZero(obj);
       }
     }
 
@@ -277,7 +252,7 @@ var onDragAdj = {
     if (elt.insertPos < adjConElts.length) {
       var obj = adjConElts[elt.insertPos]
       if (elt.currentPos.top + elt.completeHeight > obj.pos.top + obj.completeHeight / 2 && obj.moved == true) {
-        obj.transToZero();
+        transToZero(obj);
         obj.moved = false;
         elt.insertPos = obj.n + 1;
         obj.pos.top = obj.pos.top - elt.completeHeight;
@@ -288,7 +263,7 @@ var onDragAdj = {
     if (elt.insertPos < adjConElts.length) {
       var obj = adjConElts[elt.insertPos]
       if (elt.currentPos.left + elt.completeWidth > obj.pos.left + obj.completeWidth / 2 && obj.moved == true) {
-        obj.transToZero();
+        transToZero(obj);
         obj.moved = false;
         elt.insertPos = obj.n + 1;
         obj.pos.left = obj.pos.left - elt.completeWidth;
@@ -310,5 +285,56 @@ var onDragAdj = {
       }
     };
   }
+
+};
+
+function onStop(evt, elt, div, o) { // Stop
+  animateBack(elt, o);
+  transToZero(elt);
+
+  if (o.setChars) {
+    setChars(elt);
+
+  } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
+
+
+  transSupport ? elt.one('transitionend', function() {
+    if (!posObj.crossTrigger) {       // insert the dragged element into its new position efter drop in originating container
+
+        var eltPrev = instanceArr[elt.belongsTo].elts[elt.n - 1];
+        if (elt.n == 0) {
+          elt.insertBefore(instanceArr[elt.belongsTo].elts[1]);
+        }
+        else {
+          elt.insertAfter(eltPrev);
+        }
+    }
+
+
+
+ appendRemove()
+
+  }) : appendRemove() // only wait for transitionend if supported (not ie9)
+
+  function appendRemove() {
+
+    if (!!o.autoValidate) {
+      o.autoValidate(); // calls the autovalidate function in the plugin calling script
+    }
+    if (posObj.crossTrigger) {
+
+      instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
+
+      instanceArr[elt.movesTo].addLiElem(elt.text(), elt.insertPos, false);
+
+      posObj.crossTrigger = false;
+
+      instanceArr[elt.movesTo].cutOffEnd()
+    }
+    else {
+
+
+    }
+  };
 
 };
