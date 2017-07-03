@@ -4,7 +4,6 @@
   } from "./modules.js"
 
   import {
-    onDrag,
     posObj
   } from "./module_dragging.js"
 
@@ -22,15 +21,40 @@
   } from "./module_animation.js"
 
   export {
-    animateBack,
-    instanceArr
+    instanceArr,
+    onStop
   };
 
   var instanceArr = []; // fix this export /import weirdness!!!
 
-var module_main = (function($) { // Compliant with jquery.noConflict()
 
-  JumbleScramble.prototype.addHandlers = addHandlers;
+  function onStop(evt, elt, div, o) { // Stop
+    animateBack(elt, o);
+    transToZero(elt);
+
+    if (o.setChars) {  setChars(elt);  } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
+
+    transSupport ? elt.one('transitionend', function() {
+      if (!posObj.crossTrigger) {       // insert the dragged element into its new position efter drop in originating container
+          var eltPrev = instanceArr[elt.belongsTo].elts[elt.n - 1];
+          if (elt.n == 0) {
+            elt.insertBefore(instanceArr[elt.belongsTo].elts[1]);
+          }
+          else {   elt.insertAfter(eltPrev);   }
+      }
+      appendRemove()
+    }) : appendRemove() // only wait for transitionend if supported (not ie9)
+
+    function appendRemove() {
+      if (!!o.autoValidate) {  o.autoValidate(); } // calls the autovalidate function in the plugin calling script
+      if (posObj.crossTrigger) {
+        instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
+        instanceArr[elt.movesTo].addLiElem(elt.text(), elt.insertPos, false);
+        posObj.crossTrigger = false;
+        instanceArr[elt.movesTo].cutOffEnd()
+      }
+    };
+  };
 
 
   function addToObject(thisElts, elt, n, $thisHeight, $thisWidth, o, thisContainer, adjCon, posTop, posLeft) {
@@ -72,6 +96,7 @@ var module_main = (function($) { // Compliant with jquery.noConflict()
 
   };
 
+  JumbleScramble.prototype.addHandlers = addHandlers;
 
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
     var eltsSize = 0;
@@ -89,7 +114,7 @@ var module_main = (function($) { // Compliant with jquery.noConflict()
     this.animAdded(tArr, this.adjCon);
   };
 
-  JumbleScramble.prototype.animAdded = function(elems, parentCont) {
+  JumbleScramble.prototype.animAdded = function(elems, parentCont) {  // should be in animation module, and not on the prototype
 
     var tArr = elems;
     var parentCont = parentCont;
@@ -373,12 +398,11 @@ var module_main = (function($) { // Compliant with jquery.noConflict()
 
   };
 
+var module_main = function() { // Compliant with jquery.noConflict()
 
+ return JumbleScramble;
 
-
-  return JumbleScramble
-
-})(jQuery);
+}();
 
 export {
   module_main

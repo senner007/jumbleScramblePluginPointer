@@ -1,11 +1,11 @@
-import {instanceArr, animateBack} from "./module_main.js"
+import {instanceArr} from "./module_main.js"
+import {animateBack} from "./module_animation.js"
 import {transSupport, transitionPrefix, transformPrefix, transToZero} from "./module_animation.js"
 
 export {
   onDrag,
   onDragAdj,
   onDragElts,
-  onStop,
   posObj
 };
 
@@ -285,54 +285,5 @@ var onDragAdj = {
       }
     };
   }
-
-};
-
-function onStop(evt, elt, div, o) { // Stop
-  animateBack(elt, o);
-  transToZero(elt);
-
-  if (o.setChars) {
-    setChars(elt);
-
-  } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
-
-
-  transSupport ? elt.one('transitionend', function() {
-    if (!posObj.crossTrigger) {       // insert the dragged element into its new position efter drop in originating container
-
-        var eltPrev = instanceArr[elt.belongsTo].elts[elt.n - 1];
-        if (elt.n == 0) {
-          elt.insertBefore(instanceArr[elt.belongsTo].elts[1]);
-        }
-        else {
-          elt.insertAfter(eltPrev);
-        }
-    }
-
- appendRemove()
-
-  }) : appendRemove() // only wait for transitionend if supported (not ie9)
-
-  function appendRemove() {
-
-    if (!!o.autoValidate) {
-      o.autoValidate(); // calls the autovalidate function in the plugin calling script
-    }
-    if (posObj.crossTrigger) {
-
-      instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
-
-      instanceArr[elt.movesTo].addLiElem(elt.text(), elt.insertPos, false);
-
-      posObj.crossTrigger = false;
-
-      instanceArr[elt.movesTo].cutOffEnd()
-    }
-    else {
-
-
-    }
-  };
 
 };

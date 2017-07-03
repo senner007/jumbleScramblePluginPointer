@@ -1,6 +1,6 @@
 import {transitionPrefix, transSupport, transformPrefix} from "./module_animation.js"
-import {onDrag, onStop} from "./module_dragging.js"
-import {instanceArr} from "./module_main.js"
+import {onDrag} from "./module_dragging.js"
+import {instanceArr, onStop} from "./module_main.js"
 
 export {addHandlers}
 
@@ -53,10 +53,10 @@ function addHandlers () {
     //move.addClass('dragging');
     move.className = classDefine + ' dragging';
 
-    if (instanceArr[adjCon]) {
-      instanceArr[adjCon].ul[0].style.zIndex = '-1'
-    } //will also prevent the adjacent ul from
+    if (instanceArr[adjCon]) {  instanceArr[adjCon].ul[0].style.zIndex = '-1' }
+    //will also prevent the adjacent ul from
     // responding to touch events
+    
     //if (e.type == 'touchstart') { e = e.originalEvent.touches[0] }
     startX = e.pageX, startY = e.pageY;
     targetOffsetY = e.target.offsetTop;

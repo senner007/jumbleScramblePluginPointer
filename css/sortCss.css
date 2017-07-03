@@ -14,6 +14,7 @@ button {
   margin-top: 20px;
   width: 100%;
   height: 90%;
+
 }
 
 #jMyPuzzleId0 {
@@ -32,19 +33,19 @@ button {
 }
 
 #jMyPuzzleId2 {
-  overflow: visible;
   margin: 0;
   position: absolute;
   width: inherit;
-  height: 50px;
+  height: 60px;
+    overflow: visible;
 }
 
 #jMyPuzzleId3 {
   overflow: visible;
   position: absolute;
   width: inherit;
-  height: 50px;
-  margin-top: 68px;
+  height: 60px;
+  margin-top: 70px;
 }
 
 .splitList {
@@ -56,8 +57,9 @@ button {
 
 .splitList-horizontal {
   width: inherit;
-  margin: 0;
+position: absolute;
   display: block;
+    overflow: visible;
 }
 
 .listItem {
@@ -91,6 +93,8 @@ button {
   -webkit-user-select: none;
   z-index: 1;
   white-space: nowrap;
+
+
 }
 
 .dragging {
