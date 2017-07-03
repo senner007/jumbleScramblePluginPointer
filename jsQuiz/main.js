@@ -1,3 +1,4 @@
+import {module_jumble_scramble} from "../js/jumbleScramble.js"
 $(document).ready(function() {
 
   (function($) {
@@ -20,12 +21,12 @@ $(document).ready(function() {
 
   var winHeight = window.innerHeight - 50; // recalculate windows height for cutoff on resize.
 
-  var hello = new module(elem, {
+  var hello = new module_jumble_scramble(elem, {
     isVertical: true,
     cutOff: winHeight
   })
 
-  var hello2 = new module(elem2, {
+  var hello2 = new module_jumble_scramble(elem2, {
     isVertical: true,
     cutOff: winHeight
   })
