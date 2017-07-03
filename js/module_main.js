@@ -128,20 +128,20 @@ var module_main = (function($) { // Compliant with jquery.noConflict()
     var removeTrans = arguments[1];
     var callBack = arguments[2];
     if (typeof arguments[2] == 'function') { // flag to see if the third argument is a function, which is when it is called as a method from outside
-      var callBack = arguments[2];           // if nott the third arghuments passed is set to asPartofDragging
+      var callBack = arguments[2];           // if nott the third arghuments passed is set to dropDelete
     }
     else {
-      var asPartofDragging = arguments[2];
+      var dropDelete = arguments[2];
     }
 
     var n = elt.index();
 
     var thisElts = this.elts;
-    var eltHeight = asPartofDragging ? elt.completeHeight : thisElts[n].completeHeight;
-    var eltWidth = asPartofDragging ? elt.completeWidth : thisElts[n].completeWidth;
+    var eltHeight = dropDelete ? elt.completeHeight : thisElts[n].completeHeight;
+    var eltWidth = dropDelete ? elt.completeWidth : thisElts[n].completeWidth;
 
 
-    if (asPartofDragging != true) {           // not sure what this does - refactor
+    if (dropDelete != true) {           // this code is run when the removeLiElem mothod is called after init. not sure what everything does - maybe refactor
       for (var i = n + 1; i < thisElts.length; i++) {
         var el = thisElts[i];
 
@@ -155,24 +155,24 @@ var module_main = (function($) { // Compliant with jquery.noConflict()
         el.pos.left = el.pos.left - eltWidth;
       };
     }
-   thisElts.length = thisElts.length - 1;
+   thisElts.length = thisElts.length - 1;     // reduce the length of elt objects in the instanceArr after a delete
 
-    if (removeTrans) {
+    if (removeTrans) {  // if the option to animate in the removeLiElem method used after init is true
       elt[0].style[transformPrefix] = 'scale(0.5,0.5)';
       elt[0].style.opacity = '0';
       elt[0].style[transitionPrefix] = '250ms';
       setTimeout(function() {
         elt.remove()
         if (callBack) {
-          callBack();
+          callBack(); //the callback is fired after the animation has finished
         }
       }, 250);
     } else {
       elt.remove();
     }
-
+      // recalculate the height or width of the ul after deleting items
       this.options.isVertical ? this.ul.css({'height': '-=' + eltHeight + 'px'}) : this.ul.css({ 'width': '-=' + eltWidth + 'px'});
-        console.log(this.ul.css('height'))
+
   };
 
 

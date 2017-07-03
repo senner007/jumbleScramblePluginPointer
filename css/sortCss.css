@@ -1,6 +1,7 @@
-*{
-  margin:0;
-  padding:0;
+* {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 button {
@@ -9,88 +10,91 @@ button {
 }
 
 .container {
-margin: 0;
-margin-top: 20px;
-width: 100%;
-height: 90%;
+  margin: 0;
+  margin-top: 20px;
+  width: 100%;
+  height: 90%;
 }
 
 #jMyPuzzleId0 {
-
-width: 50%;
-height: 90%;
-position: absolute;
+  overflow: visible;
+  width: 50%;
+  height: 90%;
+  position: absolute;
 }
+
 #jMyPuzzleId1 {
+  overflow: visible;
   margin-left: 50%;
-width: 50%;
-height: 90%;
-position: absolute;
+  width: 50%;
+  height: 90%;
+  position: absolute;
 }
 
 #jMyPuzzleId2 {
-margin: 0;
-position: absolute;
-width: inherit;
-height: 50px;
-
+  overflow: visible;
+  margin: 0;
+  position: absolute;
+  width: inherit;
+  height: 50px;
 }
 
 #jMyPuzzleId3 {
-
-position: absolute;
-width: inherit;
-height: 50px;
-margin-top: 68px;
+  overflow: visible;
+  position: absolute;
+  width: inherit;
+  height: 50px;
+  margin-top: 68px;
 }
 
 .splitList {
-width: 100%;
-position: absolute;
-display: block;
+  width: 100%;
+  position: absolute;
+  display: block;
+  overflow: visible;
 }
 
 .splitList-horizontal {
-width: inherit;
-margin: 0;
-display: block;
+  width: inherit;
+  margin: 0;
+  display: block;
 }
 
 .listItem {
-position: absolute;
-list-style: none;
-margin-bottom: 5px;
-padding: 5px;
-width: 95%;
-color: rgba(34, 34, 34,1);
- border-radius: 1px;			/* needed for ipad box shadow */
--webkit-box-shadow: 0;
--moz-box-shadow: 0;
-box-shadow: 0;
-background: white;
-z-index: 1;
+  position: absolute;
+  list-style: none;
+  margin-bottom: 5px;
+  padding: 5px;
+  width: 95%;
+  color: rgba(34, 34, 34, 1);
+  border-radius: 1px;
+  /* needed for ipad box shadow */
+  -webkit-box-shadow: 0;
+  -moz-box-shadow: 0;
+  box-shadow: 0;
+  background: white;
+  z-index: 1;
 }
 
 .listItem-horizontal {
-position: absolute;
-list-style: none;
-font-size:24px;
-padding: 14px;
-margin-left: 10px;
-padding-left: 8px;
-border: 1px solid black;
-color: rgba(34, 34, 34,1);
-background: yellowgreen;
-cursor: move;
-touch-action: none;
--webkit-user-select: none;
-z-index: 1;
-white-space:nowrap;
+  position: absolute;
+  list-style: none;
+  font-size: 24px;
+  padding: 14px;
+  margin-left: 10px;
+  padding-left: 8px;
+  border: 1px solid black;
+  color: rgba(34, 34, 34, 1);
+  background: yellowgreen;
+  cursor: move;
+  touch-action: none;
+  -webkit-user-select: none;
+  z-index: 1;
+  white-space: nowrap;
 }
 
-
 .dragging {
--webkit-box-shadow: 0px 2px 10px rgba(0,0,0,.7);
--moz-box-shadow: 0px 2px 10px rgba(0,0,0,.7);
-box-shadow: 0px 2px 10px rgba(0,0,0,.7);
+  -webkit-box-shadow: 0px 2px 10px rgba(0, 0, 0, .7);
+  -moz-box-shadow: 0px 2px 10px rgba(0, 0, 0, .7);
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, .7);
 }
