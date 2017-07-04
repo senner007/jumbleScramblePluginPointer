@@ -21,67 +21,61 @@ $(document).ready(function() {
 
   var winHeight = window.innerHeight - 50; // recalculate windows height for cutoff on resize.
 
-  var hello = new JumbleScramble(elem, {
+  var cont1 = new JumbleScramble(elem, {
     isVertical: true,
     cutOff: winHeight
   })
 
-  var hello2 = new JumbleScramble(elem2, {
+  var cont2 = new JumbleScramble(elem2, {
     isVertical: true,
     cutOff: winHeight
   })
 
-  hello.div.on('layoutComplete', function () {
-      console.log('complete hello')
+  cont1.div.on('layoutComplete', function () {
+      console.log('container 1 layoutComplete')
 
        //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
        var toDelete = elem.find('li').first()
-       hello.removeLiElem(toDelete, true, function (){
-         console.log('done')
+       cont1.removeLiElem(toDelete, true, function (){
+         console.log('container 1 remove element done')
        })
 
   })
 
 
-  hello2.div.on('layoutComplete', function () {
-      console.log('complete hello2')
+  cont2.div.on('layoutComplete', function () {
+      console.log('container 2 layoutComplete')
 
       //example of using the addLiElem method on the object's prototype
-       hello2.addLiElem('added', 0, true)
+       cont2.addLiElem('added', 0, true)
 
 
   })
   // example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
-  hello2.div.on('layoutCompleteAll', function () {
-      console.log('layout of all objects completed')
+  cont2.div.on('layoutCompleteAll', function () {
+      console.log('layoutCompleteAll')
 
 
   })
 
-  console.log('hello before init')
-  hello.init();
-  console.log('hello after init')
-  hello2.init();
+  console.log('container 1 before init')
+  cont1.init();
+  console.log('container 1 after init')
+  cont2.init();
 
 
-
-
-
-  console.log(hello)
-  console.log(hello2)
-console.log(hello.cutOff)
   $(window).on('resize', function() {
     winHeight = window.innerHeight - 50;
-    hello.cutOff = winHeight;
-    hello2.cutOff = winHeight;
-    console.log(hello.cutOff)
-    hello.reLayout()
-    hello2.reLayout()
+    cont1.cutOff = winHeight;
+    cont2.cutOff = winHeight;
+    console.log(cont1.cutOff)
+    cont1.reLayout()
+    cont2.reLayout()
 
     // example of using the cutOffEnd method on the object's prototype.
     //Here, upon resize, it cuts the list when height is above specified value and prepends to adjacent container
-    hello.cutOffEnd()
-    hello2.cutOffEnd()
+    cont1.cutOffEnd()
+    cont2.cutOffEnd()
   });
 
 
