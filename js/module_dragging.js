@@ -27,12 +27,12 @@ function onDrag(elt, elts, o) { // Drag
   thisElt.eltPos = eltPos; //its current position derived from $draggable object
 
 
-  if (instanceArr.length > 1 && o.isVertical) {
+  if (instanceArr.length > 1 && o.isVertical) {   //vartical
     var adjConElts = instanceArr[elt.movesTo].elts;
     var adjacentDir = instanceArr[elt.movesTo].divOffset.left - instanceArr[elt.belongsTo].divOffset.left;
     var dirSwitch = (elt.belongsTo % 2 == 0 ? thisElt.eltPos.left > adjacentDir / 2 : thisElt.eltPos.left < adjacentDir / 2);
   }
-  if (instanceArr.length > 1 && !o.isVertical) {
+  if (instanceArr.length > 1 && !o.isVertical) {  // horizontal
     var adjConElts = instanceArr[elt.movesTo].elts;
     var adjacentDir = instanceArr[elt.movesTo].divOffset.top - instanceArr[elt.belongsTo].divOffset.top;
     var dirSwitch = (elt.belongsTo % 2 == 0 ? thisElt.eltPos.top > adjacentDir / 2 : thisElt.eltPos.top < adjacentDir / 2);
@@ -64,7 +64,7 @@ function onDrag(elt, elts, o) { // Drag
   };
   var move;
   /*--------------------------------------------------------------------*/
-  if (!o.isVertical && thisElt.eltPos.left != oldPos.left) { // check whether the move is
+  if (!o.isVertical && thisElt.eltPos.left != oldPos.left) {             // check whether the move is
     move = (thisElt.eltPos.left > oldPos.left ? 'forward' : 'backward'); // forward, backward, up or down
   } else if (o.isVertical && thisElt.eltPos.top != oldPos.top) {
     move = (thisElt.eltPos.top > oldPos.top ? "down" : "up");
@@ -83,12 +83,14 @@ function onDrag(elt, elts, o) { // Drag
     posObj.crossTrigger ? onDragAdj.moveDown(elt, adjConElts) : onDragElts.eltsMoveDown(elt, elts); };
 };
 
+
+
+
+
 var onDragElts = {
   eltsMoveUp: function(elt, elts, flag) { // flag disregards elt position check
     if (elt.n > 0) {
-
       var eltPrev = elts[elt.n - 1];
-
       var eltPrevBound = eltPrev.pos.top + eltPrev.completeHeight / 2;
       if (elt.currentPos.top < eltPrevBound || flag) {
         // if (eltPrev.hasClass('locked')) {

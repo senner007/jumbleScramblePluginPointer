@@ -150,6 +150,7 @@
   JumbleScramble.prototype.removeLiElem = function() { // Remove new li to previous collection
 
     var elt = arguments[0];
+    //console.log(elt)
     var removeTrans = arguments[1];
     var callBack = arguments[2];
     if (typeof arguments[2] == 'function') { // flag to see if the third argument is a function, which is when it is called as a method from outside
@@ -160,10 +161,12 @@
     }
 
     var n = elt.index();
+    console.log(this)
 
     var thisElts = this.elts;
     var eltHeight = dropDelete ? elt.completeHeight : thisElts[n].completeHeight;
     var eltWidth = dropDelete ? elt.completeWidth : thisElts[n].completeWidth;
+
 
 
     if (dropDelete != true) {           // this code is run when the removeLiElem mothod is called after init. not sure what everything does - maybe refactor

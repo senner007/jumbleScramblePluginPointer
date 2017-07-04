@@ -29,8 +29,27 @@ $(document).ready(function() {
     isVertical: false,
     cutOff: winHeight
   })
+
+  hello.div.on('layoutCompleteAll', function () {
+      // console.log('complete hello')
+      //      hello.addLiElem('added', 0, true)
+           var toDelete = elem.find('li').first()
+           hello.removeLiElem(toDelete, true, function (){
+             console.log('done')
+           })
+           var toDelete2 = elem2.find('li').first()
+           hello2.removeLiElem(toDelete2, true, function (){
+             console.log('done')
+             hello2.addLiElem('added', 0, true)
+           })
+
+
+
+  })
   hello.init();
   hello2.init();
+
+
 
   console.log(hello)
   console.log(hello2)
