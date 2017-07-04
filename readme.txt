@@ -27,6 +27,7 @@ Todo:
 + add option to fire layoutComplete after all instances have been initialized. Probably using jquery.deferred http://api.jquery.com/deferred.promise/
 + remove animAdded from prototype and add to animation module
 + maybe set the instanceArr array to the JumbleScramble constructor function's constructor
++ set up router example. Move git dir and share code with router git
 
 
 
