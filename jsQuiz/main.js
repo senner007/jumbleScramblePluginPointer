@@ -58,9 +58,9 @@ $(document).ready(function() {
 
   })
 
-  console.log('container 1 before init')
+  console.log('container 1 and 2 before init')
   cont1.init();
-  console.log('container 1 after init')
+  console.log('container 1 after init - container 2 before init')
   cont2.init();
 
 
