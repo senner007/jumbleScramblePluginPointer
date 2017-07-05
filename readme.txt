@@ -23,7 +23,6 @@ Todo:
 + add boolean to cutOffEnd method which prevents the function from running if the cut-off element(s) will make adjacent container fire its cutoffEnd method and thereby creating an infinite loop.
 + remove animAdded from prototype and add to animation module
 + maybe set the instanceArr array to the JumbleScramble constructor function's constructor
-+ set up router example. Move git dir and share code with router git
 + Setup main page with Bulma css. Show all examples on one page and add a -show in full screen- link to each. Fetch each example module which are exporting objects with unique data.
   * Make examples avaiable using the routes rewrite in htaccess. When using the routes, remove anything but the example and show in full screen.
 
