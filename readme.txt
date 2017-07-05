@@ -14,20 +14,18 @@ Todo:
 + Multiple container drop ( long term )
 + Improve add and remove method. eg. all or an array as parameter.
 + Add containment option to specify containment for the draggable elements.
-+ Click items to delete
++ Click items to delete (for showcasing)
 + Create new items from textbox and then add
 + working example where text is retrieved from json file with option to save
-+ cutOff on init and reLayout
 + allow cutOff and dropLimit to be set after init
-+ add examples of add and remove method calls
 + Add callbacks to init, relayout, add, remove, drop (before and after animate)
 + relayout is duplicating code from init - FIX ME!
-+ do not run init on object instantiation (run after as obj.init())- FIX ME!
 + add boolean to cutOffEnd method which prevents the function from running if the cut-off element(s) will make adjacent container fire its cutoffEnd method and thereby creating an infinite loop.
-+ add option to fire layoutComplete after all instances have been initialized. Probably using jquery.deferred http://api.jquery.com/deferred.promise/
 + remove animAdded from prototype and add to animation module
 + maybe set the instanceArr array to the JumbleScramble constructor function's constructor
 + set up router example. Move git dir and share code with router git
++ Setup main page with Bulma css. Show all examples on one page and add a -show in full screen- link to each. Fetch each example module which are exporting objects with unique data.
+  * Make examples avaiable using the routes rewrite in htaccess. When using the routes, remove anything but the example and show in full screen.
 
 
 
@@ -45,10 +43,13 @@ Working:
 + Multiple instances of jumbleScramble on the same page
 + reLayout method is added to allow repositioning and updates to position data in object instances. Can be fired after window resize event(which is also fired on orientation change on mobile devices)
 + No longer uses jquery plugin structure. Instantiate object using new keyword. Ex var myList = new JumbleScramble(divElem, options)
++ Examples of add and remove method calls
++ option to fire layoutComplete after all instances have been initialized
 
 Fixed:
 + allow dragging and dropping over other instances - Fixed
 + double cliking elements throws errors - Fixed
++ do not run init on object instantiation (run after as obj.init())- Fixed
 
 
 

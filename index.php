@@ -42,11 +42,36 @@
 			</ul>
 		</div>
 
+		<div class="jMyPuzzle" id="jMyPuzzleId2">
+			<ul touch-action="none" class="splitList-horizontal">
+				<li class='listItem-horizontal'>Lorem</li>
+				<li class='listItem-horizontal'>ipsum</li>
+				<li class='listItem-horizontal'>dolor.</li>
+				<li class='listItem-horizontal'>Lorem ipssasaum sdolor sit amet</li>
+				<li class='listItem-horizontal'>sit</li>
+				<li class='listItem-horizontal'>amet</li>
+			</ul>
+		</div>
+
+		<div class="jMyPuzzle" id="jMyPuzzleId3">
+			<ul touch-action="none" class="splitList-horizontal">
+				<li class='listItem-horizontal'>Lorem</li>
+				<li class='listItem-horizontal'>ipsum</li>
+				<li class='listItem-horizontal'>dolor.</li>
+				<li class='listItem-horizontal'>Lorem ipssasaum sdolor sit amet</li>
+				<li class='listItem-horizontal'>sit</li>
+				<li class='listItem-horizontal'>amet</li>
+			</ul>
+		</div>
+
 	</div>
+ <button id="button1">vertical</button>
+ <button id="button2">horizontal</button>
 
 	<script type="text/javascript" src="js/jquery-3.2.1.slim.min.js"></script>
 	<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
-	<script type="module" src="jsQuiz/main.js"></script>
+	<script type='module' src='jsQuiz\main.js'></script>
+
 </body>
 
 </html>

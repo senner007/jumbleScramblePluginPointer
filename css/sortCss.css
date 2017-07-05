@@ -5,8 +5,10 @@
 }
 
 button {
-  color: #900;
+  color: black;
   font-weight: bold;
+  font-size : 40px;
+  display: none;
 }
 
 .container {
@@ -15,6 +17,7 @@ button {
   width: 100%;
   height: 90%;
 
+
 }
 
 #jMyPuzzleId0 {
@@ -22,6 +25,7 @@ button {
   width: 50%;
   height: 90%;
   position: absolute;
+  display: none;
 }
 
 #jMyPuzzleId1 {
@@ -30,6 +34,7 @@ button {
   width: 50%;
   height: 90%;
   position: absolute;
+  display: none;
 }
 
 #jMyPuzzleId2 {
@@ -38,6 +43,7 @@ button {
   width: inherit;
   height: 60px;
     overflow: visible;
+      display: none;
 }
 
 #jMyPuzzleId3 {
@@ -46,6 +52,7 @@ button {
   width: inherit;
   height: 60px;
   margin-top: 70px;
+    display: none;
 }
 
 .splitList {

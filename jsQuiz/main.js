@@ -1,82 +1,89 @@
-import JumbleScramble from "../js/module_main.js"
-$(document).ready(function() {
+import {cont1, cont2} from "./vertical.js"
+import {hello, hello2} from "./horizontal.js"
+$('.container').hide(); // cannot be set from css ???
 
-  (function($) {
-    $.fn.disableSelection = function() {
-      return this
-        .attr('unselectable', 'on')
-        .css('user-select', 'none')
-        .on('selectstart', false);
-    };
-  })(jQuery);
-  //$("body").css("overflow", "hidden");
-  $('body').disableSelection();
-  $('ul').on('touchmove', function(e) {
-    e.preventDefault();
-  });
+var exampleObject = {
+  vertical: function () {
+    $('.splitList-horizontal').parent().remove();
+    $('button').remove()
+    $('.container').show()
 
+    console.log('container 1 and 2 before init')
+    cont1.init();
+    console.log('container 1 after init - container 2 before init')
+    cont2.init();
 
-  var elem = $("#jMyPuzzleId0");
-  var elem2 = $("#jMyPuzzleId1");
+    $(window).on('resize', function() {
+      var winHeight = window.innerHeight - 50;
+      cont1.cutOff = winHeight;
+      cont2.cutOff = winHeight;
+      cont1.reLayout()
+      cont2.reLayout()
+      // example of using the cutOffEnd method on the object's prototype.
+      //Here, upon resize, it cuts the list when height is above specified value and prepends to adjacent container
+      cont1.cutOffEnd()
+      cont2.cutOffEnd()
+    });
 
-  var winHeight = window.innerHeight - 50; // recalculate windows height for cutoff on resize.
+  },
+  horizontal: function () {
+    $('.splitList').parent().remove();
+    $('button').remove()
+    $('.container').show()
 
-  var cont1 = new JumbleScramble(elem, {
-    isVertical: true,
-    cutOff: winHeight
-  })
+    console.log('container 1 and 2 before init')
+    hello.init();
+    console.log('container 1 after init - container 2 before init')
+    hello2.init();
 
-  var cont2 = new JumbleScramble(elem2, {
-    isVertical: true,
-    cutOff: winHeight
-  })
+    $(window).on('resize', function() {
+      var winWidth = window.innerWidth - 50;
+      hello.cutOff = winWidth;
+      hello2.cutOff = winWidth;
+      console.log('hello')
+      hello.reLayout()
+      hello2.reLayout()
+      hello.cutOffEnd()
+      hello2.cutOffEnd()
+    });
 
-  cont1.div.on('layoutComplete', function () {
-      console.log('container 1 layoutComplete')
+  }
 
-       //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
-       var toDelete = elem.find('li').first()
-       cont1.removeLiElem(toDelete, true, function (){
-         console.log('container 1 remove element done')
-       })
+}
 
-  })
+history.replaceState(null, document.title, document.location.href);
 
+var path = window.location.pathname.split('/');
+if (path[1].length == 0) {
 
-  cont2.div.on('layoutComplete', function () {
-      console.log('container 2 layoutComplete')
+    $('button').show().on('click', function(e) {
+      exampleObject[e.target.textContent]();
+    });
 
-      //example of using the addLiElem method on the object's prototype
-       cont2.addLiElem('added', 0, true)
+}
+else if (path[1] == 'vertical' ){
 
+    exampleObject.vertical();
+}
+else if (path[1] == 'horizontal' ) {
 
-  })
-  // example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
-  cont2.div.on('layoutCompleteAll', function () {
-      console.log('layoutCompleteAll')
+  exampleObject.horizontal();
 
-
-  })
-
-  console.log('container 1 and 2 before init')
-  cont1.init();
-  console.log('container 1 after init - container 2 before init')
-  cont2.init();
-
-
-  $(window).on('resize', function() {
-    winHeight = window.innerHeight - 50;
-    cont1.cutOff = winHeight;
-    cont2.cutOff = winHeight;
-    console.log(cont1.cutOff)
-    cont1.reLayout()
-    cont2.reLayout()
-
-    // example of using the cutOffEnd method on the object's prototype.
-    //Here, upon resize, it cuts the list when height is above specified value and prepends to adjacent container
-    cont1.cutOffEnd()
-    cont2.cutOffEnd()
-  });
+}
 
 
+
+
+
+$.fn.disableSelection = function() {
+    return this
+      .attr('unselectable', 'on')
+      .css('user-select', 'none')
+      .on('selectstart', false);
+};
+
+//$("body").css("overflow", "hidden");
+$('body').disableSelection();
+$('ul').on('touchmove', function(e) {
+  e.preventDefault();
 });

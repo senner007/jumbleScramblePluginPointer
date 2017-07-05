@@ -181,7 +181,7 @@
       ulSize = 0,
       posTop = 0,
       posLeft = 0;
-
+  
 
     var thisElts = this.elts;
     var thisEltsLength = thisElts.length;
