@@ -2,7 +2,6 @@
 
 
 Todo:
-+ add global vars for 'top'/'left' and 'completeHeight'/'completeWidth'
 + lock method prototype
 + make dropLimit work in horizontal mode
 + add margin for elt to constructor the first time it is calculated in animateback
