@@ -30,9 +30,12 @@ function addHandlers () {
   function findIndex() {
     var index;
     for (var i = 0; i < thisElts.length; i++) {
-      if (thisElts[i][0].className == classDefine + ' dragging') {
-        index = i
-      }
+
+
+        if (thisElts[i].className == classDefine + ' dragging') {
+          console.log('found')
+          index = i
+        }
     };
     return index;
   }
@@ -53,6 +56,7 @@ function addHandlers () {
     //move.addClass('dragging');
     move.className = classDefine + ' dragging';
     elt = thisElts[findIndex()]
+    //console.log(elt instanceof jQuery)
     if (instanceArr[adjCon]) {  instanceArr[adjCon].ul[0].style.zIndex = '-1' }
     //will also prevent the adjacent ul from
     // responding to touch events

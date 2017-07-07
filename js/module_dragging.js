@@ -173,9 +173,9 @@ var onDragElts = {
     var dir = elem.o.isVertical ? 'top' : 'left';
     //var dirTranslate = elem.o.isVertical ? 'translateY(' : 'translateX(';
 
-    elem[0].style[transitionPrefix] = '0s';
-    elem[0].style[dir] = elem.pos[dir] + 'px';
-    elem[0].style[transformPrefix] = elem.o.isVertical ? 'translate3d(0px,' + eltDimension + 'px, 0px)' : 'translate3d(' + eltDimension + 'px, 0px, 0px)'
+    elem.style[transitionPrefix] = '0s';
+    elem.style[dir] = elem.pos[dir] + 'px';
+    elem.style[transformPrefix] = elem.o.isVertical ? 'translate3d(0px,' + eltDimension + 'px, 0px)' : 'translate3d(' + eltDimension + 'px, 0px, 0px)'
     transToZero(elem);
   }
 }
@@ -202,8 +202,8 @@ var onDragAdj = {
 
         if (obj.moved == false) {
           tempArr.push(i)
-          obj[0].style[transitionPrefix] = '250ms ease';
-          obj[0].style[transformPrefix] = objTranslate
+          obj.style[transitionPrefix] = '250ms ease';
+          obj.style[transformPrefix] = objTranslate
           obj.moved = true;
           elt.insertPos = obj.n;
           obj.pos[objOffset] = obj.pos[objOffset] + elt[objDimension];
@@ -242,8 +242,8 @@ var onDragAdj = {
     if (elt.insertPos > 0) {
       var obj = adjConElts[elt.insertPos - 1]
       if (elt.currentPos.top < obj.pos.top + obj.completeHeight / 2 && obj.moved == false) {
-        obj[0].style[transitionPrefix] = '250ms ease';
-        obj[0].style[transformPrefix] = transSupport ? 'translate3d(0px,' + elt.completeHeight + 'px, 0px)' : 'translateY(' + elt.completeHeight + 'px)';
+        obj.style[transitionPrefix] = '250ms ease';
+        obj.style[transformPrefix] = transSupport ? 'translate3d(0px,' + elt.completeHeight + 'px, 0px)' : 'translateY(' + elt.completeHeight + 'px)';
         obj.moved = true;
         elt.insertPos = obj.n;
         obj.pos.top = obj.pos.top + elt.completeHeight;
@@ -279,8 +279,8 @@ var onDragAdj = {
 
       if (elt.currentPos.left < obj.pos.left + obj.completeWidth / 2 && obj.moved == false) {
 
-        obj[0].style[transitionPrefix] = '250ms ease';
-        obj[0].style[transformPrefix] = transSupport ? 'translate3d(' + elt.completeWidth + 'px,0px,0px)' : 'translateX(' + elt.completeWidth + 'px)';
+        obj.style[transitionPrefix] = '250ms ease';
+        obj.style[transformPrefix] = transSupport ? 'translate3d(' + elt.completeWidth + 'px,0px,0px)' : 'translateX(' + elt.completeWidth + 'px)';
         obj.moved = true;
         elt.insertPos = obj.n;
         obj.pos.left = obj.pos.left + elt.completeWidth;

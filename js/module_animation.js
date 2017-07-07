@@ -34,7 +34,7 @@ var transitionPrefix = "webkitTransition" in testElement.style ? "webkitTransiti
 var transformPrefix = "webkitTransform" in testElement.style ? "webkitTransform" : "-ms-transform" in testElement.style && transSupport == false ? "-ms-transform" : "transform"; //if ie9
 
 function transToZero(elt) {
-  var elt = elt[0];
+
 
   window.getComputedStyle(elt)[transformPrefix] // needed to apply the transition style dynamically
 
@@ -46,7 +46,7 @@ function transToZero(elt) {
 
 function animateBack(elt, o) {
 
-  var eltMarginLeft = o.isVertical ? 0 : elt.completeWidth - elt[0].offsetWidth; // set margin for horizontal
+  var eltMarginLeft = o.isVertical ? 0 : elt.completeWidth - elt.offsetWidth; // set margin for horizontal
   if (posObj.crossTrigger) {
 
     var instMovesTo = instanceArr[elt.movesTo];
@@ -77,8 +77,8 @@ function animateBack(elt, o) {
       thisY = elt.currentPos.top - elt.pos.top;
   }
 
-  elt[0].style.left = thisLeft + 'px'
-  elt[0].style.top = thisTop + 'px'
-  elt[0].style[transformPrefix] = 'translate3d(' + (thisX - eltMarginLeft) + 'px,' + thisY + 'px,0px)';
+  elt.style.left = thisLeft + 'px'
+  elt.style.top = thisTop + 'px'
+  elt.style[transformPrefix] = 'translate3d(' + (thisX - eltMarginLeft) + 'px,' + thisY + 'px,0px)';
 
 };

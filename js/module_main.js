@@ -38,13 +38,13 @@
 
     if (o.setChars) {  setChars(elt);  } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
 
-    transSupport ? elt.one('transitionend', function() {
+    transSupport ? $(elt).one('transitionend', function() {
       if (!posObj.crossTrigger) {       // insert the dragged element into its new position efter drop in originating container
           var eltPrev = instanceArr[elt.belongsTo].elts[elt.n - 1];
           if (elt.n == 0) {
-            elt.insertBefore(instanceArr[elt.belongsTo].elts[1]);
+            $(elt).insertBefore(instanceArr[elt.belongsTo].elts[1]);
           }
-          else {   elt.insertAfter(eltPrev);   }
+          else {   $(elt).insertAfter(eltPrev);   }
       }
       appendRemove()
     }) : appendRemove() // only wait for transitionend if supported (not ie9)
@@ -53,7 +53,7 @@
       if (!!o.autoValidate) {  o.autoValidate(); } // calls the autovalidate function in the plugin calling script
       if (posObj.crossTrigger) {
         instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
-        instanceArr[elt.movesTo].addLiElem(elt.text(), elt.insertPos, false);
+        instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false);
         posObj.crossTrigger = false;
         instanceArr[elt.movesTo].cutOffEnd()
       }
@@ -102,7 +102,7 @@
 
   JumbleScramble.prototype.init = function() {
 
-    var li = this.div.find('li'); // Variables declaration
+    var li = this.div[0].getElementsByTagName('li'); // Variables declaration
     var left = 0,
       top = 0,
       n = 0,
@@ -113,19 +113,19 @@
     var thisElts = this.elts = new Array(li.length);
 
     for (var i = 0; i < thisElts.length; i++) {
-      var elt = li.eq(i);
+      var elt = li[i];
 
       if (this.options.isVertical) {
-        elt.css('top', posTop + 'px'); // get each li height in case of individual heights.
+        $(elt).css('top', posTop + 'px'); // get each li height in case of individual heights.
 
-        var $thisHeight = elt.outerHeight(true);
+        var $thisHeight = $(elt).outerHeight(true);
         posTop += $thisHeight;
 
 
         ulSize += $thisHeight;
       } else {
-        elt.css('left', posLeft + 'px'); // get each li width in case of individual widths. (default)
-        var $thisWidth = elt.outerWidth(true);
+        $(elt).css('left', posLeft + 'px'); // get each li width in case of individual widths. (default)
+        var $thisWidth = $(elt).outerWidth(true);
         posLeft += $thisWidth;
 
         ulSize += $thisWidth; // calculate the size of the ul element
@@ -135,7 +135,7 @@
       addToObject(thisElts, elt, n, $thisHeight, $thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
 
       n = n + 1;
-      elt[0].style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
+      elt.style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
     }
     this.addHandlers();
 
@@ -143,7 +143,7 @@
       height: ulSize
     }) : this.ul.css({
       width: ulSize,
-      height: thisElts[0].outerHeight() + 'px',
+      height: $(thisElts[0]).outerHeight() + 'px',
     //  marginLeft: (this.ul.parent().width() - ulSize) / 2
     }); // Update the ul size
     this.div.trigger('layoutComplete', [this.ul.css('height')])
@@ -181,7 +181,7 @@
       ulSize = 0,
       posTop = 0,
       posLeft = 0;
-  
+
 
     var thisElts = this.elts;
     var thisEltsLength = thisElts.length;
@@ -234,16 +234,19 @@
 
     var tArr = [];
     while (eltsSize > this.cutOff) {
-      tArr.push(instanceArr[this.adjCon].addLiElem(this.elts[this.elts.length - 1].text(), 0, transSupport)[0]);
+      tArr.push(instanceArr[this.adjCon].addLiElem(this.elts[this.elts.length - 1].textContent, 0, transSupport));
       this.removeLiElem(this.elts[this.elts.length - 1], transSupport)
       eltsSize -= this.elts[this.elts.length - 1][eltDim];
     }
+      console.log(tArr)
     this.animAdded(tArr, this.adjCon);
+
   };
 
   JumbleScramble.prototype.animAdded = function(elems, parentCont) {  // should be in animation module, and not on the prototype
 
     var tArr = elems;
+
     var parentCont = parentCont;
 
     if (transSupport && tArr.length != 0) { // transition elements  but only if if there are any
@@ -255,7 +258,7 @@
 
       if (instanceArr[parentCont].elts[tArr.length] && !$(tArr).is(':last-child')) {
 
-        instanceArr[parentCont].elts[instanceArr[parentCont].elts.length - 1].one('transitionend', animAddedElems); // callback function for when the items have moved down and made room for the newly prepended item(s)
+        $(instanceArr[parentCont].elts[instanceArr[parentCont].elts.length - 1]).one('transitionend', animAddedElems); // callback function for when the items have moved down and made room for the newly prepended item(s)
 
       } else { // if there are no elements that have moved to make way for added elements(tArr)
         setTimeout(function() { // setTimeout is need because transform properties need time to be set.
@@ -303,15 +306,15 @@
     var $thisHeight = o.isVertical ? elt.outerHeight(true) : 0;
 
     for (var i = n; i < thisElts.length; i++) {
-      var ets0 = thisElts[i][0];
+      var ets = thisElts[i];
       thisElts[i].moved = false;
-      ets0.style[transitionPrefix] = '0ms';
-      ets0.style[transformPrefix] = transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
-      ets0.style.left = parseInt(ets0.style.left) + $thisWidth + 'px'
-      ets0.style.top = parseInt(ets0.style.top) + $thisHeight + 'px'
+      ets.style[transitionPrefix] = '0ms';
+      ets.style[transformPrefix] = transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
+      ets.style.left = parseInt(ets.style.left) + $thisWidth + 'px'
+      ets.style.top = parseInt(ets.style.top) + $thisHeight + 'px'
 
       if (addTrans) {
-        ets0.style[transformPrefix] = 'translate(' + -($thisWidth) + 'px,' + -($thisHeight) + 'px)';
+        ets.style[transformPrefix] = 'translate(' + -($thisWidth) + 'px,' + -($thisHeight) + 'px)';
         transToZero(thisElts[i]);
       }
     }
@@ -323,19 +326,20 @@
     var newTopPos = parseInt(eltObj.top),
         newLeftPos = parseInt(eltObj.left)
 
+        elt = elt[0]
     addToObject(thisElts, elt, n, $thisHeight, $thisWidth, o, this.container, this.adjCon,newTopPos, newLeftPos);
 
 
 
     for (var i = 0; i < tempArr.length; i++) {
-      var marginLeft = o.isVertical ? 0 : (tempArr[i].completeWidth - tempArr[i][0].offsetWidth); // account for margin
-      tempArr[i].pos.left = tempArr[i][0].offsetLeft - marginLeft;
-      tempArr[i].pos.top = tempArr[i][0].offsetTop;
+      var marginLeft = o.isVertical ? 0 : (tempArr[i].completeWidth - tempArr[i].offsetWidth); // account for margin
+      tempArr[i].pos.left = tempArr[i].offsetLeft - marginLeft;
+      tempArr[i].pos.top = tempArr[i].offsetTop;
       tempArr[i].n = n + i + 1;
       thisElts[n + 1 + i] = tempArr[i];
     }
     if (addTrans) {
-      var tArr = [elt[0]];
+      var tArr = elt;
       this.animAdded(tArr, this.container)
       /* elt[0].style[transitionPrefix] = '500ms'; elt[0].style[transformPrefix] = 'scale(1,1)'; elt[0].style.opacity = '1';  */
       return elt;
@@ -356,7 +360,7 @@
       var dropDelete = arguments[2];
     }
 
-    var n = elt.index();
+    var n = $(elt).index();
 
     var thisElts = this.elts;
     var eltHeight = dropDelete ? elt.completeHeight : thisElts[n].completeHeight;
@@ -368,22 +372,24 @@
       for (var i = n + 1; i < thisElts.length; i++) {
         var el = thisElts[i];
 
-        el[0].style[transitionPrefix] = removeTrans ? '250ms' : '0s';
+        el.style[transitionPrefix] = removeTrans ? '250ms' : '0s';
         thisElts[i - 1] = el;
         el.n = i - 1;
-        el[0].style.top = el.pos.top - eltHeight + 'px';
-        el[0].style.left = el.pos.left - eltWidth + 'px';
-        el[0].style[transformPrefix] = 'translate(0px,0px,0px)';
+        el.style.top = el.pos.top - eltHeight + 'px';
+        el.style.left = el.pos.left - eltWidth + 'px';
+        el.style[transformPrefix] = 'translate(0px,0px,0px)';
         el.pos.top = el.pos.top - eltHeight;
         el.pos.left = el.pos.left - eltWidth;
       };
     }
    thisElts.length = thisElts.length - 1;     // reduce the length of elt objects in the instanceArr after a delete
 
+  
+
     if (removeTrans) {  // if the option to animate in the removeLiElem method used after init is true
-      elt[0].style[transformPrefix] = 'scale(0.5,0.5)';
-      elt[0].style.opacity = '0';
-      elt[0].style[transitionPrefix] = '250ms';
+      elt.style[transformPrefix] = 'scale(0.5,0.5)';
+      elt.style.opacity = '0';
+      elt.style[transitionPrefix] = '250ms';
       setTimeout(function() {
         elt.remove()
         if (callBack) {
