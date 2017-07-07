@@ -1,4 +1,4 @@
-import {cont1, cont2} from "./vertical.js"
+import {cont1, cont2, vertical} from "./vertical.js"
 import {hello, hello2} from "./horizontal.js"
 $('.container').hide(); // cannot be set from css ???
 
@@ -24,6 +24,30 @@ var exampleObject = {
       cont1.cutOffEnd()
       cont2.cutOffEnd()
     });
+
+    // var divId = vertical.init.divId(),
+    //     nLi = Object.keys(vertical.text).length;
+    //
+    //
+    // for (var index = 0; index<vertical.init.nDivs; index++) {
+    //
+    //   $(".container").append("<div class='jMyPuzzle' id=" + divId[index]  + "><ul touch-action='none' class=" + vertical.init.ulClass + "></ul></div>"); // create the divs with uls
+    //   $("#" + divId[i]).find('ul').css(vertical.init.ulCss);  // set the ul css
+    //
+    //       for (var i = 0; i<nLi; i++) {
+    //
+    //             var thisLi = Object.keys(vertical.text)[i]
+    //             $("#" + divId[index]).find('ul').append("<li>" + vertical.text[thisLi] + "</li>") // create the lis
+    //             $("#" + divId[index]).find('ul').find('li').eq(i).css(vertical.init.liCss) // attach the css for the lis
+    //
+    //
+    //
+    //       }
+    //
+    // }
+
+
+
 
   },
   horizontal: function () {

@@ -26,6 +26,8 @@ Todo:
 + Setup main page with Bulma css. Show all examples on one page and add a -show in full screen- link to each. Fetch each example module which are exporting objects with unique data.
   * Make examples avaiable using the routes rewrite in htaccess. When using the routes, remove anything but the example and show in full screen.
 + use touch instead of pointer because of increased support : https://caniuse.com/#feat=touch
++ Assume transition support
++ Remove jQuery dependency - Pointer events polyfill will still work without it
 
 
 Working:

@@ -1,2 +1,14 @@
 RewriteEngine on
+
+# This rule will redirect localhost/(param) to localhost but display url to localhost/(param). Use $_Get(['p']) top get /(param)
 RewriteRule ^(vertical|horizontal|example3|example4)$ index.php?p=$1 [NC,L]
+
+# This rule will redirect localhost to localhost/vertical
+# RedirectMatch "^/$" "http://localhost/vertical"
+# this is a comment. it starts with #
+
+# This rule replaces example.com/(puppies|canines)/(param) to example.com/dogs/(param)
+# RedirectMatch "^/(puppies|canines)/(.*)" "/dogs/$2"
+
+#This rule redirects localhost/index.html to localhost/index.php
+# RedirectMatch 301 (.*)\.html$ http://localhost$1.php
