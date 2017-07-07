@@ -25,7 +25,7 @@ function addHandlers () {
   var hasMoved;
   var docElem = document.documentElement;
 
-  ul[0].style.zIndex = '1'
+  ul.style.zIndex = '1'
 
   function findIndex() {
     var index;
@@ -39,7 +39,7 @@ function addHandlers () {
     };
     return index;
   }
-  ul.on(eStart, liSelector, function(e) {
+  $(ul).on(eStart, liSelector, function(e) {
     if (dontTouch == true) {
       return;
     } // flag to prevent multi
@@ -57,7 +57,7 @@ function addHandlers () {
     move.className = classDefine + ' dragging';
     elt = thisElts[findIndex()]
     //console.log(elt instanceof jQuery)
-    if (instanceArr[adjCon]) {  instanceArr[adjCon].ul[0].style.zIndex = '-1' }
+    if (instanceArr[adjCon]) {  instanceArr[adjCon].ul.style.zIndex = '-1' }
     //will also prevent the adjacent ul from
     // responding to touch events
 
@@ -130,9 +130,9 @@ function addHandlers () {
       move.style[transitionPrefix] = 'box-shadow 250ms';
       move.style.zIndex = 1;
       if (instanceArr[adjCon]) {
-        instanceArr[adjCon].ul[0].style.zIndex = '1'
+        instanceArr[adjCon].ul.style.zIndex = '1'
       };
-      ul[0].style.zIndex = '1';
+      ul.style.zIndex = '1';
 
       move.className = classDefine;
       dontTouch = false;

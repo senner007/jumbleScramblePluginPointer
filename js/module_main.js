@@ -85,7 +85,7 @@
 
     this.div = $(element);
     this.divOffset = this.div.offset();
-    this.ul = this.div.find('ul');
+    this.ul = this.div.find('ul')[0];
     this.container = instanceArr.length;
     this.adjCon = this.container % 2 == 0 ? this.container + 1 : this.container - 1;
 
@@ -93,7 +93,7 @@
 
     this.cutOff = this.options.cutOff
     this.dropLimit = this.options.dropLimit[0];
-    this.ul[0].style[transformPrefix] = 'translate3d(0px,0px,0px)';
+    this.ul.style[transformPrefix] = 'translate3d(0px,0px,0px)';
     this.dfd = $.Deferred()
 
     instanceArr.push(this);
@@ -140,15 +140,20 @@
       elt.style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
     }
     this.addHandlers();
+    console.log(ulSize)
+    if (this.options.isVertical) {
+      this.ul.style.height = ulSize + 'px';
+      console.log(this.ul.style.height)
+    }
+    else {
+          this.ul.style.width = ulSize + 'px'; this.ul.style.height = outerHeight(thisElts[0]) + 'px';
 
-    this.options.isVertical ? this.ul.css({
-      height: ulSize
-    }) : this.ul.css({
-      width: ulSize,
-      height: $(thisElts[0]).outerHeight() + 'px',
+    }
+
+
     //  marginLeft: (this.ul.parent().width() - ulSize) / 2
-    }); // Update the ul size
-    this.div.trigger('layoutComplete', [this.ul.css('height')])
+   // Update the ul size
+    this.div.trigger('layoutComplete', [parseInt(this.ul.style.height)])
     this.dfd.resolve();
     var $this = this;
   //  var whendfd;
@@ -234,14 +239,7 @@
     elt.style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
     }
 
-
-    this.options.isVertical ? this.ul.css({
-      height: ulSize
-    }) : this.ul.css({
-      width: ulSize,
-      height: outerHeight(thisElts[0]) + 'px',
-
-    }); // Update the ul size
+    this.options.isVertical ? this.ul.style.height = ulSize + 'px': this.ul.style.width = ulSize +'px';  this.ul.style.height = outerHeight(thisElts[0]) + 'px';
 
     this.divOffset = this.div.offset();
 
@@ -343,8 +341,8 @@
         transToZero(thisElts[i]);
       }
     }
-
-    o.isVertical ? this.ul.css({ 'height': '+=' + $thisHeight + 'px'  }) :  this.ul.css({'width': '+=' + $thisWidth + 'px'})
+    console.log($thisHeight)
+    o.isVertical ? this.ul.style.height = parseInt(this.ul.style.height) + $thisHeight + 'px':  this.ul.style.width = parseInt(this.ul.style.width) + $thisWidth + 'px';
 
 
 
@@ -425,6 +423,7 @@
       elt.remove();
     }
       // recalculate the height or width of the ul after deleting items
-      this.options.isVertical ? this.ul.css({'height': '-=' + eltHeight + 'px'}) : this.ul.css({ 'width': '-=' + eltWidth + 'px'});
+
+      this.options.isVertical ? this.ul.style.height = parseInt(this.ul.style.height) - eltHeight + 'px' : this.ul.style.width = parseInt(this.ul.style.width) - eltWidth + 'px';
 
   };
