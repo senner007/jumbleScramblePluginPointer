@@ -64,7 +64,7 @@ var exampleObject = {
       var winWidth = window.innerWidth - 50;
       hello.cutOff = winWidth;
       hello2.cutOff = winWidth;
-      console.log('hello')
+
       hello.reLayout()
       hello2.reLayout()
       hello.cutOffEnd()

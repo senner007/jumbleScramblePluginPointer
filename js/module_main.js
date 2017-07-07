@@ -140,7 +140,7 @@
       elt.style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
     }
     this.addHandlers();
-    
+
     if (this.options.isVertical) {  this.ul.style.height = ulSize + 'px'; }
     else { this.ul.style.width = ulSize + 'px'; this.ul.style.height = outerHeight(thisElts[0]) + 'px'; }
 
@@ -256,7 +256,7 @@
       this.removeLiElem(this.elts[this.elts.length - 1], transSupport)
       eltsSize -= this.elts[this.elts.length - 1][eltDim];
     }
-      console.log(tArr)
+
     this.animAdded(tArr, this.adjCon);
 
   };
@@ -337,7 +337,7 @@
         transToZero(thisElts[i]);
       }
     }
-    console.log($thisHeight)
+
     o.isVertical ? this.ul.style.height = parseInt(this.ul.style.height) + $thisHeight + 'px':  this.ul.style.width = parseInt(this.ul.style.width) + $thisWidth + 'px';
 
 
