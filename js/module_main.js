@@ -172,6 +172,23 @@
 
   };
 
+  function outerHeight(el) {    // replacing jquery outerWidth(true)
+    var height = el.offsetHeight;
+    var style = getComputedStyle(el);
+
+    height += parseInt(style.marginTop) + parseInt(style.marginBottom);
+    return height;
+  }
+
+  function outerWidth(el) {    // replacing jquery outerWidth(true)
+    var width = el.offsetWidth;
+    var style = getComputedStyle(el);
+
+    width += parseInt(style.marginLeft) + parseInt(style.marginRight);
+    return width;
+  }
+
+
 
 
   JumbleScramble.prototype.reLayout = function() {
@@ -192,14 +209,19 @@
       var elt = thisElts[i];
 
       if (this.options.isVertical) {
-        $(elt).css('top', posTop + 'px'); // get each li height in case of individual heights.
-        var $thisHeight = $(elt).outerHeight(true);
+
+       // get each li height in case of individual heights.
+        elt.style.top = posTop + 'px'
+        console.log(elt.style.top)
+        var $thisHeight = outerHeight(elt);
+
         posTop += $thisHeight;
 
         ulSize += $thisHeight;
       } else {
-        $(elt).css('left', posLeft + 'px'); // get each li width in case of individual widths. (default)
-        var $thisWidth =$(elt).outerWidth(true);
+       // get each li width in case of individual widths. (default)
+        elt.style.left = posLeft + 'px';
+        var $thisWidth = outerWidth(elt);
         posLeft += $thisWidth;
 
         ulSize += $thisWidth; // calculate the size of the ul element
@@ -217,7 +239,7 @@
       height: ulSize
     }) : this.ul.css({
       width: ulSize,
-      height: thisElts[0].outerHeight() + 'px',
+      height: outerHeight(thisElts[0]) + 'px',
 
     }); // Update the ul size
 
