@@ -52,11 +52,11 @@ function addHandlers () {
     move.style.zIndex = 5;
     //move.addClass('dragging');
     move.className = classDefine + ' dragging';
-
+    elt = thisElts[findIndex()]
     if (instanceArr[adjCon]) {  instanceArr[adjCon].ul[0].style.zIndex = '-1' }
     //will also prevent the adjacent ul from
     // responding to touch events
-    
+
     //if (e.type == 'touchstart') { e = e.originalEvent.touches[0] }
     startX = e.pageX, startY = e.pageY;
     targetOffsetY = e.target.offsetTop;
@@ -77,7 +77,7 @@ function addHandlers () {
     //if ($(move).offset().top <  div.offset().top ) {return;}   //containment
     e.preventDefault();
     hasMoved = true; // hasMoved is a flag to clicking items without moving them
-    elt = thisElts[findIndex()]
+
     //if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}
     newDx = e.pageX - startX;
     newDy = e.pageY - startY;
