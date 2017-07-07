@@ -27,19 +27,7 @@ function addHandlers () {
 
   ul.style.zIndex = '1'
 
-  function findIndex() {
-    var index;
-    for (var i = 0; i < thisElts.length; i++) {
-
-        console.log(thisElts[i] instanceof jQuery)
-        if (thisElts[i].className == classDefine + ' dragging') {
-
-          index = i
-        }
-    };
-    return index;
-  }
-  $(ul).on(eStart, liSelector, function(e) {
+    $(ul).on(eStart, liSelector, function(e) {
     if (dontTouch == true) {
       return;
     } // flag to prevent multi
@@ -55,7 +43,8 @@ function addHandlers () {
     move.style.zIndex = 5;
     //move.addClass('dragging');
     move.className = classDefine + ' dragging';
-    elt = thisElts[findIndex()]
+  
+    elt = thisElts[move.n]
     //console.log(elt instanceof jQuery)
     if (instanceArr[adjCon]) {  instanceArr[adjCon].ul.style.zIndex = '-1' }
     //will also prevent the adjacent ul from
