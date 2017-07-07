@@ -140,15 +140,9 @@
       elt.style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
     }
     this.addHandlers();
-    console.log(ulSize)
-    if (this.options.isVertical) {
-      this.ul.style.height = ulSize + 'px';
-      console.log(this.ul.style.height)
-    }
-    else {
-          this.ul.style.width = ulSize + 'px'; this.ul.style.height = outerHeight(thisElts[0]) + 'px';
-
-    }
+    
+    if (this.options.isVertical) {  this.ul.style.height = ulSize + 'px'; }
+    else { this.ul.style.width = ulSize + 'px'; this.ul.style.height = outerHeight(thisElts[0]) + 'px'; }
 
 
     //  marginLeft: (this.ul.parent().width() - ulSize) / 2
@@ -239,7 +233,9 @@
     elt.style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
     }
 
-    this.options.isVertical ? this.ul.style.height = ulSize + 'px': this.ul.style.width = ulSize +'px';  this.ul.style.height = outerHeight(thisElts[0]) + 'px';
+    if (this.options.isVertical) { this.ul.style.height = ulSize + 'px'; }
+    else {  this.ul.style.width = ulSize + 'px'; this.ul.style.height = outerHeight(thisElts[0]) + 'px'  }
+
 
     this.divOffset = this.div.offset();
 
