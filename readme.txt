@@ -29,7 +29,9 @@ Todo:
 + Remove jQuery dependency - Pointer events polyfill will still work without it
 + Prevent multitouch ( not fixed yet)
 + Throttle the resize events
-+ Call orientationChange event in place of resize on Chrome ios 
++ Call orientationChange event in place of resize on Chrome ios
++ option to turn off/down animations
++ put elt object on separate object
 
 
 Working:

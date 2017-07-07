@@ -30,6 +30,3 @@ import JumbleScramble from "../js/module_main.js"
            })
 
   })
-
-  console.log(hello)
-  console.log(hello2)

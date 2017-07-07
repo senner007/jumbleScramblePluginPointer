@@ -104,7 +104,10 @@ vertical.events = {
      var toDelete = elem.find('li').first()[0]
         cont1.removeLiElem(toDelete, true, function (){
           console.log('container 1 remove element done')
+          console.log(cont1)
         })
+
+
 
   })
 
@@ -114,12 +117,13 @@ vertical.events = {
 
 
       cont2.addLiElem('added', 0, true)
-
+        console.log(cont2)
 
   })
   // example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
   cont2.div.on('layoutCompleteAll', function () {
       console.log('layoutCompleteAll')
+
 
 
   })
