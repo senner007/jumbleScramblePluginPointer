@@ -38,7 +38,8 @@
 
     if (o.setChars) {  setChars(elt);  } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
 
-    transSupport ? $(elt).one('transitionend', function() {
+    transSupport ? elt.addEventListener('transitionend', function() {
+
       if (!posObj.crossTrigger) {       // insert the dragged element into its new position efter drop in originating container
           var eltPrev = instanceArr[elt.belongsTo].elts[elt.n - 1];
           if (elt.n == 0) {
@@ -47,7 +48,8 @@
           else {   $(elt).insertAfter(eltPrev);   }
       }
       appendRemove()
-    }) : appendRemove() // only wait for transitionend if supported (not ie9)
+    }, {once: true}) : appendRemove() // only wait for transitionend if supported (not ie9)
+    // once not supported before edge 16
 
     function appendRemove() {
       if (!!o.autoValidate) {  o.autoValidate(); } // calls the autovalidate function in the plugin calling script
@@ -258,7 +260,8 @@
 
       if (instanceArr[parentCont].elts[tArr.length] && !$(tArr).is(':last-child')) {
 
-        $(instanceArr[parentCont].elts[instanceArr[parentCont].elts.length - 1]).one('transitionend', animAddedElems); // callback function for when the items have moved down and made room for the newly prepended item(s)
+          // callback function for when the items have moved down and made room for the newly prepended item(s)
+        instanceArr[parentCont].elts[instanceArr[parentCont].elts.length - 1].addEventListener('transitionend', animAddedElems, {once: true}); // once true might not be supported in all browsers
 
       } else { // if there are no elements that have moved to make way for added elements(tArr)
         setTimeout(function() { // setTimeout is need because transform properties need time to be set.
