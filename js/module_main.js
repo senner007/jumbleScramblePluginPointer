@@ -213,22 +213,22 @@
        // get each li height in case of individual heights.
         elt.style.top = posTop + 'px'
         console.log(elt.style.top)
-        var $thisHeight = outerHeight(elt);
+        var thisHeight = outerHeight(elt);
 
-        posTop += $thisHeight;
+        posTop += thisHeight;
 
-        ulSize += $thisHeight;
+        ulSize += thisHeight;
       } else {
        // get each li width in case of individual widths. (default)
         elt.style.left = posLeft + 'px';
-        var $thisWidth = outerWidth(elt);
-        posLeft += $thisWidth;
+        var thisWidth = outerWidth(elt);
+        posLeft += thisWidth;
 
-        ulSize += $thisWidth; // calculate the size of the ul element
+        ulSize += thisWidth; // calculate the size of the ul element
       }
-      var newPosTop = posTop - $thisHeight;
-      var newPosLeft = posLeft - $thisWidth;
-      addToObject(thisElts, elt, n, $thisHeight, $thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
+      var newPosTop = posTop - thisHeight;
+      var newPosLeft = posLeft - thisWidth;
+      addToObject(thisElts, elt, n, thisHeight, thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
 
       n = n + 1;
     elt.style[transformPrefix] = 'translate3d(0px, 0px, 0px)';

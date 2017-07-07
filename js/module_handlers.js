@@ -31,9 +31,9 @@ function addHandlers () {
     var index;
     for (var i = 0; i < thisElts.length; i++) {
 
-
+        console.log(thisElts[i] instanceof jQuery)
         if (thisElts[i].className == classDefine + ' dragging') {
-          console.log('found')
+
           index = i
         }
     };
