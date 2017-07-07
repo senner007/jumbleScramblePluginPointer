@@ -27,6 +27,9 @@ Todo:
 + use touch instead of pointer because of increased support : https://caniuse.com/#feat=touch
 + Assume transition support
 + Remove jQuery dependency - Pointer events polyfill will still work without it
++ Prevent multitouch ( not fixed yet)
++ Throttle the resize events
++ Call orientationChange event in place of resize on Chrome ios 
 
 
 Working:
