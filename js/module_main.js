@@ -190,14 +190,14 @@
       var elt = thisElts[i];
 
       if (this.options.isVertical) {
-        elt.css('top', posTop + 'px'); // get each li height in case of individual heights.
-        var $thisHeight = elt.outerHeight(true);
+        $(elt).css('top', posTop + 'px'); // get each li height in case of individual heights.
+        var $thisHeight = $(elt).outerHeight(true);
         posTop += $thisHeight;
 
         ulSize += $thisHeight;
       } else {
-        elt.css('left', posLeft + 'px'); // get each li width in case of individual widths. (default)
-        var $thisWidth = elt.outerWidth(true);
+        $(elt).css('left', posLeft + 'px'); // get each li width in case of individual widths. (default)
+        var $thisWidth =$(elt).outerWidth(true);
         posLeft += $thisWidth;
 
         ulSize += $thisWidth; // calculate the size of the ul element
@@ -207,7 +207,7 @@
       addToObject(thisElts, elt, n, $thisHeight, $thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
 
       n = n + 1;
-    elt[0].style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
+    elt.style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
     }
 
 
@@ -384,7 +384,7 @@
     }
    thisElts.length = thisElts.length - 1;     // reduce the length of elt objects in the instanceArr after a delete
 
-  
+
 
     if (removeTrans) {  // if the option to animate in the removeLiElem method used after init is true
       elt.style[transformPrefix] = 'scale(0.5,0.5)';

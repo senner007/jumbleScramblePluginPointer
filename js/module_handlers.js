@@ -12,7 +12,7 @@ function addHandlers () {
   var adjCon = this.adjCon;
   var o = this.options;
   var thisElts;
-  var $this = this;
+  var constructorThis = this;
   var move, elt;
   var movePos = {};
   var eStart = 'pointerdown',
@@ -46,7 +46,7 @@ function addHandlers () {
   //	e.stopPropagation();
 
     e.preventDefault();
-    thisElts = $this.elts;
+    thisElts = constructorThis.elts;
 
     dontTouch = true;
     move = this;
