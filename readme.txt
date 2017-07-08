@@ -30,6 +30,7 @@ Todo:
 + Prevent multitouch ( not fixed yet)
 + Throttle the resize events
 + Call orientationChange event in place of resize on Chrome ios 
++ use native event delegation https://stackoverflow.com/questions/14174056/native-addeventlistener-with-selector-like-on-in-jquery
 
 
 Working:
