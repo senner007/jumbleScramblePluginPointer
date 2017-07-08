@@ -31,7 +31,7 @@ Todo:
 + Throttle the resize events
 + Call orientationChange event in place of resize on Chrome ios 
 + use native event delegation https://stackoverflow.com/questions/14174056/native-addeventlistener-with-selector-like-on-in-jquery
-
++ trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
 
 Working:
 + List items in vertical or horizontal layout
