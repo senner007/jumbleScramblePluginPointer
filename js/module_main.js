@@ -43,10 +43,12 @@
       if (!posObj.crossTrigger) {       // insert the dragged element into its new position efter drop in originating container
           var eltPrev = instanceArr[elt.belongsTo].elts[elt.n - 1];
           if (elt.n == 0) {
-            $(elt).insertBefore(instanceArr[elt.belongsTo].elts[1]);
+          //  $(elt).insertBefore(instanceArr[elt.belongsTo].elts[1]);
+            instanceArr[elt.belongsTo].ul.insertBefore(elt, instanceArr[elt.belongsTo].elts[1]); // insert elt before the first one - replaces $.insertBefore
           }
           else {   $(elt).insertAfter(eltPrev);   }
       }
+
       appendRemove()
     }, {once: true}) : appendRemove() // only wait for transitionend if supported (not ie9)
     // once not supported before edge 16
