@@ -151,9 +151,11 @@ var onDragElts = {
   },
   eltsMoveForward: function(elt, elts, flag) {
     if (elt.n < elts.length - 1) {
+
       var eltNext = elts[elt.n + 1];
       var eltNextBound = eltNext.pos.left + eltNext.completeWidth / 2;
-      if (elt.currentPos.left + elt.completeWidth > eltNextBound || flag) {
+      if (elt.currentPos.left + (elt.completeWidth/1.2)  > eltNextBound || flag) { // (elt.completeWidth/1.2) - tweak me!
+          console.log(elt.currentPos.left)
         // if (eltNext.hasClass('locked')) {
         //   return;
         // }
@@ -264,7 +266,7 @@ var onDragAdj = {
   moveForward: function(elt, adjConElts) {
     if (elt.insertPos < adjConElts.length) {
       var obj = adjConElts[elt.insertPos]
-      if (elt.currentPos.left + elt.completeWidth > obj.pos.left + obj.completeWidth / 2 && obj.moved == true) {
+      if (elt.currentPos.left + (elt.completeWidth/1.2) > obj.pos.left + obj.completeWidth / 2 && obj.moved == true) { //(elt.completeWidth/1.2)  - Tweak me!
         transToZero(obj);
         obj.moved = false;
         elt.insertPos = obj.n + 1;

@@ -44,10 +44,10 @@
 
 		<div class="jMyPuzzle" id="jMyPuzzleId2">
 			<ul touch-action="none" class="splitList-horizontal">
-				<li class='listItem-horizontal'>Lorem</li>
-				<li class='listItem-horizontal'>ipsum</li>
+				<li class='listItem-horizontal'>Loremffffff</li>
+				<li class='listItem-horizontal'>ipsumffffffffffffffffffff</li>
 				<li class='listItem-horizontal'>dolor.</li>
-				<li class='listItem-horizontal'>Lorem ipssasaum sdolor sit amet</li>
+				<li class='listItem-horizontal'>Lorem ipssasaum sdolor sit ametfffffffffffffffff</li>
 				<li class='listItem-horizontal'>sit</li>
 				<li class='listItem-horizontal'>amet</li>
 			</ul>
