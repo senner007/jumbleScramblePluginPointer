@@ -70,7 +70,7 @@
 
 	<script type="text/javascript" src="js/jquery-3.2.1.slim.min.js"></script>
 	<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
-	<script type='module' src='jsQuiz\main.js'></script>
+	<script type='module' src='jsQuiz/main.js'></script>
 
 </body>
 
