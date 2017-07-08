@@ -379,7 +379,7 @@
       var dropDelete = arguments[2];
     }
 
-    var n = $(elt).index();
+    var n = elt.n;
 
     var thisElts = this.elts;
     var eltHeight = dropDelete ? elt.completeHeight : thisElts[n].completeHeight;
