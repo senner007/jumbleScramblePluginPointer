@@ -29,17 +29,13 @@ Todo:
 + Remove jQuery dependency - Pointer events polyfill will still work without it
 + Prevent multitouch ( not fixed yet)
 + Throttle the resize events
-<<<<<<< HEAD
 + Call orientationChange event in place of resize on Chrome ios
 + option to turn off/down animations
 + put elt object on separate object
-
-=======
-+ Call orientationChange event in place of resize on Chrome ios 
 + use native event delegation https://stackoverflow.com/questions/14174056/native-addeventlistener-with-selector-like-on-in-jquery
 + trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
 + insert before and after wirh native - https://blog.garstasio.com/you-dont-need-jquery/dom-manipulation/#inserting-elements-before-&-after
->>>>>>> 72809fe679c1ee8ecd9d3751eaa28e84f6bf08a2
+
 
 Working:
 + List items in vertical or horizontal layout
