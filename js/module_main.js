@@ -41,12 +41,17 @@
     transSupport ? elt.addEventListener('transitionend', function() {
 
       if (!posObj.crossTrigger) {       // insert the dragged element into its new position efter drop in originating container
-          var eltPrev = instanceArr[elt.belongsTo].elts[elt.n - 1];
+        //  var eltPrev = instanceArr[elt.belongsTo].elts[elt.n - 1];
           if (elt.n == 0) {
           //  $(elt).insertBefore(instanceArr[elt.belongsTo].elts[1]);
             instanceArr[elt.belongsTo].ul.insertBefore(elt, instanceArr[elt.belongsTo].elts[1]); // insert elt before the first one - replaces $.insertBefore
           }
-          else {   $(elt).insertAfter(eltPrev);   }
+          else {
+            //$(elt).insertAfter(eltPrev);
+            instanceArr[elt.belongsTo].ul.insertBefore(elt, instanceArr[elt.belongsTo].elts[elt.n + 1]);
+            // insert elt before the next one - replaces $.insertAfter -http://xahlee.info/js/js_insert_after.html
+
+          }
       }
 
       appendRemove()
