@@ -70,3 +70,41 @@ Testing:
 Dependency:
 jQuery ? - latest
 jQuery pointer events polyfill
+
+
+
+
+if (instanceArr.crossTrigger) {
+
+  if (this.hasFinished.timer == true) {
+    console.log('timer true')
+      clearTimeout(this.reset);
+    this.reset = setTimeout(function (){
+      _this.hasFinished.timer = true;
+
+    }, 5000)
+
+    console.log(this.hasFinished.timer)
+    animateBack(elt, o, instanceArr);
+    instanceArr[0].transToZero(elt);
+
+
+  }
+    console.log(this.hasFinished.timer)
+  if (this.hasFinished.timer == false) {
+    console.log('timer false')
+    animateBack(elt, o, instanceArr);
+    instanceArr[0].transToZero(elt, '10ms ease');
+
+
+  }
+  if (this.hasFinished.timer == true) {
+
+      this.hasFinished.timer= false
+
+  }
+
+
+
+
+}
