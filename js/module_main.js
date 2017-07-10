@@ -33,17 +33,19 @@
 
     instanceArr.end   = new Date();
     instanceArr.diff = (instanceArr.end.getTime() - instanceArr.start.getTime()) / 1000;
-        console.log(instanceArr.diff)
-
-
+    console.log(instanceArr.diff)
     if (instanceArr.diff < 0.5) {
 
-      var speed = '15ms ease'
+      var speed = '150ms ease'
     }
-  if (!instanceArr.crossTrigger) {
+    if (instanceArr.diff < 0.4) {
 
-      var speed = '250ms ease'
-      instanceArr.diff = 0.5
+      var speed = '70ms ease'
+    }
+
+    if (instanceArr.diff < 0.3) {
+
+      var speed = '15ms ease'
     }
 
 
