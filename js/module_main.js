@@ -1,11 +1,13 @@
   import {
     defaults,
-    setChars
+    setChars,
+    transSupport,
+    transitionPrefix,
+    transformPrefix,
+    ifGpu
   } from "./modules.js"
 
-  import {
-    posObj
-  } from "./module_dragging.js"
+
 
   import {
     addHandlers
@@ -13,34 +15,30 @@
 
   import {
     animateBack,
-    transSupport,
-    ifGpu,
-    transitionPrefix,
-    transformPrefix,
     transToZero
   } from "./module_animation.js"
 
-  export {
-    instanceArr,
-    onStop
-  };
+
 
   export default JumbleScramble;
 
+ JumbleScramble.prototype.transToZero = transToZero;
 
 
-  var instanceArr = []; // fix this export /import weirdness!!! - possibly set this to the JumbleScramble constructor function's constructor
+// fix this export /import weirdness!!! - possibly set this to the JumbleScramble constructor function's constructor
 
 
-  function onStop(evt, elt, div, o) { // Stop
-    animateBack(elt, o);
-    transToZero(elt);
+  JumbleScramble.prototype.onStop = function(elt, o) { // Stop
+    var instanceArr = this.constructor.instanceArr;
+    animateBack(elt, o, instanceArr);
+    instanceArr[0].transToZero(elt);
+
 
     if (o.setChars) {  setChars(elt);  } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
 
     transSupport ? elt.addEventListener('transitionend', function() {
 
-      if (!posObj.crossTrigger) {       // insert the dragged element into its new position efter drop in originating container
+      if (!instanceArr.crossTrigger) {       // insert the dragged element into its new position efter drop in originating container
         //  var eltPrev = instanceArr[elt.belongsTo].elts[elt.n - 1];
           if (elt.n == 0) {
           //  $(elt).insertBefore(instanceArr[elt.belongsTo].elts[1]);
@@ -60,10 +58,10 @@
 
     function appendRemove() {
       if (!!o.autoValidate) {  o.autoValidate(); } // calls the autovalidate function in the plugin calling script
-      if (posObj.crossTrigger) {
+      if (instanceArr.crossTrigger) {
         instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
         instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false);
-        posObj.crossTrigger = false;
+        instanceArr.crossTrigger= false;
         instanceArr[elt.movesTo].cutOffEnd()
       }
     };
@@ -85,15 +83,24 @@
     thisElts[n].movesTo = adjCon;
     thisElts[n].currentPos = {};
 
+
   };
 
 
   function JumbleScramble(element, options) { // Constructor function
+    if (!this.constructor.instanceArr) {
+      this.constructor.instanceArr = [];
+      this.constructor.instanceArr.crossTrigger = false;
+      this.constructor.instanceArr.transSupport = transSupport;
+      this.constructor.instanceArr.transitionPrefix = transitionPrefix;
+      this.constructor.instanceArr.transformPrefix = transformPrefix;
+      this.constructor.instanceArr.ifGpu = ifGpu;
+    }
 
     this.div = $(element);
     this.divOffset = this.div.offset();
     this.ul = this.div.find('ul')[0];
-    this.container = instanceArr.length;
+    this.container = this.constructor.instanceArr.length;
     this.adjCon = this.container % 2 == 0 ? this.container + 1 : this.container - 1;
 
     this.options = $.extend({}, defaults, options);
@@ -102,14 +109,22 @@
     this.dropLimit = this.options.dropLimit[0];
     this.ul.style[transformPrefix] = 'translate3d(0px,0px,0px)';
     this.dfd = $.Deferred()
+   this.constructor.instanceArr.push(this);
 
-    instanceArr.push(this);
+
+
 
   };
+
+  // JumbleScramble.prototype.instanceArray = function {
+  //
+  //
+  // }
 
   JumbleScramble.prototype.addHandlers = addHandlers;
 
   JumbleScramble.prototype.init = function() {
+
 
     var li = this.div[0].getElementsByTagName('li'); // Variables declaration
     var left = 0,
@@ -141,6 +156,8 @@
       }
        var newPosTop = posTop - $thisHeight;
        var newPosLeft = posLeft - $thisWidth;
+
+
       addToObject(thisElts, elt, n, $thisHeight, $thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
 
       n = n + 1;
@@ -161,15 +178,15 @@
     if(this.constructor.whendfd == undefined) {
       //flag to prevent the when function from running on each instance init. whendfd is set on the inits constructor on the first init
       // a new array is created containing the derred functions from all the instances in the instanceArr
-      var instanceArrDfd = $.map(instanceArr, function (val, ind) {
+      var instanceArrDfd = $.map($this.instanceArr, function (val, ind) {
           return val.dfd
       });
       // the deferred instances is passed in as an array
-      this.constructor.whendfd = $.when.apply($, instanceArrDfd).done(function () {
+      this.constructor.whendfd = $.when.apply($, $this.instanceArrDfd).done(function () {
         console.log('all resolved')
         // all the instances have been initialized
         // trigger the callback on all divs on all instances in the current instanceArr
-        $.each(instanceArr, function( index, value ) {
+        $.each($this.instanceArr, function( index, value ) {
               value.div.trigger('layoutCompleteAll')
             });
 
@@ -218,7 +235,7 @@
 
        // get each li height in case of individual heights.
         elt.style.top = posTop + 'px'
-        console.log(elt.style.top)
+
         var thisHeight = outerHeight(elt);
 
         posTop += thisHeight;
@@ -251,6 +268,7 @@
 
 
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
+    var instanceArr = this.constructor.instanceArr;
     var eltsSize = 0;
     var eltDim = this.options.isVertical ? 'completeHeight' : 'completeWidth';
     for (var i = 0; i < this.elts.length; i++) {
@@ -271,6 +289,7 @@
   JumbleScramble.prototype.animAdded = function(elems, parentCont) {  // should be in animation module, and not on the prototype
 
     var tArr = elems;
+    var instanceArr = this.constructor.instanceArr;
 
     var parentCont = parentCont;
 
@@ -310,7 +329,7 @@
     var o = this.options;
     var listClass = o.isVertical ? 'listItem' : 'listItem-horizontal';
     var elt = $('<li class=' + listClass + '>' + liText + '</li>');
-
+    var instanceArr = this.constructor.instanceArr;
     /* 		if (addTrans) { elt[0].style[transformPrefix] = 'scale(0,0)'; elt[0].style.opacity = '1'; } */
 
     var tempArr = [];
@@ -334,14 +353,14 @@
     for (var i = n; i < thisElts.length; i++) {
       var ets = thisElts[i];
       thisElts[i].moved = false;
-      ets.style[transitionPrefix] = '0ms';
-      ets.style[transformPrefix] = transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
+      ets.style[instanceArr.transitionPrefix] = '0ms';
+      ets.style[instanceArr.transformPrefix] = instanceArr.transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
       ets.style.left = parseInt(ets.style.left) + $thisWidth + 'px'
       ets.style.top = parseInt(ets.style.top) + $thisHeight + 'px'
 
       if (addTrans) {
-        ets.style[transformPrefix] = 'translate(' + -($thisWidth) + 'px,' + -($thisHeight) + 'px)';
-        transToZero(thisElts[i]);
+        ets.style[instanceArr.transformPrefix] = 'translate(' + -($thisWidth) + 'px,' + -($thisHeight) + 'px)';
+        instanceArr[0].transToZero(thisElts[i]);
       }
     }
 

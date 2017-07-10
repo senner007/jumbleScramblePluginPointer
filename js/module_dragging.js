@@ -1,24 +1,25 @@
-import {instanceArr} from "./module_main.js"
-import {animateBack} from "./module_animation.js"
-import {transSupport, transitionPrefix, transformPrefix, transToZero} from "./module_animation.js"
+
+// import {animateBack} from "./module_animation.js"
+
 
 export {
   onDrag,
-  onDragAdj,
-  onDragElts,
-  posObj
+  // onDragAdj,
+  // onDragElts,
+
 };
 
 var posObj = {}
-posObj.crossTrigger = false;
 
 
-function onDrag(elt, elts, o) { // Drag
+
+function onDrag(elt, elts, o, instanceArr) { // Drag
 
   var eltPos = {
     top: elt.currentPos.top,
     left: elt.currentPos.left
   }
+
 
 
   var thisElt = posObj; //must be saved to a global object. (Possibly to avoid random
@@ -45,22 +46,23 @@ function onDrag(elt, elts, o) { // Drag
   // adjacent container if below
   // dropLimit - refactor to add method for horizontal too.
 
-  if (dirSwitch && posObj.crossTrigger == false) {
+  if (dirSwitch && instanceArr.crossTrigger == false) {
 
     if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= instanceArr[elt.movesTo].dropLimit) {
       // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
 
 
       onDragAdj.triggerOn(elt, adjConElts, elts, o);
-      posObj.crossTrigger = true;
+      instanceArr.crossTrigger = true;
     }
   };
 
-  if (!dirSwitch && posObj.crossTrigger == true && Object.keys(elts).length > 1) { // go back to originating container
+  if (!dirSwitch && instanceArr.crossTrigger == true && Object.keys(elts).length > 1) { // go back to originating container
+
     console.log('back to originating')
 
     onDragAdj.triggerOff(elt, adjConElts, elts, o);
-    posObj.crossTrigger = false;
+    instanceArr.crossTrigger = false;
   };
   var move;
   /*--------------------------------------------------------------------*/
@@ -72,15 +74,17 @@ function onDrag(elt, elts, o) { // Drag
     return;
   } // doing nothing
 
+ onDragElts.instanceArr = instanceArr;
+ onDragAdj.instanceArr = instanceArr;
   /*--------------------------------------------------------------------*/
   if (move == 'forward') { //  move forward
-    posObj.crossTrigger ? onDragAdj.moveForward(elt, adjConElts) : onDragElts.eltsMoveForward(elt, elts); };
+    instanceArr.crossTrigger ? onDragAdj.moveForward(elt, adjConElts) : onDragElts.eltsMoveForward(elt, elts); };
   if (move == "backward") { //  move backward
-    posObj.crossTrigger ? onDragAdj.moveBack(elt, adjConElts) : onDragElts.eltsMoveBack(elt, elts); } ;
+    instanceArr.crossTrigger ? onDragAdj.moveBack(elt, adjConElts) : onDragElts.eltsMoveBack(elt, elts); } ;
   if (move == 'up') { //  move up
-    posObj.crossTrigger ? onDragAdj.moveUp(elt, adjConElts) : onDragElts.eltsMoveUp(elt, elts); };
+    instanceArr.crossTrigger ? onDragAdj.moveUp(elt, adjConElts) : onDragElts.eltsMoveUp(elt, elts); };
   if (move == 'down') { //  move down
-    posObj.crossTrigger ? onDragAdj.moveDown(elt, adjConElts) : onDragElts.eltsMoveDown(elt, elts); };
+    instanceArr.crossTrigger ? onDragAdj.moveDown(elt, adjConElts) : onDragElts.eltsMoveDown(elt, elts); };
 };
 
 
@@ -155,7 +159,7 @@ var onDragElts = {
       var eltNext = elts[elt.n + 1];
       var eltNextBound = eltNext.pos.left + eltNext.completeWidth / 2;
       if (elt.currentPos.left + (elt.completeWidth/1.2)  > eltNextBound || flag) { // (elt.completeWidth/1.2) - tweak me!
-          console.log(elt.currentPos.left)
+
         // if (eltNext.hasClass('locked')) {
         //   return;
         // }
@@ -174,12 +178,12 @@ var onDragElts = {
   eltsAnimate: function(eltDimension, elem) {
     var dir = elem.o.isVertical ? 'top' : 'left';
     //var dirTranslate = elem.o.isVertical ? 'translateY(' : 'translateX(';
-
-    elem.style[transitionPrefix] = '0s';
+    this.instanceArr
+    elem.style[this.instanceArr.transitionPrefix] = '0s';
     elem.style[dir] = elem.pos[dir] + 'px';
-    elem.style[transformPrefix] = elem.o.isVertical ? 'translate3d(0px,' + eltDimension + 'px, 0px)' : 'translate3d(' + eltDimension + 'px, 0px, 0px)'
-    transToZero(elem);
-  }
+    elem.style[this.instanceArr.transformPrefix] = elem.o.isVertical ? 'translate3d(0px,' + eltDimension + 'px, 0px)' : 'translate3d(' + eltDimension + 'px, 0px, 0px)'
+    this.instanceArr[0].transToZero(elem);
+  },
 }
 
 
@@ -192,7 +196,7 @@ var onDragAdj = {
     var tempArr = [];
     var objOffset = o.isVertical ? 'top' : 'left';
     var objDimension = o.isVertical ? 'completeHeight' : 'completeWidth';
-    if (transSupport) {
+    if (this.instanceArr.transSupport) {
       var objTranslate = o.isVertical ? 'translate3d(0px,' + elt[objDimension] + 'px,0px)' : 'translate3d(' + elt[objDimension] + 'px,0px,0px)';
     } else {
       var objTranslate = o.isVertical ? 'translateY(' + elt[objDimension] + 'px)' : 'translateX(' + elt[objDimension] + 'px)';
@@ -204,8 +208,8 @@ var onDragAdj = {
 
         if (obj.moved == false) {
           tempArr.push(i)
-          obj.style[transitionPrefix] = '250ms ease';
-          obj.style[transformPrefix] = objTranslate
+          obj.style[this.instanceArr.transitionPrefix] = '250ms ease';
+          obj.style[this.instanceArr.transformPrefix] = objTranslate
           obj.moved = true;
           elt.insertPos = obj.n;
           obj.pos[objOffset] = obj.pos[objOffset] + elt[objDimension];
@@ -230,7 +234,7 @@ var onDragAdj = {
       if (obj.moved == true) {
         obj.moved = false;
         obj.pos[objOffset] = obj.pos[objOffset] - elt[objDimension];
-        transToZero(obj);
+        this.instanceArr[0].transToZero(obj);
       }
     }
 
@@ -244,8 +248,8 @@ var onDragAdj = {
     if (elt.insertPos > 0) {
       var obj = adjConElts[elt.insertPos - 1]
       if (elt.currentPos.top < obj.pos.top + obj.completeHeight / 2 && obj.moved == false) {
-        obj.style[transitionPrefix] = '250ms ease';
-        obj.style[transformPrefix] = transSupport ? 'translate3d(0px,' + elt.completeHeight + 'px, 0px)' : 'translateY(' + elt.completeHeight + 'px)';
+        obj.style[this.instanceArr.transitionPrefix] = '250ms ease';
+        obj.style[this.instanceArr.transformPrefix] = this.instanceArr.transSupport ? 'translate3d(0px,' + elt.completeHeight + 'px, 0px)' : 'translateY(' + elt.completeHeight + 'px)';
         obj.moved = true;
         elt.insertPos = obj.n;
         obj.pos.top = obj.pos.top + elt.completeHeight;
@@ -256,7 +260,7 @@ var onDragAdj = {
     if (elt.insertPos < adjConElts.length) {
       var obj = adjConElts[elt.insertPos]
       if (elt.currentPos.top + elt.completeHeight > obj.pos.top + obj.completeHeight / 2 && obj.moved == true) {
-        transToZero(obj);
+        this.instanceArr[0].transToZero(obj);
         obj.moved = false;
         elt.insertPos = obj.n + 1;
         obj.pos.top = obj.pos.top - elt.completeHeight;
@@ -267,7 +271,7 @@ var onDragAdj = {
     if (elt.insertPos < adjConElts.length) {
       var obj = adjConElts[elt.insertPos]
       if (elt.currentPos.left + (elt.completeWidth/1.2) > obj.pos.left + obj.completeWidth / 2 && obj.moved == true) { //(elt.completeWidth/1.2)  - Tweak me!
-        transToZero(obj);
+        this.instanceArr[0].transToZero(obj);
         obj.moved = false;
         elt.insertPos = obj.n + 1;
         obj.pos.left = obj.pos.left - elt.completeWidth;
@@ -281,8 +285,8 @@ var onDragAdj = {
 
       if (elt.currentPos.left < obj.pos.left + obj.completeWidth / 2 && obj.moved == false) {
 
-        obj.style[transitionPrefix] = '250ms ease';
-        obj.style[transformPrefix] = transSupport ? 'translate3d(' + elt.completeWidth + 'px,0px,0px)' : 'translateX(' + elt.completeWidth + 'px)';
+        obj.style[this.instanceArr.transitionPrefix] = '250ms ease';
+        obj.style[this.instanceArr.transformPrefix] = this.instanceArr.transSupport ? 'translate3d(' + elt.completeWidth + 'px,0px,0px)' : 'translateX(' + elt.completeWidth + 'px)';
         obj.moved = true;
         elt.insertPos = obj.n;
         obj.pos.left = obj.pos.left + elt.completeWidth;

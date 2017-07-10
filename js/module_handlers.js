@@ -1,17 +1,21 @@
-import {transitionPrefix, transSupport, transformPrefix} from "./module_animation.js"
 import {onDrag} from "./module_dragging.js"
-import {instanceArr, onStop} from "./module_main.js"
+
 
 export {addHandlers}
 
 function addHandlers () {
 
   var targetOffsetY, targetOffsetX, newDx, newDy;
+  var transformPrefix = this.constructor.instanceArr.transformPrefix;
+  var transitionPrefix = this.constructor.instanceArr.transitionPrefix;
+  var transSupport = this.constructor.instanceArr.transSupport;
+  // var ifGpu = this.constructor.instanceArr.ifGpu;
   var div = this.div;
   var ul = this.ul;
   var adjCon = this.adjCon;
   var o = this.options;
   var thisElts;
+  var instanceArr = this.constructor.instanceArr;
   var constructorThis = this;
   var move, elt;
   var movePos = {};
@@ -43,7 +47,7 @@ function addHandlers () {
     move.style.zIndex = 5;
     //move.addClass('dragging');
     move.className = classDefine + ' dragging';
-  
+
     elt = thisElts[move.n]
     //console.log(elt instanceof jQuery)
     if (instanceArr[adjCon]) {  instanceArr[adjCon].ul.style.zIndex = '-1' }
@@ -93,7 +97,7 @@ function addHandlers () {
     elt.currentPos.left = targetOffsetX + newDx;
     //	console.log('moving')
 
-    onDrag(elt, thisElts, o);
+    onDrag(elt, thisElts, o, instanceArr);
 
   };
 
@@ -110,7 +114,7 @@ function addHandlers () {
       if (!elt) {
         return;
       }
-      onStop(e, elt, div, o);
+      constructorThis.onStop(elt, o);
     } else { // if it hasn't moved
       clearClass();
     }
