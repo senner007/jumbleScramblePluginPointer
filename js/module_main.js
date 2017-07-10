@@ -31,10 +31,18 @@
     // if the difference in time between the initialized drag and the release is less than specified,
     // it will increase the transition speed of the dropped item going to its new position
         console.log(instanceArr.diff)
+
+
     if (instanceArr.diff < 0.5) {
 
-      var speed = '20ms ease'
+      var speed = '15ms ease'
     }
+  if (!instanceArr.crossTrigger) {
+
+      var speed = '250ms ease'
+      instanceArr.diff = 0.5
+    }
+
 
 
 
@@ -57,7 +65,7 @@
 
           }
 
-          instanceArr.diff = 0.6
+
       }
 
       appendRemove()
