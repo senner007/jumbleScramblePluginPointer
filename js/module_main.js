@@ -27,6 +27,8 @@
 
     var instanceArr = this.constructor.instanceArr;
 
+
+
     if (o.setChars) {  setChars(elt);  } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
 
 
@@ -392,7 +394,7 @@
     }; // animation only needed when triggering add
 
     console.timeEnd("concatenation");
-    elt.hasFinished = true
+
 
   }
 
