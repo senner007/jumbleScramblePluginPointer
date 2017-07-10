@@ -35,7 +35,7 @@ Todo:
 + use native event delegation https://stackoverflow.com/questions/14174056/native-addeventlistener-with-selector-like-on-in-jquery
 + trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
 + insert before and after with native - https://blog.garstasio.com/you-dont-need-jquery/dom-manipulation/#inserting-elements-before-&-after
-+ currently doesn't work in Edge - Fix me!!
+
 
 
 Working:
@@ -59,6 +59,7 @@ Fixed:
 + allow dragging and dropping over other instances - Fixed
 + double cliking elements throws errors - Fixed
 + do not run init on object instantiation (run after as obj.init())- Fixed
++ currently doesn't work in Edge - Fixed ({once: true} in events doesn't agree with Edge)
 
 
 
