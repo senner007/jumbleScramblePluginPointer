@@ -49,6 +49,7 @@ function addHandlers () {
     move.className = classDefine + ' dragging';
 
     elt = thisElts[move.n]
+
     //console.log(elt instanceof jQuery)
     if (instanceArr[adjCon]) {  instanceArr[adjCon].ul.style.zIndex = '-1' }
     //will also prevent the adjacent ul from

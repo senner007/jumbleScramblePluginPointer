@@ -46,6 +46,7 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
   // adjacent container if below
   // dropLimit - refactor to add method for horizontal too.
 
+
   if (dirSwitch && instanceArr.crossTrigger == false) {
 
     if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= instanceArr[elt.movesTo].dropLimit) {
@@ -76,6 +77,7 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
 
  onDragElts.instanceArr = instanceArr;
  onDragAdj.instanceArr = instanceArr;
+
   /*--------------------------------------------------------------------*/
   if (move == 'forward') { //  move forward
     instanceArr.crossTrigger ? onDragAdj.moveForward(elt, adjConElts) : onDragElts.eltsMoveForward(elt, elts); };
@@ -252,7 +254,9 @@ var onDragAdj = {
         obj.style[this.instanceArr.transformPrefix] = this.instanceArr.transSupport ? 'translate3d(0px,' + elt.completeHeight + 'px, 0px)' : 'translateY(' + elt.completeHeight + 'px)';
         obj.moved = true;
         elt.insertPos = obj.n;
+
         obj.pos.top = obj.pos.top + elt.completeHeight;
+
       };
     };
   },
@@ -260,10 +264,12 @@ var onDragAdj = {
     if (elt.insertPos < adjConElts.length) {
       var obj = adjConElts[elt.insertPos]
       if (elt.currentPos.top + elt.completeHeight > obj.pos.top + obj.completeHeight / 2 && obj.moved == true) {
+
         this.instanceArr[0].transToZero(obj);
         obj.moved = false;
         elt.insertPos = obj.n + 1;
         obj.pos.top = obj.pos.top - elt.completeHeight;
+
       }
     };
   },

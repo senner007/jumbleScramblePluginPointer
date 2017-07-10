@@ -8,7 +8,6 @@
   } from "./modules.js"
 
 
-
   import {
     addHandlers
   } from "./module_handlers.js"
@@ -18,25 +17,20 @@
     transToZero
   } from "./module_animation.js"
 
-
-
   export default JumbleScramble;
 
  JumbleScramble.prototype.transToZero = transToZero;
 
 
-// fix this export /import weirdness!!! - possibly set this to the JumbleScramble constructor function's constructor
-
 
   JumbleScramble.prototype.onStop = function(elt, o) { // Stop
-    var instanceArr = this.constructor.instanceArr;
-    animateBack(elt, o, instanceArr);
-    instanceArr[0].transToZero(elt);
 
+    var instanceArr = this.constructor.instanceArr;
 
     if (o.setChars) {  setChars(elt);  } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
 
-    transSupport ? elt.addEventListener('transitionend', function() {
+
+    $(elt).one('transitionend', function() {
 
       if (!instanceArr.crossTrigger) {       // insert the dragged element into its new position efter drop in originating container
         //  var eltPrev = instanceArr[elt.belongsTo].elts[elt.n - 1];
@@ -53,16 +47,22 @@
       }
 
       appendRemove()
-    }, {once: true}) : appendRemove() // only wait for transitionend if supported (not ie9)
-    // once not supported before edge 16
+    })
+
+
+    animateBack(elt, o, instanceArr);
+    instanceArr[0].transToZero(elt);
+    // only wait for transitionend if supported (not ie9)
+    //{once: true}  once not supported before edge 16
 
     function appendRemove() {
+       console.time("concatenation");
       if (!!o.autoValidate) {  o.autoValidate(); } // calls the autovalidate function in the plugin calling script
       if (instanceArr.crossTrigger) {
         instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
         instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false);
         instanceArr.crossTrigger= false;
-        instanceArr[elt.movesTo].cutOffEnd()
+       instanceArr[elt.movesTo].cutOffEnd()
       }
     };
   };
@@ -82,6 +82,7 @@
     thisElts[n].belongsTo = thisContainer;
     thisElts[n].movesTo = adjCon;
     thisElts[n].currentPos = {};
+
 
 
   };
@@ -109,17 +110,10 @@
     this.dropLimit = this.options.dropLimit[0];
     this.ul.style[transformPrefix] = 'translate3d(0px,0px,0px)';
     this.dfd = $.Deferred()
-   this.constructor.instanceArr.push(this);
-
-
-
+    this.constructor.instanceArr.push(this);
 
   };
 
-  // JumbleScramble.prototype.instanceArray = function {
-  //
-  //
-  // }
 
   JumbleScramble.prototype.addHandlers = addHandlers;
 
@@ -143,6 +137,7 @@
         $(elt).css('top', posTop + 'px'); // get each li height in case of individual heights.
 
         var $thisHeight = $(elt).outerHeight(true);
+
         posTop += $thisHeight;
 
 
@@ -326,6 +321,7 @@
 
     var thisElts = this.elts;
     var n = Math.min(Math.max(parseInt(liPosition), 0), thisElts.length);
+
     var o = this.options;
     var listClass = o.isVertical ? 'listItem' : 'listItem-horizontal';
     var elt = $('<li class=' + listClass + '>' + liText + '</li>');
@@ -334,6 +330,7 @@
 
     var tempArr = [];
     for (var i = n; i < thisElts.length; i++) {
+
       tempArr.push(thisElts[i]);
     }
 
@@ -347,11 +344,14 @@
     } // if there are no elements present at drop
     else(n > 0 ? elt.insertAfter(thisElts[n - 1]).css(eltObj) : elt.insertBefore(thisElts[n]).css(eltObj));
 
-    var $thisWidth = o.isVertical ? 0 : elt.outerWidth(true);
-    var $thisHeight = o.isVertical ? elt.outerHeight(true) : 0;
+    elt = elt[0]
+
+    var $thisWidth = o.isVertical ? 0 : outerWidth(elt);
+    var $thisHeight = o.isVertical ? outerHeight(elt) : 0;
 
     for (var i = n; i < thisElts.length; i++) {
       var ets = thisElts[i];
+
       thisElts[i].moved = false;
       ets.style[instanceArr.transitionPrefix] = '0ms';
       ets.style[instanceArr.transformPrefix] = instanceArr.transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
@@ -371,12 +371,13 @@
     var newTopPos = parseInt(eltObj.top),
         newLeftPos = parseInt(eltObj.left)
 
-        elt = elt[0]
+
     addToObject(thisElts, elt, n, $thisHeight, $thisWidth, o, this.container, this.adjCon,newTopPos, newLeftPos);
 
 
 
     for (var i = 0; i < tempArr.length; i++) {
+
       var marginLeft = o.isVertical ? 0 : (tempArr[i].completeWidth - tempArr[i].offsetWidth); // account for margin
       tempArr[i].pos.left = tempArr[i].offsetLeft - marginLeft;
       tempArr[i].pos.top = tempArr[i].offsetTop;
@@ -390,6 +391,8 @@
       return elt;
     }; // animation only needed when triggering add
 
+    console.timeEnd("concatenation");
+    elt.hasFinished = true
 
   }
 
@@ -414,6 +417,7 @@
 
 
     if (dropDelete != true) {           // this code is run when the removeLiElem mothod is called after init. not sure what everything does - maybe refactor
+
       for (var i = n + 1; i < thisElts.length; i++) {
         var el = thisElts[i];
 
@@ -439,6 +443,7 @@
         elt.remove()
         if (callBack) {
           callBack(); //the callback is fired after the animation has finished
+
         }
       }, 250);
     } else {
