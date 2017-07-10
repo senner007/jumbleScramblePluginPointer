@@ -30,6 +30,9 @@
     // This will speed up the animation and subsequently the add and remove logic after dropping an item.
     // if the difference in time between the initialized drag and the release is less than specified,
     // it will increase the transition speed of the dropped item going to its new position
+
+    instanceArr.end   = new Date();
+    instanceArr.diff = (instanceArr.end.getTime() - instanceArr.start.getTime()) / 1000;
         console.log(instanceArr.diff)
 
 
@@ -83,8 +86,7 @@
       if (instanceArr.crossTrigger) {
         instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
         instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false);
-        instanceArr.end   = new Date();
-        instanceArr.diff = (instanceArr.end.getTime() - instanceArr.start.getTime()) / 1000;
+
         instanceArr.crossTrigger= false;
        instanceArr[elt.movesTo].cutOffEnd()
       }
@@ -120,9 +122,6 @@
       this.constructor.instanceArr.transitionPrefix = transitionPrefix;
       this.constructor.instanceArr.transformPrefix = transformPrefix;
       this.constructor.instanceArr.ifGpu = ifGpu;
-      this.constructor.instanceArr.start = new Date();
-      this.constructor.instanceArr.end = new Date();;
-      this.constructor.instanceArr.diff = 0;
 
     }
 
