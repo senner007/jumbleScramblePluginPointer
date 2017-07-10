@@ -27,6 +27,15 @@
 
     var instanceArr = this.constructor.instanceArr;
 
+    // This will speed up the animation and subsequently the add and remove logic after dropping an item.
+    // if the difference in time between the initialized drag and the release is less than specified,
+    // it will increase the transition speed of the dropped item going to its new position
+        console.log(instanceArr.diff)
+    if (instanceArr.diff < 0.5) {
+
+      var speed = '20ms ease'
+    }
+
 
 
     if (o.setChars) {  setChars(elt);  } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
@@ -45,7 +54,10 @@
             instanceArr[elt.belongsTo].ul.insertBefore(elt, instanceArr[elt.belongsTo].elts[elt.n + 1]);
             // insert elt before the next one - replaces $.insertAfter -http://xahlee.info/js/js_insert_after.html
 
+
           }
+
+          instanceArr.diff = 0.6
       }
 
       appendRemove()
@@ -53,7 +65,7 @@
 
 
     animateBack(elt, o, instanceArr);
-    instanceArr[0].transToZero(elt);
+    instanceArr[0].transToZero(elt, speed);
     // only wait for transitionend if supported (not ie9)
     //{once: true}  once not supported before edge 16
 
@@ -63,6 +75,8 @@
       if (instanceArr.crossTrigger) {
         instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
         instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false);
+        instanceArr.end   = new Date();
+        instanceArr.diff = (instanceArr.end.getTime() - instanceArr.start.getTime()) / 1000;
         instanceArr.crossTrigger= false;
        instanceArr[elt.movesTo].cutOffEnd()
       }
@@ -98,6 +112,10 @@
       this.constructor.instanceArr.transitionPrefix = transitionPrefix;
       this.constructor.instanceArr.transformPrefix = transformPrefix;
       this.constructor.instanceArr.ifGpu = ifGpu;
+      this.constructor.instanceArr.start = new Date();
+      this.constructor.instanceArr.end = new Date();;
+      this.constructor.instanceArr.diff = 0;
+
     }
 
     this.div = $(element);
@@ -112,6 +130,8 @@
     this.dropLimit = this.options.dropLimit[0];
     this.ul.style[transformPrefix] = 'translate3d(0px,0px,0px)';
     this.dfd = $.Deferred()
+
+
     this.constructor.instanceArr.push(this);
 
   };
@@ -328,6 +348,7 @@
     var listClass = o.isVertical ? 'listItem' : 'listItem-horizontal';
     var elt = $('<li class=' + listClass + '>' + liText + '</li>');
     var instanceArr = this.constructor.instanceArr;
+
     /* 		if (addTrans) { elt[0].style[transformPrefix] = 'scale(0,0)'; elt[0].style.opacity = '1'; } */
 
     var tempArr = [];
@@ -393,7 +414,9 @@
       return elt;
     }; // animation only needed when triggering add
 
-    console.timeEnd("concatenation");
+    // Do your operations
+      console.timeEnd("concatenation");
+
 
 
   }

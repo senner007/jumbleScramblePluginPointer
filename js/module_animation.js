@@ -8,14 +8,16 @@ export {
 
 
 
-function transToZero(elt) {
+function transToZero(elt, speed) {
 
   var instanceArr = this.constructor.instanceArr;
-
+if (speed == undefined) {
+  var speed = '250ms ease'
+}
 
   window.getComputedStyle(elt)[instanceArr.transformPrefix] // needed to apply the transition style dynamically
 
-  elt.style[instanceArr.transitionPrefix] = '250ms ease';
+  elt.style[instanceArr.transitionPrefix] = speed;
 
   elt.style[instanceArr.transformPrefix] = instanceArr.ifGpu // translateZ doesn't work for ie9
 

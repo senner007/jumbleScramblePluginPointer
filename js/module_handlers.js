@@ -35,7 +35,9 @@ function addHandlers () {
     if (dontTouch == true) {
       return;
     } // flag to prevent multi
-  //	e.stopPropagation();
+    //	e.stopPropagation();
+
+    instanceArr.start = new Date();
 
     e.preventDefault();
     thisElts = constructorThis.elts;
