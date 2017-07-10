@@ -36,6 +36,7 @@ Todo:
 + trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
 + insert before and after with native - https://blog.garstasio.com/you-dont-need-jquery/dom-manipulation/#inserting-elements-before-&-after
 + improve the addLiElem logic, remove jQuery
++ optionally implement logic to calculate animation speed based on the position of the dropped item relative to its new position
 
 
 
@@ -55,6 +56,7 @@ Working:
 + No longer uses jquery plugin structure. Instantiate object using new keyword. Ex var myList = new JumbleScramble(divElem, options)
 + Examples of add and remove method calls
 + option to fire layoutComplete after all instances have been initialized
++ Animation speed logic to determine when to speed up animations.
 
 Fixed:
 + allow dragging and dropping over other instances - Fixed
