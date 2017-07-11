@@ -34,6 +34,7 @@
     instanceArr.end   = new Date();
     instanceArr.diff = (instanceArr.end.getTime() - instanceArr.start.getTime()) / 1000;
     console.log(instanceArr.diff)
+    instanceArr.interrupt = true;
     if (instanceArr.diff < 0.5) {
 
       var speed = '170ms ease'
@@ -43,9 +44,9 @@
       var speed = '100ms ease'
     }
 
-    if (instanceArr.diff < 0.3) {
+    if (instanceArr.diff < 0.2) {
 
-      var speed = '50ms ease'
+      var speed = '15ms ease'
     }
 
 
@@ -70,9 +71,11 @@
 
           }
 
-
+        instanceArr.interrupt = false;
       }
-
+      elt.canBeDragged = true;
+      // This will prevent the layout from breaking if the user quickly drags an item across, drops it
+      // and the immediately tries to drag it back again. It will disable the handler for the item until it has animatied to its position
       appendRemove()
     })
 
@@ -124,6 +127,7 @@
       this.constructor.instanceArr.transitionPrefix = transitionPrefix;
       this.constructor.instanceArr.transformPrefix = transformPrefix;
       this.constructor.instanceArr.ifGpu = ifGpu;
+      this.constructor.instanceArr.interrupt = false;
 
     }
 
@@ -425,6 +429,8 @@
 
     // Do your operations
       console.timeEnd("concatenation");
+      instanceArr.interrupt = false;
+
 
 
 

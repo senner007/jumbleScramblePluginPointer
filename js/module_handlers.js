@@ -32,9 +32,12 @@ function addHandlers () {
   ul.style.zIndex = '1'
 
     $(ul).on(eStart, liSelector, function(e) {
-    if (dontTouch == true) {
+    if (dontTouch == true || e.target.canBeDragged == false) {
       return;
-    } // flag to prevent multi
+    }
+    e.target.canBeDragged = false
+
+    // flag to prevent multi
     //	e.stopPropagation();
 
     instanceArr.start = new Date();
