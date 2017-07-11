@@ -45,7 +45,9 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
   // trigger animations for
   // adjacent container if below
   // dropLimit - refactor to add method for horizontal too.
+console.log(instanceArr.interrupt )
 if (  instanceArr.interrupt == true) {return}
+
 // this will prevent the layout from breaking if the user drags an item across slowly
 // and then immediately drags more items to the same container
 

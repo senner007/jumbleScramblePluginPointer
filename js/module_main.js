@@ -35,18 +35,17 @@
     instanceArr.diff = (instanceArr.end.getTime() - instanceArr.start.getTime()) / 1000;
     console.log(instanceArr.diff)
     instanceArr.interrupt = true;
-    if (instanceArr.diff < 0.5) {
+    //// this will prevent the layout from breaking if the user drags an item across slowly
+    // and then immediately drags more items to the same container
 
-      var speed = '170ms ease'
-    }
     if (instanceArr.diff < 0.4) {
 
-      var speed = '100ms ease'
+      var speed = '170ms ease'
     }
 
     if (instanceArr.diff < 0.2) {
 
-      var speed = '15ms ease'
+      var speed = '50ms ease'
     }
 
 

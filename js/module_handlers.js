@@ -110,8 +110,9 @@ function addHandlers () {
 
   function pointerupFunction(e) {
 
+
     if (hasMoved) {
-      e.target.canBeDragged = false
+      e.target.canBeDragged = false;
       e.preventDefault();
       hasMoved = false;
       clearClass();
