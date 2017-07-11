@@ -36,16 +36,16 @@
     console.log(instanceArr.diff)
     if (instanceArr.diff < 0.5) {
 
-      var speed = '150ms ease'
+      var speed = '170ms ease'
     }
     if (instanceArr.diff < 0.4) {
 
-      var speed = '70ms ease'
+      var speed = '100ms ease'
     }
 
     if (instanceArr.diff < 0.3) {
 
-      var speed = '15ms ease'
+      var speed = '50ms ease'
     }
 
 
