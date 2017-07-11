@@ -35,7 +35,7 @@ function addHandlers () {
     if (dontTouch == true || e.target.canBeDragged == false) {
       return;
     }
-    e.target.canBeDragged = false
+
 
     // flag to prevent multi
     //	e.stopPropagation();
@@ -74,6 +74,7 @@ function addHandlers () {
 
   function pointermoveFunction(e) {
 
+
     if (!dontTouch) {
       return;
     }
@@ -108,7 +109,9 @@ function addHandlers () {
   };
 
   function pointerupFunction(e) {
+
     if (hasMoved) {
+      e.target.canBeDragged = false
       e.preventDefault();
       hasMoved = false;
       clearClass();
