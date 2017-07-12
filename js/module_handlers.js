@@ -5,17 +5,17 @@ export {addHandlers}
 
 function addHandlers () {
 
+  var instanceArr = this.constructor.instanceArr;
   var targetOffsetY, targetOffsetX, newDx, newDy;
-  var transformPrefix = this.constructor.instanceArr.transformPrefix;
-  var transitionPrefix = this.constructor.instanceArr.transitionPrefix;
-  var transSupport = this.constructor.instanceArr.transSupport;
+  var transformPrefix = instanceArr.transformPrefix;
+  var transitionPrefix = instanceArr.transitionPrefix;
+  var transSupport = instanceArr.transSupport;
   // var ifGpu = this.constructor.instanceArr.ifGpu;
   var div = this.div;
   var ul = this.ul;
   var adjCon = this.adjCon;
   var o = this.options;
   var thisElts;
-  var instanceArr = this.constructor.instanceArr;
   var constructorThis = this;
   var move, elt;
   var movePos = {};

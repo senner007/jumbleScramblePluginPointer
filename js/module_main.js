@@ -36,7 +36,9 @@
     console.log(instanceArr.diff)
     instanceArr.interrupt = true;
     //// this will prevent the layout from breaking if the user drags an item across slowly
-    // and then immediately drags more items to the same container
+    // and then immediately drags more items to the same container. instanceArr.diff measures
+    // the time it takes to initialize the drag to when it is dropped. A smaller difference
+    // will increase the speed of the layout animation.
 
     if (instanceArr.diff < 0.4) {
 
