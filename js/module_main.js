@@ -392,8 +392,6 @@
      elt.innerHTML = item;
      elt = elt.firstChild;
 
-
-
     var instanceArr = this.getInstances();
 
     /* 		if (addTrans) { elt[0].style[transformPrefix] = 'scale(0,0)'; elt[0].style.opacity = '1'; } */
@@ -411,26 +409,7 @@
 
     } // if there are no elements present at drop
 
-    else {
-
-      (n > 0) ? this.ul.insertBefore(elt, thisElts[elt.n + 1]) :   this.ul.insertBefore(elt, thisElts[n]);
-
-    }
-
-
-
-  //
-  // ; // insert elt before the first one - replaces $.insertBefore
-  // }
-  // else {
-  //   //$(elt).insertAfter(eltPrev);
-  //   instanceArr[elt.belongsTo].ul.insertBefore(elt, instanceArr[elt.belongsTo].elts[elt.n + 1]);
-  //   // insert elt before the next one - replaces $.insertAfter -http://xahlee.info/js/js_insert_after.html
-  //
-
-
-
-
+    else {  (n > 0) ? this.ul.insertBefore(elt, thisElts[elt.n + 1]) :   this.ul.insertBefore(elt, thisElts[n]);  }
 
     if (!completeHeight && !completeWidth) {
 
@@ -442,9 +421,6 @@
       var thisWidth = completeWidth;
       var thisHeight = completeHeight;
     }
-
-
-
 
     for (var i = n; i < thisElts.length; i++) {
       var ets = thisElts[i];
@@ -463,15 +439,11 @@
 
     o.isVertical ? this.ul.style.height = parseInt(this.ul.style.height) + thisHeight + 'px':  this.ul.style.width = parseInt(this.ul.style.width) + thisWidth + 'px';
 
-
-
     var newTopPos = parseInt(eltObj.top),
         newLeftPos = parseInt(eltObj.left)
 
 
     addToObject(thisElts, elt, n, thisHeight, thisWidth, o, this.container, this.adjCon,newTopPos, newLeftPos);
-
-
 
     for (var i = 0; i < tempArr.length; i++) {
 
@@ -493,9 +465,6 @@
     // Do your operations
       console.timeEnd("concatenation");
       instanceArr.interrupt = false;
-
-
-
 
   }
 
