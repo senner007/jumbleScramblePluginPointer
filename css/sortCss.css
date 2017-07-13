@@ -83,6 +83,8 @@ position: absolute;
   box-shadow: 0;
   background: white;
   z-index: 1;
+  /*text-align: justify;
+    text-justify: inter-word;*/
 }
 
 .listItem-horizontal {
