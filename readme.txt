@@ -43,7 +43,8 @@ Todo - other:
 Add todo plugin in atom
 
 Comments - other:
-Added bookmarker and minimap plugins https://github.com/atom/bookmarks
+Added bookmarker and minimap plugins https://github.com/atom/bookmarks - switch between bookmarks with F2. Also visible in minimap 
+Added highlight - double click to highlight - select multiple with ctrl-d
 
 
 Working:
