@@ -41,13 +41,13 @@ function addHandlers () {
 
     $(ul).on(eStart, liSelector, function(e) {
       console.log(e)
-    if (dontTouch == true || e.target.canBeDragged == false) {
+    if (instanceArr.dontTouch == true || e.target.canBeDragged == false) {
       return;
     }
       e.preventDefault();
     if (e.type == 'touchstart') { e = e.originalEvent.changedTouches[0]}
   //  console.log(e)
-    dontTouch = true;
+    instanceArr.dontTouch = true;
 
     // flag to prevent multi
     //	e.stopPropagation();
@@ -84,7 +84,7 @@ function addHandlers () {
   function pointermoveFunction(e) {
     //console.log(instanceArr.interrupt)
   //  if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}
-    if (!dontTouch || instanceArr.interrupt == true) {
+    if (!instanceArr.dontTouch || instanceArr.interrupt == true) {
       // It will return if dontTouch is false and if interrupt is true(layout in progress)
       return;
     }
@@ -149,7 +149,7 @@ function addHandlers () {
       ul.style.zIndex = '1';
 
       move.className = classDefine;
-      dontTouch = false;
+      instanceArr.dontTouch = false;
     };
     docElem.removeEventListener(eMove, pointermoveFunction);
     docElem.removeEventListener(eEnd, pointerupFunction);
