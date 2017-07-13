@@ -25,7 +25,7 @@
 
   JumbleScramble.prototype.onStop = function(elt, o) { // Stop
 
-    var instanceArr = this.constructor.instanceArr;
+    var instanceArr = this.getInstances();
 
     // This will speed up the animation and subsequently the add and remove logic after dropping an item.
     // if the difference in time between the initialized drag and the release is less than specified,
@@ -119,23 +119,35 @@
 
   };
 
+  function jsOffset (el) {
+    var temp = el.getBoundingClientRect();
+    return {
+      top: temp.top + document.body.scrollTop,
+      left: temp.left + document.body.scrollLeft
+    }
+  }
+
+
 
   function JumbleScramble(element, options) { // Constructor function
-    if (!this.constructor.instanceArr) {
-      this.constructor.instanceArr = [];
-      this.constructor.instanceArr.crossTrigger = false;
-      this.constructor.instanceArr.transSupport = transSupport;
-      this.constructor.instanceArr.transitionPrefix = transitionPrefix;
-      this.constructor.instanceArr.transformPrefix = transformPrefix;
-      this.constructor.instanceArr.ifGpu = ifGpu;
-      this.constructor.instanceArr.interrupt = false;
+    if (!window.instanceArr) {
+      window.instanceArr = [];
+      window.instanceArr.crossTrigger = false;
+      window.instanceArr.transSupport = transSupport;
+      window.instanceArr.transitionPrefix = transitionPrefix;
+      window.instanceArr.transformPrefix = transformPrefix;
+      window.instanceArr.ifGpu = ifGpu;
+      window.instanceArr.interrupt = false;
 
     }
 
-    this.div = $(element);
-    this.divOffset = this.div.offset();
-    this.ul = this.div.find('ul')[0];
-    this.container = this.constructor.instanceArr.length;
+    this.div = element[0];
+    this.divOffset = jsOffset(this.div);
+    console.log(this.divOffset)
+
+    this.ul = this.div.querySelector('ul');
+    console.log(this.ul)
+    this.container = window.instanceArr.length;
     this.adjCon = this.container % 2 == 0 ? this.container + 1 : this.container - 1;
 
     this.options = $.extend({}, defaults, options);
@@ -146,9 +158,15 @@
     this.dfd = $.Deferred()
 
 
-    this.constructor.instanceArr.push(this);
+    window.instanceArr.push(this);
 
   };
+
+  JumbleScramble.prototype.getInstances = function () {
+    //var b = window.instanceArr.slice(0, window.instanceArr.length);
+    return window.instanceArr;
+
+  }
 
 
   JumbleScramble.prototype.addHandlers = addHandlers;
@@ -156,7 +174,7 @@
   JumbleScramble.prototype.init = function() {
 
 
-    var li = this.div[0].getElementsByTagName('li'); // Variables declaration
+    var li = this.div.getElementsByTagName('li'); // Variables declaration
     var left = 0,
       top = 0,
       n = 0,
@@ -170,26 +188,26 @@
       var elt = li[i];
 
       if (this.options.isVertical) {
-        $(elt).css('top', posTop + 'px'); // get each li height in case of individual heights.
+        elt.style.top = posTop + 'px'; // get each li height in case of individual heights.
 
-        var $thisHeight = $(elt).outerHeight(true);
+        var thisHeight = outerHeight(elt);
 
-        posTop += $thisHeight;
+        posTop += thisHeight;
 
 
-        ulSize += $thisHeight;
+        ulSize += thisHeight;
       } else {
-        $(elt).css('left', posLeft + 'px'); // get each li width in case of individual widths. (default)
-        var $thisWidth = $(elt).outerWidth(true);
-        posLeft += $thisWidth;
+        elt.style.left =  posLeft + 'px'; // get each li width in case of individual widths. (default)
+        var thisWidth = outerWidth(elt);
+        posLeft += thisWidth;
 
-        ulSize += $thisWidth; // calculate the size of the ul element
+        ulSize += thisWidth; // calculate the size of the ul element
       }
-       var newPosTop = posTop - $thisHeight;
-       var newPosLeft = posLeft - $thisWidth;
+       var newPosTop = posTop - thisHeight;
+       var newPosLeft = posLeft - thisWidth;
 
 
-      addToObject(thisElts, elt, n, $thisHeight, $thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
+      addToObject(thisElts, elt, n, thisHeight, thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
 
       n = n + 1;
       elt.style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
@@ -202,7 +220,7 @@
 
     //  marginLeft: (this.ul.parent().width() - ulSize) / 2
    // Update the ul size
-    this.div.trigger('layoutComplete', [parseInt(this.ul.style.height)])
+    $(this.div).trigger('layoutComplete', [parseInt(this.ul.style.height)]) // example of sending the ul height as second parameter to the callback
     this.dfd.resolve();
     var $this = this;
   //  var whendfd;
@@ -223,6 +241,7 @@
 
       });
     }
+    console.log(this.getInstances())
 
   };
 
@@ -292,14 +311,14 @@
     else {  this.ul.style.width = ulSize + 'px'; this.ul.style.height = outerHeight(thisElts[0]) + 'px'  }
 
 
-    this.divOffset = this.div.offset();
+    this.divOffset = jsOffset(this.div)
 
   };
 
 
 
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
-    var instanceArr = this.constructor.instanceArr;
+    var instanceArr = this.getInstances();
     var eltsSize = 0;
     var eltDim = this.options.isVertical ? 'completeHeight' : 'completeWidth';
     for (var i = 0; i < this.elts.length; i++) {
@@ -320,7 +339,7 @@
   JumbleScramble.prototype.animAdded = function(elems, parentCont) {  // should be in animation module, and not on the prototype
 
     var tArr = elems;
-    var instanceArr = this.constructor.instanceArr;
+    var instanceArr =this.getInstances();
 
     var parentCont = parentCont;
 
@@ -361,7 +380,7 @@
     var o = this.options;
     var listClass = o.isVertical ? 'listItem' : 'listItem-horizontal';
     var elt = $('<li class=' + listClass + '>' + liText + '</li>');
-    var instanceArr = this.constructor.instanceArr;
+    var instanceArr = this.getInstances();
 
     /* 		if (addTrans) { elt[0].style[transformPrefix] = 'scale(0,0)'; elt[0].style.opacity = '1'; } */
 

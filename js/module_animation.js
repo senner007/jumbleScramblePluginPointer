@@ -1,4 +1,4 @@
-
+this
 
 export {
   animateBack,
@@ -10,7 +10,7 @@ export {
 
 function transToZero(elt, speed) {
 
-  var instanceArr = this.constructor.instanceArr;
+  var instanceArr = this.getInstances();
 if (speed == undefined) {
   var speed = '250ms ease'
 }

@@ -97,32 +97,32 @@ vertical.events = {
     cutOff: winHeight
   })
 
-  cont1.div.on('layoutComplete', function () {
-  //    console.log('container 1 layoutComplete')
+  $(cont1.div).on('layoutComplete', function (hello, a) {
+   console.log('container 1 layoutComplete')
+   console.log(a)
 
        //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
-    //  var toDelete = elem.find('li').first()[0]
-    //     cont1.removeLiElem(toDelete, true, function (){
-    //     //  console.log('container 1 remove element done')
-    //     //  console.log(cont1)
-    //     })
+   var toDelete = elem.find('li').first()[0]
+    cont1.removeLiElem(toDelete, true, function (){
+
+        })
 
 
 
   })
 
 
-  cont2.div.on('layoutComplete', function () {
-    //  console.log('container 2 layoutComplete')
+  $(cont2.div).on('layoutComplete', function () {
+   console.log('container 2 layoutComplete')
 
 
-    //  cont2.addLiElem('added', 0, true)
+    cont2.addLiElem('added', 0, true)
     //    console.log(cont2)
 
   })
-  // example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
-  cont2.div.on('layoutCompleteAll', function () {
-    //  console.log('layoutCompleteAll')
+//  example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
+  $(cont2.div).on('layoutCompleteAll', function () {
+   console.log('layoutCompleteAll')
 
 
 

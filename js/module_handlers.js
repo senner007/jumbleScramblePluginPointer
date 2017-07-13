@@ -5,13 +5,12 @@ export {addHandlers}
 
 function addHandlers () {
 
-  var instanceArr = this.constructor.instanceArr;
+  var instanceArr = this.getInstances();
   var targetOffsetY, targetOffsetX, newDx, newDy;
   var transformPrefix = instanceArr.transformPrefix;
   var transitionPrefix = instanceArr.transitionPrefix;
   var transSupport = instanceArr.transSupport;
   // var ifGpu = this.constructor.instanceArr.ifGpu;
-  var div = this.div;
   var ul = this.ul;
   var adjCon = this.adjCon;
   var o = this.options;
