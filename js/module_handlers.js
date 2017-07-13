@@ -34,7 +34,8 @@ function addHandlers () {
     if (dontTouch == true || e.target.canBeDragged == false) {
       return;
     }
-    console.log(e)
+
+  //  console.log(e)
     dontTouch = true;
 
     // flag to prevent multi
@@ -44,7 +45,6 @@ function addHandlers () {
 
     e.preventDefault();
     thisElts = constructorThis.elts;
-
 
     move = this;
 
@@ -65,19 +65,19 @@ function addHandlers () {
     targetOffsetY = e.target.offsetTop;
     targetOffsetX = e.target.offsetLeft;
 
-
     docElem.addEventListener(eEnd, pointerupFunction); // refactor to add the once: true object to similar to jquery once. Wait for browser compatibility
     docElem.addEventListener(eMove, pointermoveFunction);
-
 
   });
 
   function pointermoveFunction(e) {
+    //console.log(instanceArr.interrupt)
 
-
-    if (!dontTouch || instanceArr.interrupt) {
+    if (!dontTouch || instanceArr.interrupt == true) {
+      // It will return if dontTouch is false and if interrupt is true(layout in progress)
       return;
     }
+  //  console.log('after interrupt')
     //if ($(move).offset().top <  div.offset().top ) {return;}   //containment
     e.preventDefault();
     hasMoved = true; // hasMoved is a flag to clicking items without moving them

@@ -40,6 +40,7 @@
     // the time it takes to initialize the drag to when it is dropped. A smaller difference
     // will increase the speed of the layout animation.
 
+
     if (instanceArr.diff < 0.5) {
 
       var speed = '170ms ease'
@@ -96,7 +97,7 @@
       if (!!o.autoValidate) {  o.autoValidate(); } // calls the autovalidate function in the plugin calling script
       if (instanceArr.crossTrigger) {
         instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
-        console.log(elt.completeHeight)
+
         instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false, elt.completeHeight, elt.completeWidth);
 
         instanceArr.crossTrigger= false;
