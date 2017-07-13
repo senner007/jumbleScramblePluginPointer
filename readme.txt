@@ -35,7 +35,7 @@ Todo:
 + use native event delegation https://stackoverflow.com/questions/14174056/native-addeventlistener-with-selector-like-on-in-jquery
 + trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
 + insert before and after with native - https://blog.garstasio.com/you-dont-need-jquery/dom-manipulation/#inserting-elements-before-&-after
-+ improve the addLiElem logic, remove jQuery
+
 + optionally implement logic to calculate animation speed based on the position of the dropped item relative to its new position
 + reimplement touch and check for multitouch with if (e.type == 'touchstart') { e = e.originalEvent.touches[0] }
 
@@ -71,6 +71,7 @@ Fixed:
 + double cliking elements throws errors - Fixed
 + do not run init on object instantiation (run after as obj.init())- Fixed
 + currently doesn't work in Edge - Fixed ({once: true} in events doesn't agree with Edge)
++ improve the addLiElem logic, remove jQuery - DONE
 
 
 
