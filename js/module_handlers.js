@@ -76,8 +76,8 @@ function addHandlers () {
     targetOffsetY = e.target.offsetTop;
     targetOffsetX = e.target.offsetLeft;
 
-    docElem.addEventListener(eEnd, pointerupFunction); // refactor to add the once: true object to similar to jquery once. Wait for browser compatibility
-    docElem.addEventListener(eMove, pointermoveFunction);
+    window.addEventListener(eEnd, pointerupFunction); // refactor to add the once: true object to similar to jquery once. Wait for browser compatibility
+    window.addEventListener(eMove, pointermoveFunction);
 
   });
 
@@ -151,8 +151,8 @@ function addHandlers () {
       move.className = classDefine;
       instanceArr.dontTouch = false;
     };
-    docElem.removeEventListener(eMove, pointermoveFunction);
-    docElem.removeEventListener(eEnd, pointerupFunction);
+    window.removeEventListener(eMove, pointermoveFunction);
+    window.removeEventListener(eEnd, pointerupFunction);
 
   }
 
