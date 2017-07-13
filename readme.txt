@@ -37,13 +37,14 @@ Todo:
 + insert before and after with native - https://blog.garstasio.com/you-dont-need-jquery/dom-manipulation/#inserting-elements-before-&-after
 + improve the addLiElem logic, remove jQuery
 + optionally implement logic to calculate animation speed based on the position of the dropped item relative to its new position
++ reimplement touch and check for multitouch with if (e.type == 'touchstart') { e = e.originalEvent.touches[0] }
 
 
 Todo - other:
 Add todo plugin in atom
 
 Comments - other:
-Added bookmarker and minimap plugins https://github.com/atom/bookmarks - switch between bookmarks with F2. Also visible in minimap 
+Added bookmarker and minimap plugins https://github.com/atom/bookmarks - switch between bookmarks with F2. Also visible in minimap
 Added highlight - double click to highlight - select multiple with ctrl-d
 
 
