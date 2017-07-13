@@ -34,7 +34,8 @@ function addHandlers () {
     if (dontTouch == true || e.target.canBeDragged == false) {
       return;
     }
-
+    console.log(e)
+    dontTouch = true;
 
     // flag to prevent multi
     //	e.stopPropagation();
@@ -44,7 +45,7 @@ function addHandlers () {
     e.preventDefault();
     thisElts = constructorThis.elts;
 
-    dontTouch = true;
+
     move = this;
 
     move.style[transitionPrefix] = '0s';
@@ -74,7 +75,7 @@ function addHandlers () {
   function pointermoveFunction(e) {
 
 
-    if (!dontTouch) {
+    if (!dontTouch || instanceArr.interrupt) {
       return;
     }
     //if ($(move).offset().top <  div.offset().top ) {return;}   //containment

@@ -40,14 +40,19 @@
     // the time it takes to initialize the drag to when it is dropped. A smaller difference
     // will increase the speed of the layout animation.
 
-    if (instanceArr.diff < 0.4) {
+    if (instanceArr.diff < 0.5) {
 
       var speed = '170ms ease'
     }
+    if (instanceArr.diff < 0.35) {
+
+      var speed = '100ms ease'
+    }
+
 
     if (instanceArr.diff < 0.2) {
 
-      var speed = '100ms ease'
+      var speed = '15ms ease'
     }
 
 
