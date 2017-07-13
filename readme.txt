@@ -39,6 +39,12 @@ Todo:
 + optionally implement logic to calculate animation speed based on the position of the dropped item relative to its new position
 
 
+Todo - other:
+Add todo plugin in atom
+
+Comments - other:
+Added bookmarker and minimap plugins https://github.com/atom/bookmarks
+
 
 Working:
 + List items in vertical or horizontal layout
