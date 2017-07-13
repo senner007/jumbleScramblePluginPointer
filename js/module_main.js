@@ -47,7 +47,7 @@
 
     if (instanceArr.diff < 0.2) {
 
-      var speed = '50ms ease'
+      var speed = '100ms ease'
     }
 
 
@@ -91,7 +91,8 @@
       if (!!o.autoValidate) {  o.autoValidate(); } // calls the autovalidate function in the plugin calling script
       if (instanceArr.crossTrigger) {
         instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
-        instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false);
+        console.log(elt.completeHeight)
+        instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false, elt.completeHeight, elt.completeWidth);
 
         instanceArr.crossTrigger= false;
        instanceArr[elt.movesTo].cutOffEnd()
@@ -331,7 +332,7 @@
       this.removeLiElem(this.elts[this.elts.length - 1], transSupport)
       eltsSize -= this.elts[this.elts.length - 1][eltDim];
     }
-    console.log(tArr)
+
     this.animAdded(tArr, this.adjCon);
 
   };
@@ -347,7 +348,7 @@
     if (transSupport && tArr.length != 0) { // transition elements  but only if if there are any
 
       for (var i = 0; i < tArr.length; i++) {
-          
+
         tArr[i].style[instanceArr.transitionPrefix] = '0ms';
         tArr[i].style[instanceArr.transformPrefix] = 'scale(0,0)';
       }
@@ -355,7 +356,7 @@
       if (instanceArr[parentCont].elts[tArr.length] && !$(tArr).is(':last-child')) {
 
           // callback function for when the items have moved down and made room for the newly prepended item(s)
-        instanceArr[parentCont].elts[instanceArr[parentCont].elts.length - 1].addEventListener('transitionend', animAddedElems, {once: true}); // once true might not be supported in all browsers
+        $(instanceArr[parentCont].elts[instanceArr[parentCont].elts.length - 1]).one('transitionend', animAddedElems); // once true might not be supported in all browsers
 
       } else { // if there are no elements that have moved to make way for added elements(tArr)
         setTimeout(function() { // setTimeout is need because transform properties need time to be set.
@@ -376,14 +377,23 @@
     }
   }
 
-  JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans) { // Add new li to previous collection
+  JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans, completeHeight, completeWidth) { // Add new li to previous collection
 
     var thisElts = this.elts;
     var n = Math.min(Math.max(parseInt(liPosition), 0), thisElts.length);
-
     var o = this.options;
-    var listClass = o.isVertical ? 'listItem' : 'listItem-horizontal';
-    var elt = $('<li class=' + listClass + '>' + liText + '</li>');
+
+    var eltObj = {
+      'left': n > 0 ? thisElts[n - 1].pos.left + thisElts[n - 1].completeWidth + 'px' : 0,
+      'top': n > 0 ? thisElts[n - 1].pos.top + thisElts[n - 1].completeHeight + 'px' : 0
+    }
+    var item = ('<li style="left:'  + eltObj.left + ';top:' + eltObj.top + '" class=' + (o.isVertical ? 'listItem' : 'listItem-horizontal') + '>' + liText + '</li>');
+     var elt = document.createElement('li');
+     elt.innerHTML = item;
+     elt = elt.firstChild;
+
+
+
     var instanceArr = this.getInstances();
 
     /* 		if (addTrans) { elt[0].style[transformPrefix] = 'scale(0,0)'; elt[0].style.opacity = '1'; } */
@@ -394,20 +404,47 @@
       tempArr.push(thisElts[i]);
     }
 
-    var eltObj = {
-      'left': n > 0 ? thisElts[n - 1].pos.left + thisElts[n - 1].completeWidth + 'px' : 0,
-      'top': n > 0 ? thisElts[n - 1].pos.top + thisElts[n - 1].completeHeight + 'px' : 0
+    //  elt = elt[0];
+    if (thisElts.length == 0) {
+    //  elt.appendTo(this.ul)
+      this.ul.appendChild(elt)
+
+    } // if there are no elements present at drop
+
+    else {
+
+      (n > 0) ? this.ul.insertBefore(elt, thisElts[elt.n + 1]) :   this.ul.insertBefore(elt, thisElts[n]);
+
     }
 
-    if (thisElts.length == 0) {
-      elt.css(eltObj).appendTo(this.ul)
-    } // if there are no elements present at drop
-    else(n > 0 ? elt.insertAfter(thisElts[n - 1]).css(eltObj) : elt.insertBefore(thisElts[n]).css(eltObj));
 
-    elt = elt[0]
 
-    var $thisWidth = o.isVertical ? 0 : outerWidth(elt);
-    var $thisHeight = o.isVertical ? outerHeight(elt) : 0;
+  //
+  // ; // insert elt before the first one - replaces $.insertBefore
+  // }
+  // else {
+  //   //$(elt).insertAfter(eltPrev);
+  //   instanceArr[elt.belongsTo].ul.insertBefore(elt, instanceArr[elt.belongsTo].elts[elt.n + 1]);
+  //   // insert elt before the next one - replaces $.insertAfter -http://xahlee.info/js/js_insert_after.html
+  //
+
+
+
+
+
+    if (!completeHeight && !completeWidth) {
+
+      var thisWidth = o.isVertical ? 0 : outerWidth(elt);
+      var thisHeight = o.isVertical ? outerHeight(elt) : 0;
+    }
+    else {
+
+      var thisWidth = completeWidth;
+      var thisHeight = completeHeight;
+    }
+
+
+
 
     for (var i = n; i < thisElts.length; i++) {
       var ets = thisElts[i];
@@ -415,16 +452,16 @@
       thisElts[i].moved = false;
       ets.style[instanceArr.transitionPrefix] = '0ms';
       ets.style[instanceArr.transformPrefix] = instanceArr.transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
-      ets.style.left = parseInt(ets.style.left) + $thisWidth + 'px'
-      ets.style.top = parseInt(ets.style.top) + $thisHeight + 'px'
+      ets.style.left = parseInt(ets.style.left) + thisWidth + 'px'
+      ets.style.top = parseInt(ets.style.top) + thisHeight + 'px'
 
       if (addTrans) {
-        ets.style[instanceArr.transformPrefix] = 'translate(' + -($thisWidth) + 'px,' + -($thisHeight) + 'px)';
+        ets.style[instanceArr.transformPrefix] = 'translate(' + -(thisWidth) + 'px,' + -(thisHeight) + 'px)';
         instanceArr[0].transToZero(thisElts[i]);
       }
     }
 
-    o.isVertical ? this.ul.style.height = parseInt(this.ul.style.height) + $thisHeight + 'px':  this.ul.style.width = parseInt(this.ul.style.width) + $thisWidth + 'px';
+    o.isVertical ? this.ul.style.height = parseInt(this.ul.style.height) + thisHeight + 'px':  this.ul.style.width = parseInt(this.ul.style.width) + thisWidth + 'px';
 
 
 
@@ -432,7 +469,7 @@
         newLeftPos = parseInt(eltObj.left)
 
 
-    addToObject(thisElts, elt, n, $thisHeight, $thisWidth, o, this.container, this.adjCon,newTopPos, newLeftPos);
+    addToObject(thisElts, elt, n, thisHeight, thisWidth, o, this.container, this.adjCon,newTopPos, newLeftPos);
 
 
 
