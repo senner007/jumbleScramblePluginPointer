@@ -11,15 +11,12 @@ export {
 
 var posObj = {}
 
-
-
 function onDrag(elt, elts, o, instanceArr) { // Drag
 
   var eltPos = {
     top: elt.currentPos.top,
     left: elt.currentPos.left
   }
-
 
 
   var thisElt = posObj; //must be saved to a global object. (Possibly to avoid random
@@ -64,7 +61,7 @@ if (  instanceArr.interrupt == true) {return}
 
   if (!dirSwitch && instanceArr.crossTrigger == true && Object.keys(elts).length > 1) { // go back to originating container
 
-    console.log('back to originating')
+  //  console.log('back to originating')
 
     onDragAdj.triggerOff(elt, adjConElts, elts, o);
     instanceArr.crossTrigger = false;

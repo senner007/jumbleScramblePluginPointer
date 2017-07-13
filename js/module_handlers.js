@@ -5,6 +5,14 @@ export {addHandlers}
 
 function addHandlers () {
 
+  var isTouch = (function is_touch_device() {
+      return (('ontouchstart' in window)
+      || (navigator.MaxTouchPoints > 0)
+      || (navigator.msMaxTouchPoints > 0));
+    })();
+
+    var isPointer =  (window.PointerEvent);
+
   var instanceArr = this.getInstances();
   var targetOffsetY, targetOffsetX, newDx, newDy;
   var transformPrefix = instanceArr.transformPrefix;
@@ -18,9 +26,9 @@ function addHandlers () {
   var constructorThis = this;
   var move, elt;
   var movePos = {};
-  var eStart = 'pointerdown',
-    eMove = 'pointermove',
-    eEnd = 'pointerup'
+  var eStart = isTouch ? 'touchstart' : isPointer ? 'pointerdown' : 'mousedown',
+  			eMove = isTouch ? 'touchmove' : isPointer ? 'pointermove' : 'mousemove',
+  			eEnd = isTouch ? 'touchend' : isPointer ? 'pointerup' : 'mouseup'
   var dontTouch = false;
   var classDefine = o.isVertical == true ? 'listItem' : 'listItem-horizontal',
     liSelector = o.isVertical == true ? '.listItem' : '.listItem-horizontal';
@@ -28,13 +36,16 @@ function addHandlers () {
   var hasMoved;
   var docElem = document.documentElement;
 
+
   ul.style.zIndex = '1'
 
     $(ul).on(eStart, liSelector, function(e) {
+      console.log(e)
     if (dontTouch == true || e.target.canBeDragged == false) {
       return;
     }
-
+      e.preventDefault();
+    if (e.type == 'touchstart') { e = e.originalEvent.changedTouches[0]}
   //  console.log(e)
     dontTouch = true;
 
@@ -43,7 +54,7 @@ function addHandlers () {
 
     instanceArr.start = new Date();
 
-    e.preventDefault();
+
     thisElts = constructorThis.elts;
 
     move = this;
@@ -72,7 +83,7 @@ function addHandlers () {
 
   function pointermoveFunction(e) {
     //console.log(instanceArr.interrupt)
-
+  //  if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}
     if (!dontTouch || instanceArr.interrupt == true) {
       // It will return if dontTouch is false and if interrupt is true(layout in progress)
       return;
@@ -109,11 +120,11 @@ function addHandlers () {
   };
 
   function pointerupFunction(e) {
-
+    e.preventDefault();
 
     if (hasMoved) {
       e.target.canBeDragged = false;
-      e.preventDefault();
+
       hasMoved = false;
       clearClass();
       if (transSupport) {
