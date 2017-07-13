@@ -116,7 +116,7 @@ vertical.events = {
    console.log('container 2 layoutComplete')
 
 
-    cont2.addLiElem('added', 0, true)
+    cont2.addLiElem('addeggdgfgdfgdfgd', 0, true)
     //    console.log(cont2)
 
   })

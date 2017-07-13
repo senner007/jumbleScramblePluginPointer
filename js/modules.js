@@ -13,7 +13,7 @@ var defaults = {
   cutOff: false,
   dropLimit: false,
   hasAdjacent: true,
-  layoutComplete: function() { }
+  // layoutComplete: function() { }
 }
 
 function setChars(elt) {

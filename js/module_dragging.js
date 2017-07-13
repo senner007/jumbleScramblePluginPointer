@@ -184,7 +184,7 @@ var onDragElts = {
   eltsAnimate: function(eltDimension, elem) {
     var dir = elem.o.isVertical ? 'top' : 'left';
     //var dirTranslate = elem.o.isVertical ? 'translateY(' : 'translateX(';
-    this.instanceArr
+
     elem.style[this.instanceArr.transitionPrefix] = '0s';
     elem.style[dir] = elem.pos[dir] + 'px';
     elem.style[this.instanceArr.transformPrefix] = elem.o.isVertical ? 'translate3d(0px,' + eltDimension + 'px, 0px)' : 'translate3d(' + eltDimension + 'px, 0px, 0px)'

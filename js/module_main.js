@@ -143,10 +143,10 @@
 
     this.div = element[0];
     this.divOffset = jsOffset(this.div);
-    console.log(this.divOffset)
+
 
     this.ul = this.div.querySelector('ul');
-    console.log(this.ul)
+
     this.container = window.instanceArr.length;
     this.adjCon = this.container % 2 == 0 ? this.container + 1 : this.container - 1;
 
@@ -241,7 +241,7 @@
 
       });
     }
-    console.log(this.getInstances())
+
 
   };
 
@@ -331,7 +331,7 @@
       this.removeLiElem(this.elts[this.elts.length - 1], transSupport)
       eltsSize -= this.elts[this.elts.length - 1][eltDim];
     }
-
+    console.log(tArr)
     this.animAdded(tArr, this.adjCon);
 
   };
@@ -339,6 +339,7 @@
   JumbleScramble.prototype.animAdded = function(elems, parentCont) {  // should be in animation module, and not on the prototype
 
     var tArr = elems;
+
     var instanceArr =this.getInstances();
 
     var parentCont = parentCont;
@@ -346,8 +347,9 @@
     if (transSupport && tArr.length != 0) { // transition elements  but only if if there are any
 
       for (var i = 0; i < tArr.length; i++) {
-        tArr[i].style[transitionPrefix] = '0ms';
-        tArr[i].style[transformPrefix] = 'scale(0,0)';
+          
+        tArr[i].style[instanceArr.transitionPrefix] = '0ms';
+        tArr[i].style[instanceArr.transformPrefix] = 'scale(0,0)';
       }
 
       if (instanceArr[parentCont].elts[tArr.length] && !$(tArr).is(':last-child')) {
@@ -364,9 +366,11 @@
     }
 
     function animAddedElems() {
+
       for (var i = 0; i < tArr.length; i++) {
-        tArr[i].style[transitionPrefix] = '500ms';
-        tArr[i].style[transformPrefix] = 'scale(1,1)';
+
+        tArr[i].style[instanceArr.transitionPrefix] = '500ms';
+        tArr[i].style[instanceArr.transformPrefix] = 'scale(1,1)';
 
       }
     }
@@ -441,7 +445,9 @@
       thisElts[n + 1 + i] = tempArr[i];
     }
     if (addTrans) {
-      var tArr = elt;
+
+      var tArr = [elt];
+
       this.animAdded(tArr, this.container)
       /* elt[0].style[transitionPrefix] = '500ms'; elt[0].style[transformPrefix] = 'scale(1,1)'; elt[0].style.opacity = '1';  */
       return elt;
