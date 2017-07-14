@@ -6,6 +6,8 @@ export {
   transformPrefix,
   ifGpu
 };
+// ES6 MODULE IMPORT/EXPORT
+////////////////////////////
 
 var defaults = {
   isVertical: false,

@@ -1,5 +1,7 @@
 export {hello, hello2};
 import JumbleScramble from "../js/module_main.js"
+// ES6 MODULE IMPORT/EXPORT
+////////////////////////////
 
   var elem = $("#jMyPuzzleId2").show();
   var elem2 = $("#jMyPuzzleId3").show();

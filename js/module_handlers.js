@@ -1,7 +1,7 @@
 import {onDrag} from "./module_dragging.js"
-
-
 export {addHandlers}
+// ES6 MODULE IMPORT/EXPORT
+////////////////////////////
 
 function addHandlers () {
 
@@ -22,9 +22,8 @@ function addHandlers () {
   var ul = this.ul;
   var adjCon = this.adjCon;
   var o = this.options;
-  var thisElts;
   var constructorThis = this;
-  var move, elt;
+  var elt;
   var movePos = {};
   var eStart = isTouch ? 'touchstart' : isPointer ? 'pointerdown' : 'mousedown',
   			eMove = isTouch ? 'touchmove' : isPointer ? 'pointermove' : 'mousemove',
@@ -33,7 +32,7 @@ function addHandlers () {
   var classDefine = o.isVertical == true ? 'listItem' : 'listItem-horizontal',
     liSelector = o.isVertical == true ? '.listItem' : '.listItem-horizontal';
   var startX, startY;
-  //var hasMoved;
+  var hasMoved;
   var docElem = document.documentElement;
 
 
@@ -41,31 +40,27 @@ function addHandlers () {
 
     $(ul).on(eStart, liSelector, function(e) {
 
-    if (instanceArr.dontTouch == true || e.target.canBeDragged == false) {
+    if (dontTouch == true || e.target.canBeDragged == false || instanceArr[this.belongsTo].locked == true) {
       return;
     }
+
       e.preventDefault();
     if (e.type == 'touchstart' && e.touches.length > e.targetTouches.length) { return; }
     //  if all touches detected is greater than the touches detected on the same element - return
     //  Prevents selecting more than one element at the same time, but allows for multiple touch points(fingers) on the same element
 
-    instanceArr.dontTouch = true;
+    dontTouch = true;
     // flag to prevent multi
     //	e.stopPropagation();
 
-    instanceArr.start = new Date();
-
-
-    thisElts = constructorThis.elts;
-
-    move = this;
-
-    move.style[transitionPrefix] = '0s';
-    move.style.zIndex = 5;
+    elt = this;
+    elt.nStart = elt.n
+    elt.style[transitionPrefix] = '0s';
+    elt.style.zIndex = 5;
     //move.addClass('dragging');
-    move.className = classDefine + ' dragging';
-
-    elt = thisElts[move.n]
+    elt.className = classDefine + ' dragging';
+    elt.hasCrossed = false;
+    elt.startDate = new Date();
 
     //console.log(elt instanceof jQuery)
     if (instanceArr[adjCon]) {  instanceArr[adjCon].ul.style.zIndex = '-1' }
@@ -85,24 +80,25 @@ function addHandlers () {
   function pointermoveFunction(e) {
     //console.log(instanceArr.interrupt)
   //  if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}
-    if (!instanceArr.dontTouch || instanceArr.interrupt == true) {
+    if (!dontTouch) {
       // It will return if dontTouch is false and if interrupt is true(layout in progress)
       return;
     }
+
   //  console.log('after interrupt')
     //if ($(move).offset().top <  div.offset().top ) {return;}   //containment
     e.preventDefault();
-    elt.hasMoved = true; // hasMoved is a flag to clicking items without moving them
+    hasMoved = true; // hasMoved is a flag to clicking items without moving them
 
     //if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}
     newDx = e.pageX - startX;
     newDy = e.pageY - startY;
 
     if (transSupport) {
-      move.style[transformPrefix] = 'translate3d(' + newDx + 'px, ' + newDy + 'px, 0px) translateZ(0)';
+      elt.style[transformPrefix] = 'translate3d(' + newDx + 'px, ' + newDy + 'px, 0px) translateZ(0)';
     } else {
-      move.style.top = targetOffsetY + movePos.dy + 'px';
-      move.style.left = targetOffsetX + movePos.dx + 'px';
+      elt.style.top = targetOffsetY + movePos.dy + 'px';
+      elt.style.left = targetOffsetX + movePos.dx + 'px';
     }
 
     // we need to save last made offset
@@ -116,23 +112,21 @@ function addHandlers () {
     elt.currentPos.left = targetOffsetX + newDx;
     //	console.log('moving')
 
-    onDrag(elt, thisElts, o, instanceArr);
+    onDrag(elt, constructorThis.elts, o, instanceArr);
 
   };
 
   function pointerupFunction(e) {
     e.preventDefault();
 
-    if (elt.hasMoved == true) {
-    
-
-      elt.hasMoved = false;
+    if (hasMoved == true) {
+      hasMoved = false;
       clearClass();
       if (transSupport) {
-        move.style[transformPrefix] = 'translateZ(0) translate3d(' + 0 + 'px, ' + 0 + 'px, 0px)';
+        elt.style[transformPrefix] = 'translateZ(0) translate3d(' + 0 + 'px, ' + 0 + 'px, 0px)';
       }
-      move.style.top = targetOffsetY + movePos.dy + 'px';
-      move.style.left = targetOffsetX + movePos.dx + 'px';
+      elt.style.top = targetOffsetY + movePos.dy + 'px';
+      elt.style.left = targetOffsetX + movePos.dx + 'px';
       if (!elt) {
         return;
       }
@@ -142,15 +136,15 @@ function addHandlers () {
     }
 
     function clearClass() {
-      move.style[transitionPrefix] = 'box-shadow 250ms';
-      move.style.zIndex = 1;
+      elt.style[transitionPrefix] = 'box-shadow 250ms';
+      elt.style.zIndex = 1;
       if (instanceArr[adjCon]) {
         instanceArr[adjCon].ul.style.zIndex = '1'
       };
       ul.style.zIndex = '1';
 
-      move.className = classDefine;
-      instanceArr.dontTouch = false;
+      elt.className = classDefine;
+      dontTouch = false;
     };
     window.removeEventListener(eMove, pointermoveFunction);
     window.removeEventListener(eEnd, pointerupFunction);

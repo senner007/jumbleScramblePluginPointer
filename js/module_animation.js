@@ -1,9 +1,9 @@
-this
-
 export {
   animateBack,
   transToZero
- }
+};
+// ES6 MODULE IMPORT/EXPORT
+////////////////////////////
 
 
 
@@ -28,7 +28,7 @@ function animateBack(elt, o, instanceArr) {
 
 
   var eltMarginLeft = o.isVertical ? 0 : elt.completeWidth - elt.offsetWidth; // set margin for horizontal
-  if (instanceArr.crossTrigger) {
+  if (elt.hasCrossed) {
 
     var instMovesTo = instanceArr[elt.movesTo];
     var adjEltBefore = instMovesTo.elts[elt.insertPos - 1];

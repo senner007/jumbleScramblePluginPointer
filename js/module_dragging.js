@@ -1,13 +1,6 @@
-
-// import {animateBack} from "./module_animation.js"
-
-
-export {
-  onDrag,
-  // onDragAdj,
-  // onDragElts,
-
-};
+export {onDrag};
+// ES6 MODULE IMPORT/EXPORT
+////////////////////////////
 
 var posObj = {}
 
@@ -43,12 +36,12 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
   // adjacent container if below
   // dropLimit - refactor to add method for horizontal too.
 
-if (  instanceArr.interrupt == true) {return}
+
 
 // this will prevent the layout from breaking if the user drags an item across slowly
 // and then immediately drags more items to the same container
 
-  if (dirSwitch && instanceArr.crossTrigger == false) {
+  if (dirSwitch && instanceArr.crossTrigger == false && instanceArr[elt.movesTo].locked == false) {
 
     if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= instanceArr[elt.movesTo].dropLimit) {
       // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
@@ -56,6 +49,7 @@ if (  instanceArr.interrupt == true) {return}
 
       onDragAdj.triggerOn(elt, adjConElts, elts, o);
       instanceArr.crossTrigger = true;
+      elt.hasCrossed = dirSwitch;
     }
   };
 
@@ -65,6 +59,7 @@ if (  instanceArr.interrupt == true) {return}
 
     onDragAdj.triggerOff(elt, adjConElts, elts, o);
     instanceArr.crossTrigger = false;
+    elt.hasCrossed = dirSwitch;
   };
   var move;
   /*--------------------------------------------------------------------*/
@@ -209,11 +204,11 @@ var onDragAdj = {
 
       if (elt.currentPos[objOffset] < obj.pos[objOffset] + obj[objDimension] / 2) {
 
-        if (obj.moved == false) {
+        if (obj.adjMoved == false) {
           tempArr.push(i)
           obj.style[this.instanceArr.transitionPrefix] = '250ms ease';
           obj.style[this.instanceArr.transformPrefix] = objTranslate
-          obj.moved = true;
+          obj.adjMoved = true;
           elt.insertPos = obj.n;
           obj.pos[objOffset] = obj.pos[objOffset] + elt[objDimension];
 
@@ -234,8 +229,8 @@ var onDragAdj = {
     for (var i = 0; i < adjConElts.length; i++) { //Loop over adjacentContainer elements
       var obj = adjConElts[i];
 
-      if (obj.moved == true) {
-        obj.moved = false;
+      if (obj.adjMoved == true) {
+        obj.adjMoved = false;
         obj.pos[objOffset] = obj.pos[objOffset] - elt[objDimension];
         this.instanceArr[0].transToZero(obj);
       }
@@ -250,10 +245,10 @@ var onDragAdj = {
   moveUp: function(elt, adjConElts) {
     if (elt.insertPos > 0) {
       var obj = adjConElts[elt.insertPos - 1]
-      if (elt.currentPos.top < obj.pos.top + obj.completeHeight / 2 && obj.moved == false) {
+      if (elt.currentPos.top < obj.pos.top + obj.completeHeight / 2 && obj.adjMoved == false) {
         obj.style[this.instanceArr.transitionPrefix] = '250ms ease';
         obj.style[this.instanceArr.transformPrefix] = this.instanceArr.transSupport ? 'translate3d(0px,' + elt.completeHeight + 'px, 0px)' : 'translateY(' + elt.completeHeight + 'px)';
-        obj.moved = true;
+        obj.adjMoved = true;
         elt.insertPos = obj.n;
 
         obj.pos.top = obj.pos.top + elt.completeHeight;
@@ -264,10 +259,10 @@ var onDragAdj = {
   moveDown: function(elt, adjConElts) {
     if (elt.insertPos < adjConElts.length) {
       var obj = adjConElts[elt.insertPos]
-      if (elt.currentPos.top + elt.completeHeight > obj.pos.top + obj.completeHeight / 2 && obj.moved == true) {
+      if (elt.currentPos.top + elt.completeHeight > obj.pos.top + obj.completeHeight / 2 && obj.adjMoved == true) {
 
         this.instanceArr[0].transToZero(obj);
-        obj.moved = false;
+        obj.adjMoved = false;
         elt.insertPos = obj.n + 1;
         obj.pos.top = obj.pos.top - elt.completeHeight;
 
@@ -277,9 +272,9 @@ var onDragAdj = {
   moveForward: function(elt, adjConElts) {
     if (elt.insertPos < adjConElts.length) {
       var obj = adjConElts[elt.insertPos]
-      if (elt.currentPos.left + (elt.completeWidth/1.2) > obj.pos.left + obj.completeWidth / 2 && obj.moved == true) { //(elt.completeWidth/1.2)  - Tweak me!
+      if (elt.currentPos.left + (elt.completeWidth/1.2) > obj.pos.left + obj.completeWidth / 2 && obj.adjMoved == true) { //(elt.completeWidth/1.2)  - Tweak me!
         this.instanceArr[0].transToZero(obj);
-        obj.moved = false;
+        obj.adjMoved = false;
         elt.insertPos = obj.n + 1;
         obj.pos.left = obj.pos.left - elt.completeWidth;
       }
@@ -290,11 +285,11 @@ var onDragAdj = {
     if (elt.insertPos > 0) {
       var obj = adjConElts[elt.insertPos - 1]
 
-      if (elt.currentPos.left < obj.pos.left + obj.completeWidth / 2 && obj.moved == false) {
+      if (elt.currentPos.left < obj.pos.left + obj.completeWidth / 2 && obj.adjMoved == false) {
 
         obj.style[this.instanceArr.transitionPrefix] = '250ms ease';
         obj.style[this.instanceArr.transformPrefix] = this.instanceArr.transSupport ? 'translate3d(' + elt.completeWidth + 'px,0px,0px)' : 'translateX(' + elt.completeWidth + 'px)';
-        obj.moved = true;
+        obj.adjMoved = true;
         elt.insertPos = obj.n;
         obj.pos.left = obj.pos.left + elt.completeWidth;
       }
