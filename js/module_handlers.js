@@ -1,54 +1,60 @@
-import {onDrag} from "./module_dragging.js"
-export {addHandlers}
+import {
+  onDrag
+} from "./module_dragging.js"
+export {
+  addHandlers
+}
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 
-function addHandlers () {
+function addHandlers() {
 
   var isTouch = (function is_touch_device() {
-      return (('ontouchstart' in window)
-      || (navigator.MaxTouchPoints > 0)
-      || (navigator.msMaxTouchPoints > 0));
-    })();
+    return (('ontouchstart' in window) ||
+      (navigator.MaxTouchPoints > 0) ||
+      (navigator.msMaxTouchPoints > 0));
+  })();
 
-    var isPointer =  (window.PointerEvent);
+  var isPointer = (window.PointerEvent);
 
-  var instanceArr = this.getInstances();
-  var targetOffsetY, targetOffsetX, newDx, newDy;
-  var transformPrefix = instanceArr.transformPrefix;
-  var transitionPrefix = instanceArr.transitionPrefix;
-  var transSupport = instanceArr.transSupport;
-  // var ifGpu = this.constructor.instanceArr.ifGpu;
-  var ul = this.ul;
-  var adjCon = this.adjCon;
-  var o = this.options;
-  var constructorThis = this;
-  var elt;
-  var movePos = {};
-  var eStart = isTouch ? 'touchstart' : isPointer ? 'pointerdown' : 'mousedown',
-  			eMove = isTouch ? 'touchmove' : isPointer ? 'pointermove' : 'mousemove',
-  			eEnd = isTouch ? 'touchend' : isPointer ? 'pointerup' : 'mouseup'
-  var dontTouch = false;
-  var classDefine = o.isVertical == true ? 'listItem' : 'listItem-horizontal',
-    liSelector = o.isVertical == true ? '.listItem' : '.listItem-horizontal';
-  var startX, startY;
-  var hasMoved;
-  var docElem = document.documentElement;
-
+  var instanceArr = this.getInstances(),
+    targetOffsetY,
+    targetOffsetX,
+    newDx,
+    newDy,
+    transformPrefix = instanceArr.transformPrefix,
+    transitionPrefix = instanceArr.transitionPrefix,
+    transSupport = instanceArr.transSupport,
+    ul = this.ul,
+    adjCon = this.adjCon,
+    o = this.options,
+    instanceThis = this,
+    elt,
+    movePos = {},
+    eStart = isTouch ? 'touchstart' : isPointer ? 'pointerdown' : 'mousedown',
+    eMove = isTouch ? 'touchmove' : isPointer ? 'pointermove' : 'mousemove',
+    eEnd = isTouch ? 'touchend' : isPointer ? 'pointerup' : 'mouseup',
+    dontTouch = false,
+    classDefine = o.isVertical == true ? 'listItem' : 'listItem-horizontal',
+    liSelector = o.isVertical == true ? '.listItem' : '.listItem-horizontal',
+    startX,
+    startY,
+    hasMoved;
 
   ul.style.zIndex = '1'
 
-    ul.addEventListener(eStart, function(e) {
+  ul.addEventListener(eStart, function(e) {
 
-
-  if (e.target == this) return;
-    var _this = e.target
-    if (dontTouch == true || e.target.canBeDragged == false || instanceArr[_this.belongsTo].locked == true) {
+    if (e.target == this) return;
+    elt = e.target
+    if (dontTouch == true || e.target.canBeDragged == false || instanceArr[elt.belongsTo].locked == true) {
       return;
     }
 
-      e.preventDefault();
-    if (e.type == 'touchstart' && e.touches.length > e.targetTouches.length) { return; }
+    e.preventDefault();
+    if (e.type == 'touchstart' && e.touches.length > e.targetTouches.length) {
+      return;
+    }
     //  if all touches detected is greater than the touches detected on the same element - return
     //  Prevents selecting more than one element at the same time, but allows for multiple touch points(fingers) on the same element
 
@@ -56,7 +62,6 @@ function addHandlers () {
     // flag to prevent multi
     //	e.stopPropagation();
 
-    elt = _this;
     elt.nStart = elt.n
     elt.style[transitionPrefix] = '0s';
     elt.style.zIndex = 5;
@@ -66,7 +71,9 @@ function addHandlers () {
     elt.startDate = new Date();
 
     //console.log(elt instanceof jQuery)
-    if (instanceArr[adjCon]) {  instanceArr[adjCon].ul.style.zIndex = '-1' }
+    if (instanceArr[adjCon]) {
+      instanceArr[adjCon].ul.style.zIndex = '-1'
+    }
     //will also prevent the adjacent ul from
     // responding to touch events
 
@@ -82,13 +89,13 @@ function addHandlers () {
 
   function pointermoveFunction(e) {
     //console.log(instanceArr.interrupt)
-  //  if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}
+    //  if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}
     if (!dontTouch) {
       // It will return if dontTouch is false and if interrupt is true(layout in progress)
       return;
     }
 
-  //  console.log('after interrupt')
+    //  console.log('after interrupt')
     //if ($(move).offset().top <  div.offset().top ) {return;}   //containment
     e.preventDefault();
     hasMoved = true; // hasMoved is a flag to clicking items without moving them
@@ -115,7 +122,7 @@ function addHandlers () {
     elt.currentPos.left = targetOffsetX + newDx;
     //	console.log('moving')
 
-    onDrag(elt, constructorThis.elts, o, instanceArr);
+    onDrag(elt, instanceThis.elts, o, instanceArr);
 
   };
 
@@ -133,7 +140,7 @@ function addHandlers () {
       if (!elt) {
         return;
       }
-      constructorThis.onStop(elt, o);
+      instanceThis.onStop(elt, o);
     } else { // if it hasn't moved
       clearClass();
     }
