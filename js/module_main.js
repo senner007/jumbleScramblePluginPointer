@@ -35,6 +35,7 @@
     instanceArr.diff = (instanceArr.end.getTime() - instanceArr.start.getTime()) / 1000;
    // console.log(instanceArr.diff)
     instanceArr.interrupt = true;
+    elt.canBeDragged = false;
     //// this will prevent the layout from breaking if the user drags an item across slowly
     // and then immediately drags more items to the same container. instanceArr.diff measures
     // the time it takes to initialize the drag to when it is dropped. A smaller difference
@@ -80,12 +81,12 @@
 
         instanceArr.interrupt = false;
       }
-
-      for (var i = 0; i< instanceArr[elt.belongsTo].elts.length; i++) {
-          instanceArr[elt.belongsTo].elts[i].canBeDragged = true
-
-      }
-    //  elt.canBeDragged = true;
+      //
+      // for (var i = 0; i< instanceArr[elt.belongsTo].elts.length; i++) {
+      //     instanceArr[elt.belongsTo].elts[i].canBeDragged = true
+      //
+      // }
+      elt.canBeDragged = true;
       // This will prevent the layout from breaking if the user quickly drags an item across, drops it
       // and the immediately tries to drag it back again. It will disable the handler for the item until it has animatied to its position.
       // update: iterating over the entire colllection in the container because multi touch input might srew it up

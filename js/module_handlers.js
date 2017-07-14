@@ -33,22 +33,23 @@ function addHandlers () {
   var classDefine = o.isVertical == true ? 'listItem' : 'listItem-horizontal',
     liSelector = o.isVertical == true ? '.listItem' : '.listItem-horizontal';
   var startX, startY;
-  var hasMoved;
+  //var hasMoved;
   var docElem = document.documentElement;
 
 
   ul.style.zIndex = '1'
 
     $(ul).on(eStart, liSelector, function(e) {
-      console.log(e)
+
     if (instanceArr.dontTouch == true || e.target.canBeDragged == false) {
       return;
     }
       e.preventDefault();
-    if (e.type == 'touchstart') { e = e.originalEvent.changedTouches[0]}
-  //  console.log(e)
-    instanceArr.dontTouch = true;
+    if (e.type == 'touchstart' && e.touches.length > e.targetTouches.length) { return; }
+    //  if all touches detected is greater than the touches detected on the same element - return
+    //  Prevents selecting more than one element at the same time, but allows for multiple touch points(fingers) on the same element
 
+    instanceArr.dontTouch = true;
     // flag to prevent multi
     //	e.stopPropagation();
 
@@ -91,7 +92,7 @@ function addHandlers () {
   //  console.log('after interrupt')
     //if ($(move).offset().top <  div.offset().top ) {return;}   //containment
     e.preventDefault();
-    hasMoved = true; // hasMoved is a flag to clicking items without moving them
+    elt.hasMoved = true; // hasMoved is a flag to clicking items without moving them
 
     //if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}
     newDx = e.pageX - startX;
@@ -122,10 +123,10 @@ function addHandlers () {
   function pointerupFunction(e) {
     e.preventDefault();
 
-    if (hasMoved) {
-      e.target.canBeDragged = false;
+    if (elt.hasMoved == true) {
+    
 
-      hasMoved = false;
+      elt.hasMoved = false;
       clearClass();
       if (transSupport) {
         move.style[transformPrefix] = 'translateZ(0) translate3d(' + 0 + 'px, ' + 0 + 'px, 0px)';
