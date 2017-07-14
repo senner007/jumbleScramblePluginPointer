@@ -118,7 +118,7 @@ vertical.events = {
    console.log('container 2 layoutComplete')
 
 
-    cont2.addLiElem('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et mi sapien. Nullam rutrum velit vel quam convallis sagittis. Aliquam molestie urna sit amet lacus finibus, ac aliquet libero congue. Pellentesque in nisl quis ligula placerat ultrices. Nunc dapibus pellentesque orci, ut consectetur lorem hendrerit ornare. In tempus tellus et massa hendrerit, ut convallis lacus mattis. Mauris eget sollicitudin eros. Cras in eros sed nisi suscipit auctor. Sed efficitur sem quis posuere pulvinar. Nulla mauris urna, finibus ut magna et.', 0, true)
+    cont2.addLiElem('Lorem ipsum dolor sit amet', 0, true)
     //    console.log(cont2)
 
   })

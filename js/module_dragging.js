@@ -43,6 +43,7 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
 
   if (dirSwitch && instanceArr.crossTrigger == false && instanceArr[elt.movesTo].locked == false) {
 
+
     if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= instanceArr[elt.movesTo].dropLimit) {
       // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
 

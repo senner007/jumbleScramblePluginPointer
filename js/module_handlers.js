@@ -38,9 +38,12 @@ function addHandlers () {
 
   ul.style.zIndex = '1'
 
-    $(ul).on(eStart, liSelector, function(e) {
+    ul.addEventListener(eStart, function(e) {
 
-    if (dontTouch == true || e.target.canBeDragged == false || instanceArr[this.belongsTo].locked == true) {
+
+  if (e.target == this) return;
+    var _this = e.target
+    if (dontTouch == true || e.target.canBeDragged == false || instanceArr[_this.belongsTo].locked == true) {
       return;
     }
 
@@ -53,7 +56,7 @@ function addHandlers () {
     // flag to prevent multi
     //	e.stopPropagation();
 
-    elt = this;
+    elt = _this;
     elt.nStart = elt.n
     elt.style[transitionPrefix] = '0s';
     elt.style.zIndex = 5;

@@ -86,6 +86,7 @@ position: absolute;
   box-shadow: 0;
   background: white;
   z-index: 1;
+  font-size: 15px;
   /*text-align: justify;
     text-justify: inter-word;*/
 }
