@@ -34,6 +34,7 @@ Todo:
 + trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
 + optionally implement logic to calculate animation speed based on the position of the dropped item relative to its new position
 + when using a single list, allow the option to constrain to a single axis - http://www.javascriptkit.com/javatutors/touchevents.shtml(bottom)
++ maybe set {passive: true} as third argument on event start and event move - https://developers.google.com/web/updates/2017/01/scrolling-intervention
 
 Todo - other:
 Add todo plugin in atom
@@ -61,6 +62,7 @@ Working:
 + option to fire layoutComplete after all instances have been initialized
 + Animation speed logic to determine when to speed up animations.
 + Adds touch support with fallback to pointer and then mouse as input - prevents multiple/multi touch events.
++ Lock/unlock methods which prevents dragging to and from instance
 
 
 Fixed:
