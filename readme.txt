@@ -33,6 +33,7 @@ Todo:
 + use native event delegation https://stackoverflow.com/questions/14174056/native-addeventlistener-with-selector-like-on-in-jquery
 + trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
 + optionally implement logic to calculate animation speed based on the position of the dropped item relative to its new position
++ when using a single list, allow the option to constrain to a single axis - http://www.javascriptkit.com/javatutors/touchevents.shtml(bottom)
 
 Todo - other:
 Add todo plugin in atom
@@ -60,6 +61,7 @@ Working:
 + option to fire layoutComplete after all instances have been initialized
 + Animation speed logic to determine when to speed up animations.
 + Adds touch support with fallback to pointer and then mouse as input - prevents multiple/multi touch events.
+
 
 Fixed:
 + allow dragging and dropping over other instances - Fixed
