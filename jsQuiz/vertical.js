@@ -101,7 +101,7 @@ vertical.events = {
 
   $(cont1.div).on('layoutComplete', function (hello, a) {
    console.log('container 1 layoutComplete')
-   console.log(a)
+
 
        //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
    var toDelete = elem.find('li').first()[0]

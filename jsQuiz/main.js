@@ -1,5 +1,8 @@
 import {cont1, cont2, vertical} from "./vertical.js"
 import {hello, hello2} from "./horizontal.js"
+// ES6 MODULE IMPORT/EXPORT
+////////////////////////////
+
 $('.container').hide(); // cannot be set from css ???
 
 var exampleObject = {
@@ -96,7 +99,7 @@ else if (path[1] == 'horizontal' ) {
 }
 
 
-  // 
+  //
 	// $('ul').on('pointerdown.hello', function () { // namespaced event added on top of events set in plugin. requires that stopPropagation is not used in plugin
   //
 	// 	console.log('handler added after load')
