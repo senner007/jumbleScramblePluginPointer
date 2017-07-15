@@ -50,7 +50,11 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
       // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
 
 
-      onDragAdj.triggerOn(elt, adjConElts, elts, o);
+      //onDragAdj.triggerOn(elt, adjConElts, elts, o);
+      instanceArr.added = instanceArr[elt.movesTo].addLiElem(elt.textContent, 1, true, elt.completeHeight, elt.completeWidth);
+
+ instanceArr.added.style.color = 'green'
+       instanceArr.added.insertPos = 1
       instanceArr.crossTrigger = true;
       elt.hasCrossed = dirSwitch;
     }
@@ -76,28 +80,32 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
 
  onDragElts.instanceArr = instanceArr;
  onDragAdj.instanceArr = instanceArr;
-
+if (instanceArr.added) {console.log(instanceArr.added.pos)}
   /*--------------------------------------------------------------------*/
   if (move == 'forward') { //  move forward
-    dirSwitch ? onDragAdj.moveForward(elt, adjConElts) : onDragElts.eltsMoveForward(elt, elts); };
+    instanceArr.crossTrigger ? onDragAdj.moveForward(elt, adjConElts) : onDragElts.eltsMoveForward(elt, elts); };
   if (move == "backward") { //  move backward
-    dirSwitch ? onDragAdj.moveBack(elt, adjConElts) : onDragElts.eltsMoveBack(elt, elts); } ;
+    instanceArr.crossTrigger ? onDragAdj.moveBack(elt, adjConElts) : onDragElts.eltsMoveBack(elt, elts); } ;
   if (move == 'up') { //  move up
-    dirSwitch ? onDragAdj.moveUp(elt, adjConElts) : onDragElts.eltsMoveUp(elt, elts); };
-  if (move == 'down') { //  move down
-    dirSwitch ? onDragAdj.moveDown(elt, adjConElts) : onDragElts.eltsMoveDown(elt, elts); };
-};
+    instanceArr.crossTrigger ? onDragElts.eltsMoveUp(elt, adjConElts, instanceArr.added) : onDragElts.eltsMoveUp(elt, elts); };
+    if (move == 'down') { //  move down
+      instanceArr.crossTrigger ? onDragElts.eltsMoveDown(elt, adjConElts, instanceArr.added) : onDragElts.eltsMoveDown(elt, elts); };
+ };
 
 
 
 
 
 var onDragElts = {
-  eltsMoveUp: function(elt, elts, flag) { // flag disregards elt position check
-    if (elt.n > 0) {
-      var eltPrev = elts[elt.n - 1];
+  eltsMoveUp: function(elt, elts, added) { // flag disregards elt position check
+
+    if (  instanceArr.crossTrigger ? added.n > 0 : elt.n > 0) {
+
+      var eltPrev = instanceArr.crossTrigger ? elts[added.n - 1] : elts[elt.n - 1] ;
+
       var eltPrevBound = eltPrev.pos.top + eltPrev.completeHeight / 2;
-      if (elt.currentPos.top < eltPrevBound || flag) {
+      if (elt.currentPos.top < eltPrevBound) {
+          if (  instanceArr.crossTrigger) {elt = added}
         // if (eltPrev.hasClass('locked')) {
         //   return;
         // }
@@ -113,11 +121,13 @@ var onDragElts = {
       }
     }
   },
-  eltsMoveDown: function(elt, elts, flag) {
-    if (elt.n < elts.length - 1) {
-      var eltNext = elts[elt.n + 1];
+  eltsMoveDown: function(elt, elts, added) {
+      if (  instanceArr.crossTrigger ? added.n < elts.length - 1 : elt.n < elts.length - 1) {
+
+      var eltNext = instanceArr.crossTrigger ? elts[added.n + 1] : elts[elt.n +1] ;
       var eltNextBound = eltNext.pos.top + eltNext.completeHeight / 2;
-      if (elt.currentPos.top + elt.completeHeight > eltNextBound || flag) {
+      if (elt.currentPos.top + elt.completeHeight > eltNextBound) {
+          if (  instanceArr.crossTrigger) {elt = added}
         // if (eltNext.hasClass('locked')) {
         //   return;
         // }
@@ -260,9 +270,10 @@ var onDragAdj = {
     };
   },
   moveDown: function(elt, adjConElts) {
+    console.log('moving down')
     if (elt.insertPos < adjConElts.length) {
       var obj = adjConElts[elt.insertPos]
-      if (elt.currentPos.top + elt.completeHeight > obj.pos.top + obj.completeHeight / 2 && obj.adjMoved == true) {
+      if (elt.currentPos.top + elt.completeHeight > obj.pos.top + obj.completeHeight / 2) {
 
         this.instanceArr[0].transToZero(obj);
         obj.adjMoved = false;
