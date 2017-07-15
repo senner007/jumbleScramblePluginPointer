@@ -1,6 +1,3 @@
-*This version uses jQuery pointer polyfill as a dependency*
-
-
 Todo:
 + make dropLimit work in horizontal mode
 + add margin for elt to constructor the first time it is calculated in animateback
@@ -36,8 +33,8 @@ Todo:
 + on event move, pass in only instances that are involved in the event(Pass in elt, instanceThis, instanceAdj (maybe rename)). Put dirSwitch as property on
   instance dragging from and rename to crossTrigger,  rename crossTrigger to crossFlag and put on same instance.
   Put remaining properties on instanceArr on each instance.
-+ try to unify the reordering logic and refactor into a single function call
-+ maybe add and remove the element on triggeron/tiggeroff, hide it but update its position on each reorder. Then avoid calling the addLiElem on dragstop
++ add placeholder when dragging
++ allow jquery pointer polyfill as optional
 
 
 Todo - other:
@@ -77,7 +74,8 @@ Fixed:
 + do not run init on object instantiation (run after as obj.init())- Fixed
 + currently doesn't work in Edge - Fixed ({once: true} in events doesn't agree with Edge)
 + improve the addLiElem logic, remove jQuery - DONE
-
++ maybe add and remove the element on triggeron/tiggeroff, hide it but update its position on each reorder. Then avoid calling the addLiElem on dragstop - DONE
++ try to unify the reordering logic and refactor into a single function call - DONE
 
 Testing:
 + Create responsive layout and test on mobile devices
