@@ -179,6 +179,15 @@
     this.locked = false;
   }
 
+  JumbleScramble.prototype.crossDistance = function() {
+    if (this.options.isVertical) {
+      var crossDistance = instanceArr[this.elts[0].movesTo].divOffset.left - this.divOffset.left;
+    } else {
+      var crossDistance = instanceArr[this.elts[0].movesTo].divOffset.top - this.divOffset.top;
+    }
+    return crossDistance;
+  }
+
   JumbleScramble.prototype.addHandlers = addHandlers;
 
   JumbleScramble.prototype.init = function() {

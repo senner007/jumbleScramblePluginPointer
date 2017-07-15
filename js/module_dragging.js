@@ -20,12 +20,15 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
 
   if (instanceArr.length > 1 && o.isVertical) {   //vartical
     var adjConElts = instanceArr[elt.movesTo].elts;
-    var adjacentDir = instanceArr[elt.movesTo].divOffset.left - instanceArr[elt.belongsTo].divOffset.left;
+    var adjacentDir = instanceArr[elt.belongsTo].crossDistance();
+  //  var adjacentDir = instanceArr[elt.movesTo].divOffset.left - instanceArr[elt.belongsTo].divOffset.left;
+
     var dirSwitch = (elt.belongsTo % 2 == 0 ? thisElt.eltPos.left > adjacentDir / 2 : thisElt.eltPos.left < adjacentDir / 2);
   }
   if (instanceArr.length > 1 && !o.isVertical) {  // horizontal
     var adjConElts = instanceArr[elt.movesTo].elts;
-    var adjacentDir = instanceArr[elt.movesTo].divOffset.top - instanceArr[elt.belongsTo].divOffset.top;
+    var adjacentDir = instanceArr[elt.belongsTo].crossDistance()
+  //  var adjacentDir = instanceArr[elt.movesTo].divOffset.top - instanceArr[elt.belongsTo].divOffset.top;
     var dirSwitch = (elt.belongsTo % 2 == 0 ? thisElt.eltPos.top > adjacentDir / 2 : thisElt.eltPos.top < adjacentDir / 2);
   }
 
@@ -42,7 +45,6 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
 // and then immediately drags more items to the same container
 
   if (dirSwitch && instanceArr.crossTrigger == false && instanceArr[elt.movesTo].locked == false) {
-
 
     if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= instanceArr[elt.movesTo].dropLimit) {
       // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
