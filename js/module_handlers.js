@@ -29,6 +29,7 @@ function addHandlers() {
     adjCon = this.adjCon,
     o = this.options,
     instanceThis = this,
+    instanceAdj = instanceArr[adjCon],
     elt,
     movePos = {},
     eStart = isTouch ? 'touchstart' : isPointer ? 'pointerdown' : 'mousedown',
@@ -47,7 +48,7 @@ function addHandlers() {
 
     if (e.target == this) return;
     elt = e.target
-    if (dontTouch == true || e.target.canBeDragged == false || instanceArr[elt.belongsTo].locked == true) {
+    if (dontTouch == true || e.target.canBeDragged == false || instanceThis.locked == true) {
       return;
     }
 
@@ -71,8 +72,8 @@ function addHandlers() {
     elt.startDate = new Date();
 
     //console.log(elt instanceof jQuery)
-    if (instanceArr[adjCon]) {
-      instanceArr[adjCon].ul.style.zIndex = '-1'
+    if (instanceAdj) {
+      instanceAdj.ul.style.zIndex = '-1'
     }
     //will also prevent the adjacent ul from
     // responding to touch events
@@ -148,8 +149,8 @@ function addHandlers() {
     function clearClass() {
       elt.style[transitionPrefix] = 'box-shadow 250ms';
       elt.style.zIndex = 1;
-      if (instanceArr[adjCon]) {
-        instanceArr[adjCon].ul.style.zIndex = '1'
+      if (instanceAdj) {
+        instanceAdj.ul.style.zIndex = '1'
       };
       ul.style.zIndex = '1';
 

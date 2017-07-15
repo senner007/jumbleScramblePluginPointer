@@ -15,6 +15,7 @@ var exampleObject = {
     cont1.init();
   //  console.log('container 1 after init - container 2 before init')
     cont2.init();
+    console.log(cont1)
 
     $(window).on('resize', function() {
       var winHeight = window.innerHeight - 50;

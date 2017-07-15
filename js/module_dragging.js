@@ -79,13 +79,13 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
 
   /*--------------------------------------------------------------------*/
   if (move == 'forward') { //  move forward
-    instanceArr.crossTrigger ? onDragAdj.moveForward(elt, adjConElts) : onDragElts.eltsMoveForward(elt, elts); };
+    dirSwitch ? onDragAdj.moveForward(elt, adjConElts) : onDragElts.eltsMoveForward(elt, elts); };
   if (move == "backward") { //  move backward
-    instanceArr.crossTrigger ? onDragAdj.moveBack(elt, adjConElts) : onDragElts.eltsMoveBack(elt, elts); } ;
+    dirSwitch ? onDragAdj.moveBack(elt, adjConElts) : onDragElts.eltsMoveBack(elt, elts); } ;
   if (move == 'up') { //  move up
-    instanceArr.crossTrigger ? onDragAdj.moveUp(elt, adjConElts) : onDragElts.eltsMoveUp(elt, elts); };
+    dirSwitch ? onDragAdj.moveUp(elt, adjConElts) : onDragElts.eltsMoveUp(elt, elts); };
   if (move == 'down') { //  move down
-    instanceArr.crossTrigger ? onDragAdj.moveDown(elt, adjConElts) : onDragElts.eltsMoveDown(elt, elts); };
+    dirSwitch ? onDragAdj.moveDown(elt, adjConElts) : onDragElts.eltsMoveDown(elt, elts); };
 };
 
 
