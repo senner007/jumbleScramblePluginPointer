@@ -61,7 +61,8 @@ Working:
 + Animation speed logic to determine when to speed up animations.
 + Adds touch support with fallback to pointer and then mouse as input - prevents multiple/multi touch events.
 + Lock/unlock methods which prevents dragging to and from instance
-+ Added getInstances method to instance which returns array of all instances 
++ Added getInstances method to instance which returns array of all instances
++ Added crossDistance method to instances. The crossing distance to the adjacent container
 
 
 Fixed:
