@@ -47,7 +47,7 @@
     // and then immediately drags more items to the same container. elt.dragSpeed measures
     // the time it takes to initialize the drag to when it is dropped. A smaller difference
     // will increase the speed of the layout animation.
-
+    console.time("concatenation");
     var speed;
     if (elt.dragSpeed < 0.5) {
       speed = '170ms ease'
@@ -88,14 +88,13 @@
     //{once: true}  once not supported before edge 16
 
     function appendRemove() {
-
       if (!!o.autoValidate) {
         o.autoValidate();
       } // calls the autovalidate function in the plugin calling script
       if (elt.hasCrossed) {
-        instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
+      //  instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
 
-        instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false, elt.completeHeight, elt.completeWidth);
+        //instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false, elt.completeHeight, elt.completeWidth);
 
 
         instanceArr[elt.movesTo].cutOffEnd()
@@ -104,11 +103,11 @@
   };
 
 
-  function addToObject(thisElts, elt, n, $thisHeight, $thisWidth, o, thisContainer, adjCon, posTop, posLeft) {
+  function addToObject(thisElts, elt, n, thisHeight, thisWidth, o, thisContainer, adjCon, posTop, posLeft) {
 
     thisElts[n] = elt;
-    thisElts[n].completeWidth = $thisWidth || 0; // its size (with the margin)
-    thisElts[n].completeHeight = $thisHeight || 0; // its height (with the margin)
+    thisElts[n].completeWidth = thisWidth || 0; // its size (with the margin)
+    thisElts[n].completeHeight = thisHeight || 0; // its height (with the margin)
     thisElts[n].pos = {
       top: posTop,
       left: posLeft
@@ -123,8 +122,8 @@
     thisElts[n].initialN = n; // its initial position (as per the other elements)
     thisElts[n].n = n; // its current position (as per the other elements)
     thisElts[n].o = o; // its current position (as per the other elements)
-    thisElts[n].adjMoved = false;
-    thisElts[n].hasCrossed = false;
+    thisElts[n].adjMoved = false; // flag used in drag reorder logic
+    thisElts[n].hasCrossed = false; // has the elt crossed over to the other container
     thisElts[n].newPosSameCon = false; // has the element changed position but remained in the same container
     thisElts[n].belongsTo = thisContainer;
     thisElts[n].movesTo = adjCon;
@@ -179,13 +178,16 @@
     this.locked = false;
   }
 
-  JumbleScramble.prototype.crossDistance = function() {
+  JumbleScramble.prototype.crossDistance = function(instThis, instAdj) {
+
+
     if (this.options.isVertical) {
       var crossDistance = instanceArr[this.elts[0].movesTo].divOffset.left - this.divOffset.left;
     } else {
       var crossDistance = instanceArr[this.elts[0].movesTo].divOffset.top - this.divOffset.top;
     }
-    return crossDistance;
+
+    return crossDistance
   }
 
   JumbleScramble.prototype.addHandlers = addHandlers;
@@ -263,7 +265,6 @@
   function outerHeight(el) { // replacing jquery outerWidth(true)
     var height = el.offsetHeight;
     var style = getComputedStyle(el);
-
     height += parseInt(style.marginTop) + parseInt(style.marginBottom);
     return height;
   }
@@ -392,60 +393,46 @@
       instanceArr = this.getInstances(),
       tempArr = [];
     var eltObj = {
-      'left': n > 0 ? thisElts[n - 1].pos.left + thisElts[n - 1].completeWidth + 'px' : 0,
-      'top': n > 0 ? thisElts[n - 1].pos.top + thisElts[n - 1].completeHeight + 'px' : 0
+      'left': n > 0 ? thisElts[n - 1].pos.left + thisElts[n - 1].completeWidth : 0,
+      'top': n > 0 ? thisElts[n - 1].pos.top + thisElts[n - 1].completeHeight : 0
     }
-    var item = ('<li style="left:' + eltObj.left + ';top:' + eltObj.top + '" class=' + (o.isVertical ? 'listItem' : 'listItem-horizontal') + '>' + liText + '</li>');
+    var item = ('<li style="left:' + eltObj.left + 'px;top:' + eltObj.top + 'px" class=' + (o.isVertical ? 'listItem' : 'listItem-horizontal') + '>' + liText + '</li>');
     var elt = document.createElement('li');
     elt.innerHTML = item;
     elt = elt.firstChild;
 
-    for (var i = n; i < thisElts.length; i++) {
-      tempArr.push(thisElts[i]);
-    }
+    thisElts.length == 0 ? this.ul.appendChild(elt) : (n > 0) ? this.ul.insertBefore(elt, thisElts[elt.n + 1]): this.ul.insertBefore(elt, thisElts[n]);
 
-    if (thisElts.length == 0) {
-      this.ul.appendChild(elt)
-    } // if there are no elements present at drop
-    else {
-      (n > 0) ? this.ul.insertBefore(elt, thisElts[elt.n + 1]): this.ul.insertBefore(elt, thisElts[n]);
-    }
-
-    if (!completeHeight && !completeWidth) {
-      var thisWidth = o.isVertical ? 0 : outerWidth(elt);
-      var thisHeight = o.isVertical ? outerHeight(elt) : 0;
-    } else {
-      var thisWidth = completeWidth;
-      var thisHeight = completeHeight;
-    }
+    var thisWidth = completeWidth || (o.isVertical ? 0 : outerWidth(elt)),
+      thisHeight = completeHeight || (o.isVertical ? outerHeight(elt) : 0);
 
     for (var i = n; i < thisElts.length; i++) {
-      var ets = thisElts[i];
-      thisElts[i].adjMoved = false;
-      ets.style[instanceArr.transitionPrefix] = '0ms';
-      ets.style[instanceArr.transformPrefix] = instanceArr.transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
-      ets.style.left = parseInt(ets.style.left) + thisWidth + 'px'
-      ets.style.top = parseInt(ets.style.top) + thisHeight + 'px'
+      var el = thisElts[i];
+      var marginLeft = o.isVertical ? 0 : (el.completeWidth - el.offsetWidth); // account for margin
+
+      el.adjMoved = false; // flag used in drag reorder logic
+      el.style[instanceArr.transitionPrefix] = '0ms';
+      el.style[instanceArr.transformPrefix] = instanceArr.transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
+      el.style.left = parseInt(el.style.left) + thisWidth + 'px'
+      el.style.top = parseInt(el.style.top) + thisHeight + 'px'
+      el.pos.left = el.offsetLeft - marginLeft;
+      el.pos.top = el.offsetTop;
+      el.n = el.n +1
+      tempArr.push(el);
       if (addTrans) {
-        ets.style[instanceArr.transformPrefix] = 'translate(' + -(thisWidth) + 'px,' + -(thisHeight) + 'px)';
+        el.style[instanceArr.transformPrefix] = 'translate(' + -(thisWidth) + 'px,' + -(thisHeight) + 'px)';
         instanceArr[0].transToZero(thisElts[i]);
       }
+    };
+
+    for (var i = 0; i < tempArr.length; i++) {
+      thisElts[n + 1 + i] = tempArr[i];
     }
 
     o.isVertical ? this.ul.style.height = parseInt(this.ul.style.height) + thisHeight + 'px' : this.ul.style.width = parseInt(this.ul.style.width) + thisWidth + 'px';
 
-    var newTopPos = parseInt(eltObj.top),
-      newLeftPos = parseInt(eltObj.left)
+    addToObject(thisElts, elt, n, thisHeight, thisWidth, o, this.container, this.adjCon, eltObj.top, eltObj.left);
 
-    addToObject(thisElts, elt, n, thisHeight, thisWidth, o, this.container, this.adjCon, newTopPos, newLeftPos);
-
-    for (var i = 0; i < tempArr.length; i++) {
-      var marginLeft = o.isVertical ? 0 : (tempArr[i].completeWidth - tempArr[i].offsetWidth); // account for margin
-      tempArr[i].pos.left = tempArr[i].offsetLeft - marginLeft;
-      tempArr[i].pos.top = tempArr[i].offsetTop;
-      tempArr[i].n = n + i + 1;
-      thisElts[n + 1 + i] = tempArr[i];
-    }
     if (addTrans) {
       var tArr = [elt];
       this.animAdded(tArr, this.container)
@@ -453,8 +440,8 @@
       return elt;
     }; // animation only needed when triggering add
 
-    console.timeEnd("concatenation");
     this.unlock();
+    return elt;
   }
 
 
