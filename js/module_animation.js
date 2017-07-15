@@ -31,11 +31,11 @@ function animateBack(elt, o, instanceArr) {
   if (elt.hasCrossed) {
 
     var instMovesTo = instanceArr[elt.movesTo];
-    var adjEltBefore = instMovesTo.elts[elt.insertPos - 1];
+    var adjEltBefore = instMovesTo.elts[instanceArr.added.n - 1];
     if (o.isVertical) {
 
       var adjacentDir = instMovesTo.divOffset.left - instanceArr[elt.belongsTo].divOffset.left;
-      var animateToPos = elt.insertPos > 0 ? adjEltBefore.pos.top + adjEltBefore.completeHeight : 0;
+      var animateToPos = instanceArr.added.n > 0 ? adjEltBefore.pos.top + adjEltBefore.completeHeight : 0;
 
       var thisLeft = adjacentDir,
         thisTop = animateToPos,
@@ -44,7 +44,7 @@ function animateBack(elt, o, instanceArr) {
     } else {
 
       var adjacentDir = instMovesTo.divOffset.top - instanceArr[elt.belongsTo].divOffset.top;
-      var animateToPos = elt.insertPos > 0 ? adjEltBefore.pos.left + adjEltBefore.completeWidth : 0;
+      var animateToPos = instanceArr.added.n > 0 ? adjEltBefore.pos.left + adjEltBefore.completeWidth : 0;
 
       var thisLeft = animateToPos,
         thisTop = adjacentDir,

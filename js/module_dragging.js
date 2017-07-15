@@ -49,12 +49,10 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
     if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= instanceArr[elt.movesTo].dropLimit) {
       // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
 
-
-      //onDragAdj.triggerOn(elt, adjConElts, elts, o);
-      instanceArr.added = instanceArr[elt.movesTo].addLiElem(elt.textContent, 1, true, elt.completeHeight, elt.completeWidth);
-
- instanceArr.added.style.color = 'green'
-       instanceArr.added.insertPos = 1
+      var insertPosition = onDragAdj.triggerOn(elt, adjConElts, elts, o);
+      instanceArr.added = instanceArr[elt.movesTo].addLiElem(elt.textContent, insertPosition, true, elt.completeHeight, elt.completeWidth);
+      instanceArr.added.insertPos = insertPosition;
+      instanceArr.added.style.display = 'none'
       instanceArr.crossTrigger = true;
       elt.hasCrossed = dirSwitch;
     }
@@ -62,10 +60,8 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
 
   if (!dirSwitch && instanceArr.crossTrigger == true && Object.keys(elts).length > 1) { // go back to originating container
 
-  //  console.log('back to originating')
-
-    onDragAdj.triggerOff(elt, adjConElts, elts, o);
     instanceArr.crossTrigger = false;
+    onDragAdj.triggerOff(elt, adjConElts, elts, o);
     elt.hasCrossed = dirSwitch;
   };
   var move;
@@ -80,32 +76,25 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
 
  onDragElts.instanceArr = instanceArr;
  onDragAdj.instanceArr = instanceArr;
-if (instanceArr.added) {console.log(instanceArr.added.pos)}
+
   /*--------------------------------------------------------------------*/
-  if (move == 'forward') { //  move forward
-    instanceArr.crossTrigger ? onDragAdj.moveForward(elt, adjConElts) : onDragElts.eltsMoveForward(elt, elts); };
-  if (move == "backward") { //  move backward
-    instanceArr.crossTrigger ? onDragAdj.moveBack(elt, adjConElts) : onDragElts.eltsMoveBack(elt, elts); } ;
-  if (move == 'up') { //  move up
-    instanceArr.crossTrigger ? onDragElts.eltsMoveUp(elt, adjConElts, instanceArr.added) : onDragElts.eltsMoveUp(elt, elts); };
-    if (move == 'down') { //  move down
-      instanceArr.crossTrigger ? onDragElts.eltsMoveDown(elt, adjConElts, instanceArr.added) : onDragElts.eltsMoveDown(elt, elts); };
+  var eltsToMove = instanceArr.crossTrigger ? adjConElts : elts;
+  if (move == 'forward') {  onDragElts.eltsMoveForward(elt, eltsToMove, instanceArr.added)  };
+  if (move == "backward") {  onDragElts.eltsMoveBack(elt, eltsToMove, instanceArr.added) } ;
+  if (move == 'up') { onDragElts.eltsMoveUp(elt, eltsToMove, instanceArr.added) };
+  if (move == 'down') { onDragElts.eltsMoveDown(elt, eltsToMove, instanceArr.added) };
  };
-
-
-
 
 
 var onDragElts = {
   eltsMoveUp: function(elt, elts, added) { // flag disregards elt position check
-
-    if (  instanceArr.crossTrigger ? added.n > 0 : elt.n > 0) {
-
-      var eltPrev = instanceArr.crossTrigger ? elts[added.n - 1] : elts[elt.n - 1] ;
-
+    var _elt = elt;
+    if (instanceArr.crossTrigger) { elt = added };
+    if (  elt.n > 0) {
+      var eltPrev = elts[elt.n - 1] ;
       var eltPrevBound = eltPrev.pos.top + eltPrev.completeHeight / 2;
-      if (elt.currentPos.top < eltPrevBound) {
-          if (  instanceArr.crossTrigger) {elt = added}
+      if (_elt.currentPos.top < eltPrevBound) {
+
         // if (eltPrev.hasClass('locked')) {
         //   return;
         // }
@@ -121,13 +110,18 @@ var onDragElts = {
       }
     }
   },
-  eltsMoveDown: function(elt, elts, added) {
-      if (  instanceArr.crossTrigger ? added.n < elts.length - 1 : elt.n < elts.length - 1) {
+  eltsMoveDown: function(elt, elts, addedOrFlag) {
+    var _elt = elt;
+    var flag;
 
-      var eltNext = instanceArr.crossTrigger ? elts[added.n + 1] : elts[elt.n +1] ;
+    typeof addedOrFlag == 'boolean' ? flag = addedOrFlag : flag = false;
+    instanceArr.crossTrigger ? elt = addedOrFlag : elt = elt;
+      if ( elt.n < elts.length - 1) {
+
+      var eltNext = elts[elt.n +1];
       var eltNextBound = eltNext.pos.top + eltNext.completeHeight / 2;
-      if (elt.currentPos.top + elt.completeHeight > eltNextBound) {
-          if (  instanceArr.crossTrigger) {elt = added}
+      if (_elt.currentPos.top + _elt.completeHeight > eltNextBound || flag) {
+
         // if (eltNext.hasClass('locked')) {
         //   return;
         // }
@@ -143,11 +137,15 @@ var onDragElts = {
       }
     }
   },
-  eltsMoveBack: function(elt, elts) {
+  eltsMoveBack: function(elt, elts, added) {
+
+    var _elt = elt;
+    if (instanceArr.crossTrigger) { elt = added;};
     if (elt.n > 0) {
       var eltPrev = elts[elt.n - 1];
       var eltPrevBound = eltPrev.pos.left + eltPrev.completeWidth / 2;
-      if (elt.currentPos.left < eltPrevBound) {
+      if (_elt.currentPos.left < eltPrevBound) {
+
 
         // if (eltPrev.hasClass('locked')) {
         //   return;
@@ -164,12 +162,16 @@ var onDragElts = {
       }
     }
   },
-  eltsMoveForward: function(elt, elts, flag) {
+  eltsMoveForward: function(elt, elts, addedOrFlag) {
+    var _elt = elt;
+    var flag;
+    typeof addedOrFlag == 'boolean' ? flag = addedOrFlag : flag = false;
+    instanceArr.crossTrigger ? elt = addedOrFlag : elt = elt;
     if (elt.n < elts.length - 1) {
 
       var eltNext = elts[elt.n + 1];
       var eltNextBound = eltNext.pos.left + eltNext.completeWidth / 2;
-      if (elt.currentPos.left + (elt.completeWidth/1.2)  > eltNextBound || flag) { // (elt.completeWidth/1.2) - tweak me!
+      if (_elt.currentPos.left + (elt.completeWidth/1.2)  > eltNextBound || flag) { // (elt.completeWidth/1.2) - tweak me!
 
         // if (eltNext.hasClass('locked')) {
         //   return;
@@ -198,20 +200,14 @@ var onDragElts = {
 }
 
 
-
 var onDragAdj = {
 
   triggerOn: function(elt, adjConElts, elts, o) {
 
-
     var tempArr = [];
     var objOffset = o.isVertical ? 'top' : 'left';
     var objDimension = o.isVertical ? 'completeHeight' : 'completeWidth';
-    if (this.instanceArr.transSupport) {
-      var objTranslate = o.isVertical ? 'translate3d(0px,' + elt[objDimension] + 'px,0px)' : 'translate3d(' + elt[objDimension] + 'px,0px,0px)';
-    } else {
-      var objTranslate = o.isVertical ? 'translateY(' + elt[objDimension] + 'px)' : 'translateX(' + elt[objDimension] + 'px)';
-    }
+
     for (var i = 0; i < adjConElts.length; i++) { //Loop the array
       var obj = adjConElts[i]
 
@@ -219,95 +215,26 @@ var onDragAdj = {
 
         if (obj.adjMoved == false) {
           tempArr.push(i)
-          obj.style[this.instanceArr.transitionPrefix] = '250ms ease';
-          obj.style[this.instanceArr.transformPrefix] = objTranslate
-          obj.adjMoved = true;
-          elt.insertPos = obj.n;
-          obj.pos[objOffset] = obj.pos[objOffset] + elt[objDimension];
 
         };
       };
     };
-    elt.insertPos = tempArr[0] >= 0 ? tempArr[0] : adjConElts.length;
+    elt.insertPos = tempArr[0] >= 0 ? tempArr[0] : adjConElts.length; // REFACTOR !!!!!!!!!!!
     // reorder the elements in the originating container
     for (var i = elt.n + 1; i < elts.length; i++) {
       o.isVertical ? onDragElts.eltsMoveDown(elt, elts, true) : onDragElts.eltsMoveForward(elt, elts, true); // third argument is a flag to override pos check in eltsMoveDown function
     };
+    return elt.insertPos;
 
   },
   triggerOff: function(elt, adjConElts, elts, o) { // going back to the originating container
 
-    var objOffset = o.isVertical ? 'top' : 'left';
-    var objDimension = o.isVertical ? 'completeHeight' : 'completeWidth';
-    for (var i = 0; i < adjConElts.length; i++) { //Loop over adjacentContainer elements
-      var obj = adjConElts[i];
+     instanceArr[elt.movesTo].removeLiElem(instanceArr.added, true, false)
 
-      if (obj.adjMoved == true) {
-        obj.adjMoved = false;
-        obj.pos[objOffset] = obj.pos[objOffset] - elt[objDimension];
-        this.instanceArr[0].transToZero(obj);
-      }
-    }
-
-    for (var i = 0; i < elts.length - 1; i++) { // Loop over originating Container elements
-      o.isVertical ? onDragElts.eltsMoveUp(elt, elts) : onDragElts.eltsMoveBack(elt, elts);
-    }
-
+     for (var i = 0; i < elts.length - 1; i++) { // Loop over originating Container elements
+       o.isVertical ? onDragElts.eltsMoveUp(elt, elts) : onDragElts.eltsMoveBack(elt, elts);
+     }
 
   },
-  moveUp: function(elt, adjConElts) {
-    if (elt.insertPos > 0) {
-      var obj = adjConElts[elt.insertPos - 1]
-      if (elt.currentPos.top < obj.pos.top + obj.completeHeight / 2 && obj.adjMoved == false) {
-        obj.style[this.instanceArr.transitionPrefix] = '250ms ease';
-        obj.style[this.instanceArr.transformPrefix] = this.instanceArr.transSupport ? 'translate3d(0px,' + elt.completeHeight + 'px, 0px)' : 'translateY(' + elt.completeHeight + 'px)';
-        obj.adjMoved = true;
-        elt.insertPos = obj.n;
-
-        obj.pos.top = obj.pos.top + elt.completeHeight;
-
-      };
-    };
-  },
-  moveDown: function(elt, adjConElts) {
-    console.log('moving down')
-    if (elt.insertPos < adjConElts.length) {
-      var obj = adjConElts[elt.insertPos]
-      if (elt.currentPos.top + elt.completeHeight > obj.pos.top + obj.completeHeight / 2) {
-
-        this.instanceArr[0].transToZero(obj);
-        obj.adjMoved = false;
-        elt.insertPos = obj.n + 1;
-        obj.pos.top = obj.pos.top - elt.completeHeight;
-
-      }
-    };
-  },
-  moveForward: function(elt, adjConElts) {
-    if (elt.insertPos < adjConElts.length) {
-      var obj = adjConElts[elt.insertPos]
-      if (elt.currentPos.left + (elt.completeWidth/1.2) > obj.pos.left + obj.completeWidth / 2 && obj.adjMoved == true) { //(elt.completeWidth/1.2)  - Tweak me!
-        this.instanceArr[0].transToZero(obj);
-        obj.adjMoved = false;
-        elt.insertPos = obj.n + 1;
-        obj.pos.left = obj.pos.left - elt.completeWidth;
-      }
-    };
-  },
-  moveBack: function(elt, adjConElts) {
-
-    if (elt.insertPos > 0) {
-      var obj = adjConElts[elt.insertPos - 1]
-
-      if (elt.currentPos.left < obj.pos.left + obj.completeWidth / 2 && obj.adjMoved == false) {
-
-        obj.style[this.instanceArr.transitionPrefix] = '250ms ease';
-        obj.style[this.instanceArr.transformPrefix] = this.instanceArr.transSupport ? 'translate3d(' + elt.completeWidth + 'px,0px,0px)' : 'translateX(' + elt.completeWidth + 'px)';
-        obj.adjMoved = true;
-        elt.insertPos = obj.n;
-        obj.pos.left = obj.pos.left + elt.completeWidth;
-      }
-    };
-  }
 
 };
