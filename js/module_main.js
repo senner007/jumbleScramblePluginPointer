@@ -92,9 +92,9 @@
         o.autoValidate();
       } // calls the autovalidate function in the plugin calling script
       if (elt.hasCrossed) {
-      //  instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
+       instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
 
-        //instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false, elt.completeHeight, elt.completeWidth);
+        instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false, elt.completeHeight, elt.completeWidth);
 
 
         instanceArr[elt.movesTo].cutOffEnd()
