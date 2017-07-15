@@ -35,6 +35,7 @@ Todo:
 + maybe set {passive: true} as third argument on event start and event move - https://developers.google.com/web/updates/2017/01/scrolling-intervention
 + on event move, pass in only instances that are in use. Set the crossTrigger boolean to the instance dragging from and the dirSwitch on the instance going in to
 + try to unify the reordering logic and refactor into a single function call
++ maybe add and remove the element on triggeron/tiggeroff, hide it but update its position on each reorder. Then avoid calling the addLiElem on dragstop
 
 
 Todo - other:
