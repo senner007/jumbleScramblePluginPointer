@@ -33,6 +33,7 @@ Todo:
 + optionally implement logic to calculate animation speed based on the position of the dropped item relative to its new position
 + when using a single list, allow the option to constrain to a single axis - http://www.javascriptkit.com/javatutors/touchevents.shtml(bottom)
 + maybe set {passive: true} as third argument on event start and event move - https://developers.google.com/web/updates/2017/01/scrolling-intervention
++ on event move, pass in only instances that are in use. Set the crossTrigger boolean to the instance dragging from and the dirSwitch on the instance going in to
 
 Todo - other:
 Add todo plugin in atom
