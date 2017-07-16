@@ -56,12 +56,25 @@
       speed = '15ms ease'
     }
 
-
-    if (o.setChars) {
-      setChars(elt);
-    } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
+    //
+    // if (o.setChars) {
+    //   setChars(elt);
+    // } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
 
     $(elt).one('transitionend', function() {
+
+      appendRemove()
+    })
+
+    animateBack(elt, o, instanceArr);
+    instanceArr[0].transToZero(elt, speed);
+    // only wait for transitionend if supported (not ie9)
+    //{once: true}  once not supported before edge 16
+
+    function appendRemove() {
+      // if (!!o.autoValidate) {
+      //   o.autoValidate();
+      // } // calls the autovalidate function in the plugin calling script
       if (!elt.hasCrossed && elt.newPosSameCon) {
         // insert the dragged element into its new position efter drop in originating container
         // on condition that it has changed its position
@@ -73,22 +86,6 @@
           instanceArr[elt.belongsTo].ul.insertBefore(elt, instanceArr[elt.belongsTo].elts[elt.n + 1]);
         }
       }
-
-      // This will prevent the layout from breaking if the user quickly drags an item across, drops it
-      // and the immediately tries to drag it back again. It will disable the handler for the item until it has animatied to its position.
-      // update: iterating over the entire colllection in the container because multi touch input might srew it up
-      appendRemove()
-    })
-
-    animateBack(elt, o, instanceArr);
-    instanceArr[0].transToZero(elt, speed);
-    // only wait for transitionend if supported (not ie9)
-    //{once: true}  once not supported before edge 16
-
-    function appendRemove() {
-      if (!!o.autoValidate) {
-        o.autoValidate();
-      } // calls the autovalidate function in the plugin calling script
       if (elt.hasCrossed) {
         if (instanceArr[elt.movesTo].elts.length == 0) {
           instanceArr[elt.movesTo].ul.insertBefore(instanceArr.added, instanceArr[elt.movesTo].elts[1]);
@@ -96,6 +93,7 @@
           instanceArr[elt.movesTo].ul.insertBefore(instanceArr.added, instanceArr[elt.movesTo].elts[instanceArr.added.n + 1]);
           instanceArr.added.style.display = 'block'
           o.isVertical ? instanceArr.added.style.top = elt.style.top : instanceArr.added.style.left = elt.style.left;
+
           instanceArr[elt.belongsTo].removeLiElem(elt, false, true);
 
         }
@@ -268,7 +266,7 @@
   function outerHeight(el) { // replacing jquery outerWidth(true)
     var height = el.offsetHeight;
     var style = getComputedStyle(el);
-  
+
 
     height += parseInt(style.marginTop) + parseInt(style.marginBottom);
     return height;
@@ -341,7 +339,7 @@
 
     var tArr = [];
     while (eltsSize > this.cutOff) {
-      tArr.push(instanceArr[this.adjCon].addLiElem(this.elts[this.elts.length - 1].textContent, 0, transSupport));
+      tArr.push(instanceArr[this.adjCon].addLiElem(this.elts[this.elts.length - 1].textContent, 0, {elt:true,elts:true}));
       this.removeLiElem(this.elts[this.elts.length - 1], transSupport)
       eltsSize -= this.elts[this.elts.length - 1][eltDim];
     }
@@ -423,7 +421,7 @@
       el.pos.top = el.offsetTop;
       el.n = el.n + 1
       tempArr.push(el);
-      if (addTrans) {
+      if (addTrans.elts) {
         el.style[instanceArr.transformPrefix] = 'translate(' + -(thisWidth) + 'px,' + -(thisHeight) + 'px)';
         instanceArr[0].transToZero(el);
       }
@@ -437,7 +435,7 @@
 
     addToObject(thisElts, elt, n, thisHeight, thisWidth, o, this.container, this.adjCon, eltObj.top, eltObj.left);
 
-    if (addTrans && !instanceArr.added) {
+    if (addTrans.elt) {
       var tArr = [elt];
       this.animAdded(tArr, this.container)
       /* elt[0].style[transitionPrefix] = '500ms'; elt[0].style[transformPrefix] = 'scale(1,1)'; elt[0].style.opacity = '1';  */

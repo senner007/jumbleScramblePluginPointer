@@ -43,7 +43,7 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
       // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
 
       var insertPosition = onTrigger.triggerOn(elt, adjConElts, elts, o);
-      instanceArr.added = instanceArr[elt.movesTo].addLiElem(elt.textContent, insertPosition, true, elt.completeHeight, elt.completeWidth);
+      instanceArr.added = instanceArr[elt.movesTo].addLiElem(elt.textContent, insertPosition, {elt:false,elts:true}, elt.completeHeight, elt.completeWidth);
       instanceArr.added.style.display = 'none'
       instanceArr.crossTrigger = true;
       elt.hasCrossed = dirSwitch;
@@ -182,8 +182,7 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
         objDimension = o.isVertical ? 'completeHeight' : 'completeWidth';
 
     for (var i = 0; i < adjConElts.length; i++) { //Loop the array
-      var obj = adjConElts[i]
-      if (elt.currentPos[objOffset] < obj.pos[objOffset] + obj[objDimension] / 2) {
+      if (elt.currentPos[objOffset] <  adjConElts[i].pos[objOffset] +  adjConElts[i][objDimension] / 2) {
           var firstInLoop = i;
           break;
       };
