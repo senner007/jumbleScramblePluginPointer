@@ -39,6 +39,8 @@ Todo:
 + refactor cutOff - pass completeHeight, comleteWidth to addLiElem
 + add more comments/lines
 + split module_main
++ crossDistance should be a property set on init/reLayout, not a method.
+
 
 
 Todo - other:
