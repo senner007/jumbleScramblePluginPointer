@@ -35,6 +35,7 @@ Todo:
   Put remaining properties on instanceArr on each instance.
 + add placeholder when dragging
 + allow jquery pointer polyfill as optional
++ fix preventing multitouch !!!
 
 
 Todo - other:
@@ -62,7 +63,7 @@ Working:
 + Examples of add and remove method calls
 + option to fire layoutComplete after all instances have been initialized
 + Animation speed logic to determine when to speed up animations.
-+ Adds touch support with fallback to pointer and then mouse as input - prevents multiple/multi touch events.
++ Adds touch support with fallback to pointer and then mouse as input
 + Lock/unlock methods which prevents dragging to and from instance
 + Added getInstances method to instance which returns array of all instances
 + Added crossDistance method to instances. The crossing distance to the adjacent container
