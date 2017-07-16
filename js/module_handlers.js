@@ -48,7 +48,7 @@ function addHandlers() {
 
     if (e.target == this) return;
     elt = e.target
-    if (dontTouch == true || e.target.canBeDragged == false || instanceThis.locked == true) {
+    if (dontTouch == true || instanceThis.locked == true) {
       return;
     }
 

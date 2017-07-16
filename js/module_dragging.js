@@ -11,14 +11,13 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
     left: elt.currentPos.left
   }
 
-
   var thisElt = posObj; //must be saved to a global object. (Possibly to avoid random
                         // occurrences of non moving objects on ipad)
   var oldPos = (thisElt.eltPos != null ? thisElt.eltPos : eltPos); //find the old position stored on the $object
   thisElt.eltPos = eltPos; //its current position derived from $draggable object
 
 
-  if (instanceArr.length > 1 && o.isVertical) {   //vartical
+  if (instanceArr.length > 1 && o.isVertical) {   //vertical
     var adjConElts = instanceArr[elt.movesTo].elts;
     var adjacentDir = instanceArr[elt.belongsTo].crossDistance();
   //  var adjacentDir = instanceArr[elt.movesTo].divOffset.left - instanceArr[elt.belongsTo].divOffset.left;
@@ -32,26 +31,19 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
     var dirSwitch = (elt.belongsTo % 2 == 0 ? thisElt.eltPos.top > adjacentDir / 2 : thisElt.eltPos.top < adjacentDir / 2);
   }
 
-
   /*--------------------------------------------------------------------*/
 
   // trigger animations for
   // adjacent container if below
   // dropLimit - refactor to add method for horizontal too.
 
-
-
-// this will prevent the layout from breaking if the user drags an item across slowly
-// and then immediately drags more items to the same container
-
   if (dirSwitch && instanceArr.crossTrigger == false && instanceArr[elt.movesTo].locked == false) {
 
     if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= instanceArr[elt.movesTo].dropLimit) {
       // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
 
-      var insertPosition = onDragAdj.triggerOn(elt, adjConElts, elts, o);
+      var insertPosition = onTrigger.triggerOn(elt, adjConElts, elts, o);
       instanceArr.added = instanceArr[elt.movesTo].addLiElem(elt.textContent, insertPosition, true, elt.completeHeight, elt.completeWidth);
-      instanceArr.added.insertPos = insertPosition;
       instanceArr.added.style.display = 'none'
       instanceArr.crossTrigger = true;
       elt.hasCrossed = dirSwitch;
@@ -61,7 +53,7 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
   if (!dirSwitch && instanceArr.crossTrigger == true && Object.keys(elts).length > 1) { // go back to originating container
 
     instanceArr.crossTrigger = false;
-    onDragAdj.triggerOff(elt, adjConElts, elts, o);
+    onTrigger.triggerOff(elt, adjConElts, elts, o);
     elt.hasCrossed = dirSwitch;
   };
   var move;
@@ -75,7 +67,6 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
   } // doing nothing
 
  onDragElts.instanceArr = instanceArr;
- onDragAdj.instanceArr = instanceArr;
 
   /*--------------------------------------------------------------------*/
   var eltsToMove = instanceArr.crossTrigger ? adjConElts : elts;
@@ -84,21 +75,17 @@ function onDrag(elt, elts, o, instanceArr) { // Drag
   if (move == 'up') { onDragElts.eltsMoveUp(elt, eltsToMove, instanceArr.added) };
   if (move == 'down') { onDragElts.eltsMoveDown(elt, eltsToMove, instanceArr.added) };
  };
-
+  /*----------------------------------------------------------------------------------------------------------------*/
 
 var onDragElts = {
-  eltsMoveUp: function(elt, elts, added) { // flag disregards elt position check
+  eltsMoveUp: function(elt, elts, added) { // added is the added element when crossing to adjacent conrtainer.
+                                            // Disregarded if elt has not crossed over
     var _elt = elt;
     if (instanceArr.crossTrigger) { elt = added };
     if (  elt.n > 0) {
       var eltPrev = elts[elt.n - 1] ;
       var eltPrevBound = eltPrev.pos.top + eltPrev.completeHeight / 2;
       if (_elt.currentPos.top < eltPrevBound) {
-
-        // if (eltPrev.hasClass('locked')) {
-        //   return;
-        // }
-    //  elt.insertBefore(eltPrev);
         elt.pos.top = eltPrev.pos.top;
         eltPrev.pos.top += elt.completeHeight;
         elts[elt.n] = eltPrev;
@@ -110,7 +97,10 @@ var onDragElts = {
       }
     }
   },
-  eltsMoveDown: function(elt, elts, addedOrFlag) {
+  eltsMoveDown: function(elt, elts, addedOrFlag) {  // flag disregards elt position check.
+                                                    // The third argument is the added element on crossTrigger and a boolean
+                                                    // when ordering the container the elt is moving from.
+
     var _elt = elt;
     var flag;
 
@@ -121,11 +111,6 @@ var onDragElts = {
       var eltNext = elts[elt.n +1];
       var eltNextBound = eltNext.pos.top + eltNext.completeHeight / 2;
       if (_elt.currentPos.top + _elt.completeHeight > eltNextBound || flag) {
-
-        // if (eltNext.hasClass('locked')) {
-        //   return;
-        // }
-    //    elt.insertAfter(eltNext);
         eltNext.pos.top = elt.pos.top;
         elt.pos.top += eltNext.completeHeight;
         elts[elt.n] = eltNext;
@@ -145,12 +130,6 @@ var onDragElts = {
       var eltPrev = elts[elt.n - 1];
       var eltPrevBound = eltPrev.pos.left + eltPrev.completeWidth / 2;
       if (_elt.currentPos.left < eltPrevBound) {
-
-
-        // if (eltPrev.hasClass('locked')) {
-        //   return;
-        // }
-      //  elt.insertBefore(eltPrev);
         elt.pos.left = eltPrev.pos.left;
         eltPrev.pos.left += elt.completeWidth;
         elts[elt.n] = eltPrev;
@@ -173,10 +152,6 @@ var onDragElts = {
       var eltNextBound = eltNext.pos.left + eltNext.completeWidth / 2;
       if (_elt.currentPos.left + (elt.completeWidth/1.2)  > eltNextBound || flag) { // (elt.completeWidth/1.2) - tweak me!
 
-        // if (eltNext.hasClass('locked')) {
-        //   return;
-        // }
-      //  elt.insertAfter(eltNext);
         eltNext.pos.left = elt.pos.left;
         elt.pos.left += eltNext.completeWidth; //invert datas in the correspondence array
         elts[elt.n] = eltNext;
@@ -198,43 +173,35 @@ var onDragElts = {
     this.instanceArr[0].transToZero(elem);
   },
 }
+  /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-
-var onDragAdj = {
+var onTrigger = {  //These will trigger when the elt is crossing over to connected adjacent container/instance
 
   triggerOn: function(elt, adjConElts, elts, o) {
-
-    var tempArr = [];
-    var objOffset = o.isVertical ? 'top' : 'left';
-    var objDimension = o.isVertical ? 'completeHeight' : 'completeWidth';
+    var objOffset = o.isVertical ? 'top' : 'left',
+        objDimension = o.isVertical ? 'completeHeight' : 'completeWidth';
 
     for (var i = 0; i < adjConElts.length; i++) { //Loop the array
       var obj = adjConElts[i]
-
       if (elt.currentPos[objOffset] < obj.pos[objOffset] + obj[objDimension] / 2) {
-
         if (obj.adjMoved == false) {
-          tempArr.push(i)
-
+          var firstInLoop = i;
+          break;
         };
       };
     };
-    elt.insertPos = tempArr[0] >= 0 ? tempArr[0] : adjConElts.length; // REFACTOR !!!!!!!!!!!
+    firstInLoop >= 0 ? firstInLoop : firstInLoop = adjConElts.length; // REFACTOR !!!!!!!!!!!
     // reorder the elements in the originating container
     for (var i = elt.n + 1; i < elts.length; i++) {
-      o.isVertical ? onDragElts.eltsMoveDown(elt, elts, true) : onDragElts.eltsMoveForward(elt, elts, true); // third argument is a flag to override pos check in eltsMoveDown function
+      o.isVertical ? onDragElts.eltsMoveDown(elt, elts, true) : onDragElts.eltsMoveForward(elt, elts, true);
+      // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
     };
-    return elt.insertPos;
-
+    return firstInLoop;
   },
   triggerOff: function(elt, adjConElts, elts, o) { // going back to the originating container
-
      instanceArr[elt.movesTo].removeLiElem(instanceArr.added, true, false)
-
      for (var i = 0; i < elts.length - 1; i++) { // Loop over originating Container elements
        o.isVertical ? onDragElts.eltsMoveUp(elt, elts) : onDragElts.eltsMoveBack(elt, elts);
      }
-
   },
-
 };

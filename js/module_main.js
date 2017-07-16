@@ -33,7 +33,7 @@
     // it will increase the transition speed of the dropped item going to its new position)
 
     if (instanceArr.crossTrigger == true) { // going to new container
-    //  instanceArr[elt.movesTo].lock();
+    instanceArr[elt.movesTo].lock();
       instanceArr.crossTrigger = false;
     } else { // staying in originating container
       elt.newPosSameCon = (elt.nStart != elt.n)
@@ -41,11 +41,8 @@
 
     elt.endDate = new Date();
     elt.dragSpeed = (elt.endDate.getTime() - elt.startDate.getTime()) / 1000;
-    console.log(elt.dragSpeed)
-    elt.canBeDragged = false;
-    //// this will prevent the layout from breaking if the user drags an item across slowly
-    // and then immediately drags more items to the same container. elt.dragSpeed measures
-    // the time it takes to initialize the drag to when it is dropped. A smaller difference
+
+    // elt.dragSpeed measuresthe time it takes to initialize the drag to when it is dropped. A smaller difference
     // will increase the speed of the layout animation.
     console.time("concatenation");
     var speed;
@@ -55,6 +52,10 @@
     if (elt.dragSpeed < 0.35) {
       speed = '100ms ease'
     }
+    if (elt.dragSpeed < 0.2) {
+      speed = '15ms ease'
+    }
+
 
     if (o.setChars) {
       setChars(elt);
@@ -72,7 +73,7 @@
           instanceArr[elt.belongsTo].ul.insertBefore(elt, instanceArr[elt.belongsTo].elts[elt.n + 1]);
         }
       }
-      elt.canBeDragged = true;
+
       // This will prevent the layout from breaking if the user quickly drags an item across, drops it
       // and the immediately tries to drag it back again. It will disable the handler for the item until it has animatied to its position.
       // update: iterating over the entire colllection in the container because multi touch input might srew it up
@@ -89,27 +90,18 @@
         o.autoValidate();
       } // calls the autovalidate function in the plugin calling script
       if (elt.hasCrossed) {
+        if (instanceArr[elt.movesTo].elts.length == 0) {
+          instanceArr[elt.movesTo].ul.insertBefore(instanceArr.added, instanceArr[elt.movesTo].elts[1]);
+        } else {
+          instanceArr[elt.movesTo].ul.insertBefore(instanceArr.added, instanceArr[elt.movesTo].elts[instanceArr.added.n + 1]);
+          instanceArr.added.style.display = 'block'
+          o.isVertical ? instanceArr.added.style.top = elt.style.top : instanceArr.added.style.left = elt.style.left;
+          instanceArr[elt.belongsTo].removeLiElem(elt, false, true);
 
-       if (instanceArr[elt.movesTo].elts.length == 0) {
+        }
+          instanceArr[elt.movesTo].unlock();
+        instanceArr[elt.movesTo].cutOffEnd();
 
-         instanceArr[elt.movesTo].ul.insertBefore(instanceArr.added, instanceArr[elt.movesTo].elts[1]);
-       }
-       // insert elt before the first one - replaces $.insertBefore
-       else {
-
-         instanceArr[elt.movesTo].ul.insertBefore(instanceArr.added, instanceArr[elt.movesTo].elts[instanceArr.added.n + 1]);
-         instanceArr.added.style.display = 'block'
-         o.isVertical ? instanceArr.added.style.top = elt.style.top : instanceArr.added.style.left = elt.style.left;
-
-         instanceArr[elt.belongsTo].removeLiElem(elt, false, true)
-         //instanceArr[elt.movesTo].unlock();
-       }
-
-
-      //  instanceArr[elt.movesTo].addLiElem(elt.textContent, elt.insertPos, false, elt.completeHeight, elt.completeWidth);
-
-
-        instanceArr[elt.movesTo].cutOffEnd()
       }
     };
   };
@@ -413,7 +405,7 @@
     elt.innerHTML = item;
     elt = elt.firstChild;
 
-    thisElts.length == 0 ? this.ul.appendChild(elt) : (n > 0) ? this.ul.insertBefore(elt, thisElts[elt.n + 1]): this.ul.insertBefore(elt, thisElts[n]);
+    thisElts.length == 0 ? this.ul.appendChild(elt) : (n > 0) ? this.ul.insertBefore(elt, thisElts[elt.n + 1]) : this.ul.insertBefore(elt, thisElts[n]);
 
     var thisWidth = completeWidth || (o.isVertical ? 0 : outerWidth(elt)),
       thisHeight = completeHeight || (o.isVertical ? outerHeight(elt) : 0);
@@ -422,18 +414,18 @@
       var el = thisElts[i];
       var marginLeft = o.isVertical ? 0 : (el.completeWidth - el.offsetWidth); // account for margin
 
-      el.adjMoved = false; // flag used in drag reorder logic
+      //  el.adjMoved = false; // flag used in drag reorder logic
       el.style[instanceArr.transitionPrefix] = '0ms';
       el.style[instanceArr.transformPrefix] = instanceArr.transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
       el.style.left = parseInt(el.style.left) + thisWidth + 'px'
       el.style.top = parseInt(el.style.top) + thisHeight + 'px'
       el.pos.left = el.offsetLeft - marginLeft;
       el.pos.top = el.offsetTop;
-      el.n = el.n +1
+      el.n = el.n + 1
       tempArr.push(el);
       if (addTrans) {
         el.style[instanceArr.transformPrefix] = 'translate(' + -(thisWidth) + 'px,' + -(thisHeight) + 'px)';
-        instanceArr[0].transToZero(thisElts[i]);
+        instanceArr[0].transToZero(el);
       }
     };
 
@@ -470,9 +462,9 @@
     }
 
     var n = elt.n,
-        thisElts = this.elts,
-        eltHeight = dropDelete ? elt.completeHeight : thisElts[n].completeHeight,
-        eltWidth = dropDelete ? elt.completeWidth : thisElts[n].completeWidth;
+      thisElts = this.elts,
+      eltHeight = dropDelete ? elt.completeHeight : thisElts[n].completeHeight,
+      eltWidth = dropDelete ? elt.completeWidth : thisElts[n].completeWidth;
 
 
     if (dropDelete != true) { // this code is run when the removeLiElem mothod is called after init. not sure what everything does - maybe refactor
