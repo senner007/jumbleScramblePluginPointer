@@ -268,6 +268,8 @@
   function outerHeight(el) { // replacing jquery outerWidth(true)
     var height = el.offsetHeight;
     var style = getComputedStyle(el);
+  
+
     height += parseInt(style.marginTop) + parseInt(style.marginBottom);
     return height;
   }
@@ -447,11 +449,8 @@
   }
 
 
-  JumbleScramble.prototype.removeLiElem = function() { // Remove new li to previous collection
+  JumbleScramble.prototype.removeLiElem = function(elt, transition, callBack) { // Remove new li to previous collection
 
-    var elt = arguments[0],
-      removeTrans = arguments[1],
-      callBack = arguments[2];
 
     if (typeof arguments[2] == 'function') { // flag to see if the third argument is a function, which is when it is called as a method from outside
       var callBack = arguments[2]; // if nott the third arghuments passed is set to dropDelete
@@ -465,12 +464,13 @@
       eltWidth = dropDelete ? elt.completeWidth : thisElts[n].completeWidth;
 
 
-    if (dropDelete != true) { // this code is run when the removeLiElem mothod is called after init. not sure what everything does - maybe refactor
+    if (dropDelete != true) { // this code is run after init and if third argument is not true. Used in cutOff method
+                              // Not sure what everything does - maybe refactor
 
       for (var i = n + 1; i < thisElts.length; i++) {
         var el = thisElts[i];
 
-        el.style[transitionPrefix] = removeTrans ? '250ms' : '0s';
+        el.style[transitionPrefix] = transition ? '250ms' : '0s';
         thisElts[i - 1] = el;
         el.n = i - 1;
         el.style.top = el.pos.top - eltHeight + 'px';
@@ -482,7 +482,8 @@
     }
     thisElts.length = thisElts.length - 1; // reduce the length of elt objects in the instanceArr after a delete
 
-    if (removeTrans) { // if the option to animate in the removeLiElem method used after init is true
+    if (transition) { // if the option to animate in the removeLiElem method used after init is true. Used in cutOff method
+
       elt.style[transformPrefix] = 'scale(0.5,0.5)';
       elt.style.opacity = '0';
       elt.style[transitionPrefix] = '250ms';
@@ -490,6 +491,7 @@
         elt.remove()
         if (callBack) {
           callBack(); //the callback is fired after the animation has finished
+                      // use transitionend instead
 
         }
       }, 250);
