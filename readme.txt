@@ -35,7 +35,10 @@ Todo:
   Put remaining properties on instanceArr on each instance.
 + add placeholder when dragging
 + allow jquery pointer polyfill as optional
-+ fix preventing multitouch !!!
++ prevent multitouch !!!
++ refactor cutOff - pass completeHeight, comleteWidth to addLiElem
++ add more comments/lines
++ split module_main
 
 
 Todo - other:
