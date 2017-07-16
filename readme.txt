@@ -36,6 +36,7 @@ Todo:
 + add placeholder when dragging
 + allow jquery pointer polyfill as optional
 + fix preventing multitouch !!!
++ crossDistance should be a property set on init/reLayout, not a method.
 
 
 Todo - other:
