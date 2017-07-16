@@ -188,7 +188,9 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
           break;
       };
     };
-    firstInLoop >= 0 ? firstInLoop : firstInLoop = adjConElts.length; // REFACTOR !!!!!!!!!!!
+    firstInLoop >= 0 ? firstInLoop : firstInLoop = adjConElts.length;
+    // check if firstInLoop is set, if not, set it to the length of the container
+    // (dropped after last item)
     // reorder the elements in the originating container
     for (var i = elt.n + 1; i < elts.length; i++) {
       o.isVertical ? onDragElts.eltsMoveDown(elt, elts, true) : onDragElts.eltsMoveForward(elt, elts, true);
