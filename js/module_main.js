@@ -263,11 +263,11 @@
 
   };
 
+  /*--------------------------------------------------------------------*/
+
   function outerHeight(el) { // replacing jquery outerWidth(true)
     var height = el.offsetHeight;
     var style = getComputedStyle(el);
-
-
     height += parseInt(style.marginTop) + parseInt(style.marginBottom);
     return height;
   }
@@ -275,10 +275,11 @@
   function outerWidth(el) { // replacing jquery outerWidth(true)
     var width = el.offsetWidth;
     var style = getComputedStyle(el);
-
     width += parseInt(style.marginLeft) + parseInt(style.marginRight);
     return width;
   }
+  /*--------------------------------------------------------------------*/
+
 
   JumbleScramble.prototype.reLayout = function() {
 
@@ -328,6 +329,8 @@
     this.divOffset = jsOffset(this.div)
 
   };
+  /*------------------------------------------------------------------------------------------------------------------------------------*/
+
 
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
     var instanceArr = this.getInstances();
@@ -339,7 +342,8 @@
 
     var tArr = [];
     while (eltsSize > this.cutOff) {
-      tArr.push(instanceArr[this.adjCon].addLiElem(this.elts[this.elts.length - 1].textContent, 0, {elt:true,elts:true}));
+      var eltToCut = this.elts[this.elts.length - 1];
+      tArr.push(instanceArr[this.adjCon].addLiElem(eltToCut.textContent, 0, {elt:false,elts:true}, eltToCut.completeHeight, eltToCut.completeWidth));
       this.removeLiElem(this.elts[this.elts.length - 1], transSupport)
       eltsSize -= this.elts[this.elts.length - 1][eltDim];
     }
@@ -347,14 +351,14 @@
     this.animAdded(tArr, this.adjCon);
 
   };
+  /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
 
   JumbleScramble.prototype.animAdded = function(elems, parentCont) { // should be in animation module, and not on the prototype
 
-    var tArr = elems;
-
-    var instanceArr = this.getInstances();
-
-    var parentCont = parentCont;
+    var tArr = elems,
+        instanceArr = this.getInstances(),
+        parentCont = parentCont;
 
     if (transSupport && tArr.length != 0) { // transition elements  but only if if there are any
 
@@ -386,7 +390,9 @@
 
       }
     }
-  }
+  };
+
+  /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
   JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans, completeHeight, completeWidth) { // Add new li to previous collection
 
