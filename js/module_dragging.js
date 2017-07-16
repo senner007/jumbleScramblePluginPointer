@@ -184,10 +184,8 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
     for (var i = 0; i < adjConElts.length; i++) { //Loop the array
       var obj = adjConElts[i]
       if (elt.currentPos[objOffset] < obj.pos[objOffset] + obj[objDimension] / 2) {
-        if (obj.adjMoved == false) {
           var firstInLoop = i;
           break;
-        };
       };
     };
     firstInLoop >= 0 ? firstInLoop : firstInLoop = adjConElts.length; // REFACTOR !!!!!!!!!!!

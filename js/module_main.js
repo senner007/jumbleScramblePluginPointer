@@ -126,7 +126,6 @@
     thisElts[n].initialN = n; // its initial position (as per the other elements)
     thisElts[n].n = n; // its current position (as per the other elements)
     thisElts[n].o = o; // its current position (as per the other elements)
-    thisElts[n].adjMoved = false; // flag used in drag reorder logic
     thisElts[n].hasCrossed = false; // has the elt crossed over to the other container
     thisElts[n].newPosSameCon = false; // has the element changed position but remained in the same container
     thisElts[n].belongsTo = thisContainer;
@@ -414,7 +413,6 @@
       var el = thisElts[i];
       var marginLeft = o.isVertical ? 0 : (el.completeWidth - el.offsetWidth); // account for margin
 
-      //  el.adjMoved = false; // flag used in drag reorder logic
       el.style[instanceArr.transitionPrefix] = '0ms';
       el.style[instanceArr.transformPrefix] = instanceArr.transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
       el.style.left = parseInt(el.style.left) + thisWidth + 'px'
