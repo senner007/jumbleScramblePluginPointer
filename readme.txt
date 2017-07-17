@@ -41,7 +41,8 @@ Todo:
 + crossDistance should be a property set on init/reLayout, not a method.
 + put elt object properties on namespaced separate object. Name the object dynamically to the div id.
 + pass in the element for the adjacent container on instantiation, and set/look up adjacent container by its id
-+ remove global instanceArr. Use call when calling methods on adjacent container.
+  if id is not passed in options, it will assign a number based id based on the order of instantiation(default)
+
 
 getInstances() should point to array of all instances but without prototypes (Object.assign)
 
@@ -86,6 +87,7 @@ Fixed:
 + improve the addLiElem logic, remove jQuery - DONE
 + maybe add and remove the element on triggeron/tiggeroff, hide it but update its position on each reorder. Then avoid calling the addLiElem on dragstop - DONE
 + try to unify the reordering logic and refactor into a single function call - DONE
++ remove global instanceArr. DONE
 
 Testing:
 + Create responsive layout and test on mobile devices
