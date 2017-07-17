@@ -151,6 +151,7 @@
     }
 
     this.div = element[0];
+    this.id = this.div.id;
     this.divOffset = jsOffset(this.div);
     this.ul = this.div.querySelector('ul');
     this.locked = false;
@@ -170,7 +171,7 @@
 
 
     var copy = Object.assign({}, instanceArr[this.adjCon]);
-    var copy2 = Object.assign({}, instanceArr[this.adjCon].__proto__); // maybe find a way to copy object with prototype
+    var copy2 = Object.assign({}, instanceArr[this.adjCon].__proto__); // maybe find a way to copy object with proto
     delete copy.adjInstance
     this.adjInstance = copy;
     this.adjInstance.__proto__ = copy2
@@ -409,6 +410,7 @@
   JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans, completeHeight, completeWidth) { // Add new li to previous collection
 
     var thisElts = this.elts;
+
       var n = Math.min(Math.max(parseInt(liPosition), 0), thisElts.length),
       o = this.options,
       instanceArr = this.getInstances(),
