@@ -1,5 +1,5 @@
 import {cont1, cont2, vertical} from "./vertical.js"
-import {hello, hello2} from "./horizontal.js"
+// import {hello, hello2} from "./horizontal.js"
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 
@@ -58,6 +58,8 @@ var exampleObject = {
     $('.splitList').parent().remove();
     $('button').remove()
     $('.container').show()
+
+
 
     console.log('container 1 and 2 before init')
     hello.init();

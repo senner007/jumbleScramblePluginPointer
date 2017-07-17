@@ -166,7 +166,22 @@
 
   };
 
+  JumbleScramble.prototype.setInstances = function() {
+
+
+    var copy = Object.assign({}, instanceArr[this.adjCon]);
+    var copy2 = Object.assign({}, instanceArr[this.adjCon].__proto__); // maybe find a way to copy object with prototype
+    delete copy.adjInstance
+    this.adjInstance = copy;
+    this.adjInstance.__proto__ = copy2
+    console.log(this)
+
+  }
+
+
   JumbleScramble.prototype.getInstances = function() {
+
+
     return window.instanceArr;
   }
 
@@ -240,26 +255,23 @@
     //  marginLeft: (this.ul.parent().width() - ulSize) / 2
     // Update the ul size
     $(this.div).trigger('layoutComplete', [parseInt(this.ul.style.height)]) // example of sending the ul height as second parameter to the callback
-    this.dfd.resolve();
-    var $this = this;
-    //  var whendfd;
-    if (this.constructor.whendfd == undefined) {
-      //flag to prevent the when function from running on each instance init. whendfd is set on the inits constructor on the first init
-      // a new array is created containing the derred functions from all the instances in the instanceArr
-      var instanceArrDfd = $.map($this.instanceArr, function(val, ind) {
-        return val.dfd
-      });
-      // the deferred instances is passed in as an array
-      this.constructor.whendfd = $.when.apply($, $this.instanceArrDfd).done(function() {
-        console.log('all resolved')
-        // all the instances have been initialized
-        // trigger the callback on all divs on all instances in the current instanceArr
-        $.each($this.instanceArr, function(index, value) {
-          value.div.trigger('layoutCompleteAll')
-        });
+    this.init = true;
+    var counter = 0;
+    for (var i = 0; i<instanceArr.length; i++) {
+      if (instanceArr[i].init == true) { counter++}
+      if (counter == instanceArr.length) {
+        $.each(instanceArr, function(index, value) {
+          $(value.div).trigger('layoutCompleteAll')
 
-      });
+            this.setInstances()
+
+
+       });
+
+      }
     }
+
+
 
   };
 
@@ -333,7 +345,7 @@
 
 
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
-    var instanceArr = this.getInstances();
+
     var eltsSize = 0;
     var eltDim = this.options.isVertical ? 'completeHeight' : 'completeWidth';
     for (var i = 0; i < this.elts.length; i++) {
@@ -343,7 +355,7 @@
     var tArr = [];
     while (eltsSize > this.cutOff) {
       var eltToCut = this.elts[this.elts.length - 1];
-      tArr.push(instanceArr[this.adjCon].addLiElem(eltToCut.textContent, 0, {elt:false,elts:true}, eltToCut.completeHeight, eltToCut.completeWidth));
+      tArr.push(this.addLiElem.call(this.adjInstance, eltToCut.textContent, 0, {elt:false,elts:true}, eltToCut.completeHeight, eltToCut.completeWidth));
       this.removeLiElem(this.elts[this.elts.length - 1], transSupport)
       eltsSize -= this.elts[this.elts.length - 1][eltDim];
     }
@@ -396,8 +408,8 @@
 
   JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans, completeHeight, completeWidth) { // Add new li to previous collection
 
-    var thisElts = this.elts,
-      n = Math.min(Math.max(parseInt(liPosition), 0), thisElts.length),
+    var thisElts = this.elts;
+      var n = Math.min(Math.max(parseInt(liPosition), 0), thisElts.length),
       o = this.options,
       instanceArr = this.getInstances(),
       tempArr = [];

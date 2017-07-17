@@ -1,4 +1,4 @@
-export {hello, hello2};
+// export {hello, hello2};
 import JumbleScramble from "../js/module_main.js"
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
