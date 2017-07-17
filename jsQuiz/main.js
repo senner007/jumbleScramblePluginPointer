@@ -1,5 +1,5 @@
 import {cont1, cont2, vertical} from "./vertical.js"
-// import {hello, hello2} from "./horizontal.js"
+//import {hello, hello2} from "./horizontal.js"
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 
@@ -15,7 +15,7 @@ var exampleObject = {
     cont1.init();
   //  console.log('container 1 after init - container 2 before init')
     cont2.init();
-    console.log(cont1)
+
 
     $(window).on('resize', function() {
       var winHeight = window.innerHeight - 50;

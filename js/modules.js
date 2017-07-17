@@ -20,7 +20,7 @@ var defaults = {
 
 function setChars(elt) {
   var left = 0;
-  $.each(instanceArr[elt.belongsTo].elts, function(i, e) {
+  $.each(this.elts, function(i, e) {
     var v = this.text();
     if (this.hasClass('lower')) {
       // v = v.replace( v.charAt(0), v.charAt(0).toLowerCase());

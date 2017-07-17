@@ -17,19 +17,18 @@ function addHandlers() {
 
   var isPointer = (window.PointerEvent);
 
-  var instanceArr = this.getInstances(),
-    targetOffsetY,
+
+   var targetOffsetY,
     targetOffsetX,
     newDx,
     newDy,
-    transformPrefix = instanceArr.transformPrefix,
-    transitionPrefix = instanceArr.transitionPrefix,
-    transSupport = instanceArr.transSupport,
+    transformPrefix = this.transformPrefix,
+    transitionPrefix = this.transitionPrefix,
+    transSupport = this.transSupport,
     ul = this.ul,
     adjCon = this.adjCon,
     o = this.options,
-    instanceThis = this,
-    instanceAdj = instanceArr[adjCon],
+    thisInst = this,
     elt,
     movePos = {},
     eStart = isTouch ? 'touchstart' : isPointer ? 'pointerdown' : 'mousedown',
@@ -48,7 +47,7 @@ function addHandlers() {
 
     if (e.target == this) return;
     elt = e.target
-    if (dontTouch == true || instanceThis.locked == true) {
+    if (dontTouch == true || thisInst.locked == true) {
       return;
     }
 
@@ -72,8 +71,8 @@ function addHandlers() {
     elt.startDate = new Date();
 
     //console.log(elt instanceof jQuery)
-    if (instanceAdj) {
-      instanceAdj.ul.style.zIndex = '-1'
+    if (thisInst.adjInst) {
+      thisInst.adjInst.ul.style.zIndex = '-1'
     }
     //will also prevent the adjacent ul from
     // responding to touch events
@@ -123,7 +122,7 @@ function addHandlers() {
     elt.currentPos.left = targetOffsetX + newDx;
     //	console.log('moving')
 
-    onDrag(elt, instanceThis.elts, o, instanceArr);
+    onDrag(elt, thisInst);
 
   };
 
@@ -141,7 +140,7 @@ function addHandlers() {
       if (!elt) {
         return;
       }
-      instanceThis.onStop(elt, o);
+      thisInst.onStop(elt, o);
     } else { // if it hasn't moved
       clearClass();
     }
@@ -149,8 +148,8 @@ function addHandlers() {
     function clearClass() {
       elt.style[transitionPrefix] = 'box-shadow 250ms';
       elt.style.zIndex = 1;
-      if (instanceAdj) {
-        instanceAdj.ul.style.zIndex = '1'
+      if (thisInst.adjInst) {
+        thisInst.adjInst.ul.style.zIndex = '1'
       };
       ul.style.zIndex = '1';
 

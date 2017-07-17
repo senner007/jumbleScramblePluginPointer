@@ -10,32 +10,33 @@ export {
 
 function transToZero(elt, speed) {
 
-  var instanceArr = this.getInstances();
+  var thisInst = this;
 if (speed == undefined) {
   var speed = '250ms ease'
 }
 
-  window.getComputedStyle(elt)[instanceArr.transformPrefix] // needed to apply the transition style dynamically
+  window.getComputedStyle(elt)[thisInst.transformPrefix] // needed to apply the transition style dynamically
 
-  elt.style[instanceArr.transitionPrefix] = speed;
+  elt.style[thisInst.transitionPrefix] = speed;
 
-  elt.style[instanceArr.transformPrefix] = instanceArr.ifGpu // translateZ doesn't work for ie9
+  elt.style[thisInst.transformPrefix] = thisInst.ifGpu // translateZ doesn't work for ie9
 
 };
 
-function animateBack(elt, o, instanceArr) {
+function animateBack(elt, o, thisInst) {
 
 
 
   var eltMarginLeft = o.isVertical ? 0 : elt.completeWidth - elt.offsetWidth; // set margin for horizontal
   if (elt.hasCrossed) {
 
-    var instMovesTo = instanceArr[elt.movesTo];
-    var adjEltBefore = instMovesTo.elts[instanceArr.added.n - 1];
+    var instMovesTo = thisInst.adjInst;
+
+    var adjEltBefore = instMovesTo.elts[thisInst.added.n - 1];
     if (o.isVertical) {
 
-      var adjacentDir = instMovesTo.divOffset.left - instanceArr[elt.belongsTo].divOffset.left;
-      var animateToPos = instanceArr.added.n > 0 ? adjEltBefore.pos.top + adjEltBefore.completeHeight : 0;
+      var adjacentDir = instMovesTo.divOffset.left - thisInst.divOffset.left;
+      var animateToPos = thisInst.added.n > 0 ? adjEltBefore.pos.top + adjEltBefore.completeHeight : 0;
 
       var thisLeft = adjacentDir,
         thisTop = animateToPos,
@@ -43,8 +44,8 @@ function animateBack(elt, o, instanceArr) {
         thisY = elt.currentPos.top - animateToPos;
     } else {
 
-      var adjacentDir = instMovesTo.divOffset.top - instanceArr[elt.belongsTo].divOffset.top;
-      var animateToPos = instanceArr.added.n > 0 ? adjEltBefore.pos.left + adjEltBefore.completeWidth : 0;
+      var adjacentDir = instMovesTo.divOffset.top - thisInst.divOffset.top;
+      var animateToPos = thisInst.added.n > 0 ? adjEltBefore.pos.left + adjEltBefore.completeWidth : 0;
 
       var thisLeft = animateToPos,
         thisTop = adjacentDir,
@@ -60,6 +61,6 @@ function animateBack(elt, o, instanceArr) {
 
   elt.style.left = thisLeft + 'px'
   elt.style.top = thisTop + 'px'
-  elt.style[instanceArr.transformPrefix] = 'translate3d(' + (thisX - eltMarginLeft) + 'px,' + thisY + 'px,0px)';
+  elt.style[thisInst.transformPrefix] = 'translate3d(' + (thisX - eltMarginLeft) + 'px,' + thisY + 'px,0px)';
 
 };
