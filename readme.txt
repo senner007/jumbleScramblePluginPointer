@@ -24,7 +24,6 @@ Todo:
 + Throttle the resize events
 + Call orientationChange event in place of resize on Chrome ios
 + option to turn off/down animations
-+ put elt object properties on separate object
 + use native event delegation https://stackoverflow.com/questions/14174056/native-addeventlistener-with-selector-like-on-in-jquery
 + trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
 + optionally implement logic to calculate animation speed based on the position of the dropped item relative to its new position
@@ -40,8 +39,11 @@ Todo:
 + add more comments/lines
 + split module_main
 + crossDistance should be a property set on init/reLayout, not a method.
++ put elt object properties on namespaced separate object. Name the object dynamically to the div id.
++ pass in the element for the adjacent container on instantiation, and set/look up adjacent container by its id
 + remove global instanceArr. Use call when calling methods on adjacent container.
-  getInstances() should point to array of all instances but without prototypes (Object.assign)
+
+getInstances() should point to array of all instances but without prototypes (Object.assign)
 
 
 
