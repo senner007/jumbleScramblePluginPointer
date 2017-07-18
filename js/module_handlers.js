@@ -53,7 +53,7 @@ function addHandlers() {
 
     e.preventDefault();
     if (e.type == 'touchstart' && e.touches.length > e.targetTouches.length) {
-      return;
+      alert('touchstart');
     }
     //  if all touches detected is greater than the touches detected on the same element - return
     //  Prevents selecting more than one element at the same time, but allows for multiple touch points(fingers) on the same element
@@ -83,17 +83,20 @@ function addHandlers() {
     targetOffsetX = e.target.offsetLeft;
 
     window.addEventListener(eEnd, pointerupFunction); // refactor to add the once: true object to similar to jquery once. Wait for browser compatibility
-    window.addEventListener(eMove, pointermoveFunction);
+    window.addEventListener(eMove, pointermoveFunction,);
 
   });
 
   function pointermoveFunction(e) {
     //console.log(instanceArr.interrupt)
-    //  if (e.type == 'touchmove') { e = e.originalEvent.changedTouches[0]}
+    if (e.type == 'touchmove' && e.touches.length > e.targetTouches.length) {
+    return
+    }
     if (!dontTouch) {
       // It will return if dontTouch is false and if interrupt is true(layout in progress)
       return;
     }
+  //  alert('hello')
 
     //  console.log('after interrupt')
     //if ($(move).offset().top <  div.offset().top ) {return;}   //containment
