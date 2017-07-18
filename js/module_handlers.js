@@ -67,7 +67,7 @@ function addHandlers() {
     elt.style.zIndex = 5;
     //move.addClass('dragging');
     elt.className = classDefine + ' dragging';
-    
+
     elt.startDate = new Date();
 
     //console.log(elt instanceof jQuery)
@@ -109,13 +109,15 @@ function addHandlers() {
     } else {
       elt.style.top = targetOffsetY + movePos.dy + 'px';
       elt.style.left = targetOffsetX + movePos.dx + 'px';
+
+      movePos = {
+        dx: newDx,
+        dy: newDy
+      };
     }
 
     // we need to save last made offset
-    movePos = {
-      dx: newDx,
-      dy: newDy
-    };
+
     //	console.log(e.pageX)
 
     elt.currentPos.top = targetOffsetY + newDy;
@@ -134,9 +136,10 @@ function addHandlers() {
       clearClass();
       if (transSupport) {
         elt.style[transformPrefix] = 'translateZ(0) translate3d(' + 0 + 'px, ' + 0 + 'px, 0px)';
+      } else {
+        elt.style.top = targetOffsetY + movePos.dy + 'px';
+        elt.style.left = targetOffsetX + movePos.dx + 'px';
       }
-      elt.style.top = targetOffsetY + movePos.dy + 'px';
-      elt.style.left = targetOffsetX + movePos.dx + 'px';
       if (!elt) {
         return;
       }
