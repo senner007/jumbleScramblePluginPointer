@@ -1,14 +1,20 @@
 * {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+
+
 }
+body {
+    overflow:hidden;
+}
+
 
 button {
   color: black;
   font-weight: bold;
   font-size : 40px;
   display: none;
+   width: 100%;
 }
 
 .container {
@@ -21,7 +27,7 @@ button {
 }
 
 #jMyPuzzleId0 {
-  overflow: visible;
+
   width: 50%;
   height: 90%;
   position: absolute;
@@ -29,7 +35,7 @@ button {
 }
 
 #jMyPuzzleId1 {
-  overflow: visible;
+
   margin-left: 50%;
   width: 50%;
   height: 90%;
@@ -42,12 +48,12 @@ button {
   position: absolute;
   width: inherit;
   height: 60px;
-    overflow: visible;
+
       display: none;
 }
 
 #jMyPuzzleId3 {
-  overflow: visible;
+
   position: absolute;
   width: inherit;
   height: 60px;
@@ -59,14 +65,14 @@ button {
   width: 100%;
   position: absolute;
   display: block;
-  overflow: visible;
+
 }
 
 .splitList-horizontal {
   width: inherit;
 position: absolute;
   display: block;
-    overflow: visible;
+
 }
 
 .listItem {
@@ -83,13 +89,16 @@ position: absolute;
   box-shadow: 0;
   background: white;
   z-index: 1;
+  font-size: 15px;
+  /*text-align: justify;
+    text-justify: inter-word;*/
 }
 
 .listItem-horizontal {
   position: absolute;
   list-style: none;
-  font-size: 24px;
-  padding: 14px;
+  font-size: 12px;
+  padding: 10px;
   margin-left: 10px;
   padding-left: 8px;
   border: 1px solid black;

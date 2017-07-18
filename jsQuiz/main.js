@@ -1,5 +1,8 @@
 import {cont1, cont2, vertical} from "./vertical.js"
-import {hello, hello2} from "./horizontal.js"
+//import {hello, hello2} from "./horizontal.js"
+// ES6 MODULE IMPORT/EXPORT
+////////////////////////////
+
 $('.container').hide(); // cannot be set from css ???
 
 var exampleObject = {
@@ -8,10 +11,11 @@ var exampleObject = {
     $('button').remove()
     $('.container').show()
 
-    console.log('container 1 and 2 before init')
+  //  console.log('container 1 and 2 before init')
     cont1.init();
-    console.log('container 1 after init - container 2 before init')
+  //  console.log('container 1 after init - container 2 before init')
     cont2.init();
+
 
     $(window).on('resize', function() {
       var winHeight = window.innerHeight - 50;
@@ -55,6 +59,8 @@ var exampleObject = {
     $('button').remove()
     $('.container').show()
 
+
+
     console.log('container 1 and 2 before init')
     hello.init();
     console.log('container 1 after init - container 2 before init')
@@ -64,7 +70,7 @@ var exampleObject = {
       var winWidth = window.innerWidth - 50;
       hello.cutOff = winWidth;
       hello2.cutOff = winWidth;
-      console.log('hello')
+
       hello.reLayout()
       hello2.reLayout()
       hello.cutOffEnd()
@@ -96,7 +102,12 @@ else if (path[1] == 'horizontal' ) {
 }
 
 
-
+  //
+	// $('ul').on('pointerdown.hello', function () { // namespaced event added on top of events set in plugin. requires that stopPropagation is not used in plugin
+  //
+	// 	console.log('handler added after load')
+	// $(this).off('pointerdown.hello');
+	// })
 
 
 $.fn.disableSelection = function() {
