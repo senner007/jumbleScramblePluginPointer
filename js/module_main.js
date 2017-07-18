@@ -13,7 +13,7 @@
   } from "./module_handlers.js"
 
   import {
-    animateBack,
+    _animateBack,
     transToZero
   } from "./module_animation.js"
 
@@ -59,7 +59,7 @@
       appendRemove.call(thisInst)
     })
 
-    animateBack(elt, o, this);
+    _animateBack(elt, o, this);
     this.transToZero(elt, speed);
 
     function appendRemove() {
@@ -83,6 +83,7 @@
           o.isVertical ? this.added.style.top = elt.style.top : this.added.style.left = elt.style.left;
           delete this.added
           this.removeLiElem(elt, false, true);
+
 
         }
         this.adjInst.unlock();
@@ -318,6 +319,7 @@
         elts: true
       }, eltToCut.completeHeight, eltToCut.completeWidth);
       elems.push(elt);
+      elems.push(elems.shift()); //push the new element to back of the array. This makes them appear in the right order in the new container
       this.removeLiElem(this.elts[this.elts.length - 1], this.transSupport)
       eltsSize -= this.elts[this.elts.length - 1][eltDim];
     }
@@ -331,14 +333,18 @@
   function _scaleElems(elems, thisInst) { // should be in animation module, and not on the prototype
     var elems = elems, // elems is an array of elements to scale in after they have been added
       thisInst = thisInst;
+
     descaleElems();
 
     if (thisInst.transSupport && elems.length != 0) { // transition elements  but only if if there are any
 
       if (thisInst.elts[elems.length] && !$(elems).is(':last-child')) {
+
+        var lastElem = elems[elems.length -1].n // find the position of the last element in the array and add transitionend to element moving down after this.
+
         // callback function for when the items have moved down and made room for the newly prepended item(s)
         // this.elts[elems.length] is the first item before the added items(elems) to scale in.
-        $(thisInst.elts[elems.length]).one('transitionend', scaleElems); // once true might not be supported in all browsers
+        $(thisInst.elts[lastElem +1]).one('transitionend', scaleElems); // once true might not be supported in all browsers
       } else {
         // if there are no elements that have moved to make way for added elements(elems)
         setTimeout(function() { // setTimeout is need because transform properties need time to be set.
@@ -349,6 +355,7 @@
     }
 
     function descaleElems() {
+
       for (var i = 0; i < elems.length; i++) {
         elems[i].style[thisInst.transitionPrefix] = '0ms';
         elems[i].style[thisInst.transformPrefix] = 'scale(0,0)';
@@ -356,6 +363,7 @@
     }
 
     function scaleElems() {
+
       for (var i = 0; i < elems.length; i++) {
         elems[i].style[thisInst.transitionPrefix] = '500ms';
         elems[i].style[thisInst.transformPrefix] = 'scale(1,1)';
@@ -380,8 +388,23 @@
     var elt = document.createElement('li');
     elt.innerHTML = item;
     elt = elt.firstChild;
+    elt.n = n
 
-    thisElts.length == 0 ? this.ul.appendChild(elt) : (n > 0) ? this.ul.insertBefore(elt, thisElts[elt.n + 1]) : this.ul.insertBefore(elt, thisElts[n]);
+
+    if (thisElts.length == 0) {
+        this.ul.appendChild(elt)
+
+      } // if there are no elements present at drop
+      else {
+        if (n > 0) {
+           this.ul.insertBefore(elt, thisElts[elt.n])
+
+        }
+        else {
+           this.ul.insertBefore(elt, thisElts[n])
+        }
+
+     }
 
     var thisWidth = completeWidth || (o.isVertical ? 0 : _outerWidth(elt)),
       thisHeight = completeHeight || (o.isVertical ? _outerHeight(elt) : 0);
@@ -413,9 +436,12 @@
 
     o.isVertical ? this.ul.style.height = parseInt(this.ul.style.height) + thisHeight + 'px' : this.ul.style.width = parseInt(this.ul.style.width) + thisWidth + 'px';
 
+
     _addToObject(thisElts, elt, n, thisHeight, thisWidth, o, this.container, this.adjCon, eltObj.top, eltObj.left);
 
     if (addTrans.elt) {
+
+
       _scaleElems([elt], this)
 
     }; // animation only needed when triggering add
