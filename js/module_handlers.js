@@ -43,17 +43,19 @@ function addHandlers() {
 
   ul.style.zIndex = '1'
 
-  ul.addEventListener(eStart, function(e) {
+  ul.addEventListener(eStart, pointerstart)
+
+    function pointerstart (e) {
 
     if (e.target == this) return;
     elt = e.target
-    if (dontTouch == true || thisInst.locked == true) {
+    if (thisInst.locked == true) {
       return;
     }
 
     e.preventDefault();
     if (e.type == 'touchstart' && e.touches.length > e.targetTouches.length) {
-    
+
     }
     //  if all touches detected is greater than the touches detected on the same element - return
     //  Prevents selecting more than one element at the same time, but allows for multiple touch points(fingers) on the same element
@@ -81,11 +83,11 @@ function addHandlers() {
     startX = e.pageX, startY = e.pageY;
     targetOffsetY = e.target.offsetTop;
     targetOffsetX = e.target.offsetLeft;
-
+    ul.removeEventListener(eStart, pointerstart);
     window.addEventListener(eEnd, pointerupFunction); // refactor to add the once: true object to similar to jquery once. Wait for browser compatibility
     window.addEventListener(eMove, pointermoveFunction,);
 
-  });
+  };
 
   function pointermoveFunction(e) {
     //console.log(instanceArr.interrupt)
@@ -133,6 +135,7 @@ function addHandlers() {
 
   function pointerupFunction(e) {
     e.preventDefault();
+      ul.addEventListener(eStart, pointerstart);
 
     if (hasMoved == true) {
       hasMoved = false;
