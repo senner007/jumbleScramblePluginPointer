@@ -35,7 +35,7 @@ function onDrag(elt, thisInst) { // Drag
     var dirSwitch = (elt.belongsTo % 2 == 0 ? thisElt.eltPos.top > adjacentDir / 2 : thisElt.eltPos.top < adjacentDir / 2);
   }
 
-  /*--------------------------------------------------------------------*/
+  /*---------------------------------------------------------------------------------------------------------------*/
 
   // trigger animations for
   // adjacent container if below
@@ -61,8 +61,9 @@ function onDrag(elt, thisInst) { // Drag
     onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
     elt.hasCrossed = dirSwitch;
   };
+
+  /*-------------------------------------------------------------------------------------------------------------*/
   var move;
-  /*--------------------------------------------------------------------*/
   if (!o.isVertical && thisElt.eltPos.left != oldPos.left) {             // check whether the move is
     move = (thisElt.eltPos.left > oldPos.left ? 'forward' : 'backward'); // forward, backward, up or down
   } else if (o.isVertical && thisElt.eltPos.top != oldPos.top) {
@@ -72,13 +73,11 @@ function onDrag(elt, thisInst) { // Drag
   } // doing nothing
 
 
-
-  /*--------------------------------------------------------------------*/
+  /*-------------------------------------------------------------------------------------------------------------*/
   var eltsToMove = thisInst.crossTrigger ? adjConElts : elts;
-  if (move == 'forward') {  onDragElts.eltsMoveForwardOrDown(elt, eltsToMove, thisInst)  };
-  if (move == 'down') { onDragElts.eltsMoveForwardOrDown(elt, eltsToMove, thisInst) };
-  if (move == "backward") {  onDragElts.eltsMoveBackOrUp(elt, eltsToMove, thisInst) } ;
-  if (move == 'up') { onDragElts.eltsMoveBackOrUp(elt, eltsToMove, thisInst) };
+  if (move == 'forward' || 'down') {  onDragElts.eltsMoveForwardOrDown(elt, eltsToMove, thisInst)  };
+  if (move == "backward" || 'up') {  onDragElts.eltsMoveBackOrUp(elt, eltsToMove, thisInst) } ;
+
 
  };
   /*----------------------------------------------------------------------------------------------------------------*/
@@ -139,7 +138,7 @@ var onDragElts = {
     thisInst.transToZero(elem);
   },
 }
-  /*-----------------------------------------------------------------------------------------------------------------------------------*/
+  /*---------------------------------------------------------------------------------------------------------*/
 
 var onTrigger = {  //These will trigger when the elt is crossing over to connected adjacent container/instance
 
@@ -158,7 +157,7 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
     // (dropped after last item)
     // reorder the elements in the originating container
     for (var i = elt.n + 1; i < elts.length; i++) {
-      o.isVertical ? onDragElts.eltsMoveForwardOrDown(elt, elts, thisInst, true) : onDragElts.eltsMoveForwardOrDown(elt, elts, thisInst, true);
+      onDragElts.eltsMoveForwardOrDown(elt, elts, thisInst, true);
       // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
     };
     return firstInLoop;
@@ -167,7 +166,7 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
 
      thisInst.adjInst.removeLiElem(thisInst.added, true, false)
      for (var i = 0; i < elts.length - 1; i++) { // Loop over originating Container elements
-       o.isVertical ? onDragElts.eltsMoveBackOrUp(elt, elts, thisInst) : onDragElts.eltsMoveBackOrUp(elt, elts, thisInst);
+       onDragElts.eltsMoveBackOrUp(elt, elts, thisInst);
      }
   },
 };
