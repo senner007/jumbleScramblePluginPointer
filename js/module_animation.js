@@ -1,5 +1,5 @@
 export {
-  animateBack,
+  _animateBack,
   transToZero
 };
 // ES6 MODULE IMPORT/EXPORT
@@ -18,7 +18,7 @@ function transToZero(elt, speed) {
 
 };
 
-function animateBack(elt, o, thisInst) {
+function _animateBack(elt, o, thisInst) {
 
   var eltMarginLeft = o.isVertical ? 0 : elt.completeWidth - elt.offsetWidth; // set margin for horizontal
   if (elt.hasCrossed) {
