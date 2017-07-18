@@ -7,18 +7,17 @@ var posObj = {}
 function onDrag(elt, thisInst) { // Drag
 
  var elts = thisInst.elts,
-    o = thisInst.options;
+    o = thisInst.options,
+    eltPos = {
+      top: elt.currentPos.top,
+      left: elt.currentPos.left
+    }
 
-
-  var eltPos = {
-    top: elt.currentPos.top,
-    left: elt.currentPos.left
-  }
-
-  var thisElt = posObj; //must be saved to a global object. (Possibly to avoid random
+ //must be saved to a global object. (Possibly to avoid random
                         // occurrences of non moving objects on ipad)
-  var oldPos = (thisElt.eltPos != null ? thisElt.eltPos : eltPos); //find the old position stored on the $object
-  thisElt.eltPos = eltPos; //its current position derived from $draggable object
+ var oldPos = posObj; //find the old position stored on the object
+
+  posObj = eltPos; //its current position derived from $draggable object
 
 
   if ("adjInst" in thisInst && o.isVertical) {   //vertical
@@ -26,13 +25,13 @@ function onDrag(elt, thisInst) { // Drag
     var adjacentDir = thisInst.crossDistance();
   //  var adjacentDir = instanceArr[elt.movesTo].divOffset.left - instanceArr[elt.belongsTo].divOffset.left;
 
-    var dirSwitch = (elt.belongsTo % 2 == 0 ? thisElt.eltPos.left > adjacentDir / 2 : thisElt.eltPos.left < adjacentDir / 2);
+    var dirSwitch = (elt.belongsTo % 2 == 0 ? posObj.left > adjacentDir / 2 : posObj.left < adjacentDir / 2);
   }
   if ("adjInst" in thisInst && !o.isVertical) {  // horizontal
     var adjConElts = thisInst.adjInst.elts;
     var adjacentDir = thisInst.crossDistance();
   //  var adjacentDir = instanceArr[elt.movesTo].divOffset.top - instanceArr[elt.belongsTo].divOffset.top;
-    var dirSwitch = (elt.belongsTo % 2 == 0 ? thisElt.eltPos.top > adjacentDir / 2 : thisElt.eltPos.top < adjacentDir / 2);
+    var dirSwitch = (elt.belongsTo % 2 == 0 ? posObj.top > adjacentDir / 2 : posObj.top < adjacentDir / 2);
   }
 
   /*---------------------------------------------------------------------------------------------------------------*/
@@ -64,10 +63,10 @@ function onDrag(elt, thisInst) { // Drag
 
   /*-------------------------------------------------------------------------------------------------------------*/
   var move;
-  if (!o.isVertical && thisElt.eltPos.left != oldPos.left) {             // check whether the move is
-    move = (thisElt.eltPos.left > oldPos.left ? 'forward' : 'backward'); // forward, backward, up or down
-  } else if (o.isVertical && thisElt.eltPos.top != oldPos.top) {
-    move = (thisElt.eltPos.top > oldPos.top ? "down" : "up");
+  if (!o.isVertical && posObj.left != oldPos.left) {             // check whether the move is
+    move = (posObj.left > oldPos.left ? 'forward' : 'backward'); // forward, backward, up or down
+  } else if (o.isVertical && posObj.top != oldPos.top) {
+    move = (posObj.top > oldPos.top ? "down" : "up");
   } else {
     return;
   } // doing nothing
