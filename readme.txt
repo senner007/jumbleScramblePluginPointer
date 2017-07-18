@@ -31,7 +31,7 @@ Todo:
 + Put dirSwitch as property on instance dragging from and rename to crossTrigger,  rename crossTrigger to crossFlag and put on same instance.
 + add placeholder when dragging
 + allow jquery pointer polyfill as optional
-+ prevent multitouch !!!
+
 + add more comments/lines
 + split module_main
 + crossDistance should be a property set on init/reLayout, not a method.
@@ -40,6 +40,7 @@ Todo:
   if id is not passed in options, it will assign a number based id based on the order of instantiation(default)
 + save the ul height on instance
 + getInstances() should point to array of all instances but without prototypes (Object.assign)
++ fix lock method
 
 
 
@@ -86,6 +87,9 @@ Fixed:
 + refactor cutOff - pass completeHeight, comleteWidth to addLiElem - DONE
 + on event move, pass in only instances that are involved in the event(Pass in elt, instanceThis, instanceAdj (maybe rename)). DONE
 + Put remaining properties on instanceArr on each instance. DONE
+
+Partially fixed:
++ prevent multitouch !!! - The element will freeze and animate back if multi touch is detected. Find a way to simple ignore additional touches
 
 Testing:
 + Create responsive layout and test on mobile devices
