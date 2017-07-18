@@ -215,28 +215,25 @@
     var left = 0,
       top = 0,
       n = 0,
-      ulSize = 0,
-      posTop = 0,
-      posLeft = 0;
-
-    var thisElts = this.elts = new Array(li.length);
+      size = 0,
+      thisElts = this.elts = new Array(li.length);
 
     for (var i = 0; i < thisElts.length; i++) {
       var elt = li[i];
 
       if (this.options.isVertical) {
-        elt.style.top = posTop + 'px'; // get each li height in case of individual heights.
+        elt.style.top = size + 'px'; // get each li height in case of individual heights.
         var thisHeight = outerHeight(elt);
-        posTop += thisHeight;
-        ulSize += thisHeight;
+        var newPosTop = size
+        size += thisHeight;
+
       } else {
-        elt.style.left = posLeft + 'px'; // get each li width in case of individual widths. (default)
+        elt.style.left = size + 'px'; // get each li width in case of individual widths. (default)
         var thisWidth = outerWidth(elt);
-        posLeft += thisWidth;
-        ulSize += thisWidth; // calculate the size of the ul element
+        var newPosLeft = size
+        size += thisWidth;
+
       }
-      var newPosTop = posTop - thisHeight;
-      var newPosLeft = posLeft - thisWidth;
 
       addToObject(thisElts, elt, n, thisHeight, thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
 
@@ -246,9 +243,9 @@
     this.addHandlers();
 
     if (this.options.isVertical) {
-      this.ul.style.height = ulSize + 'px';
+      this.ul.style.height = size + 'px';
     } else {
-      this.ul.style.width = ulSize + 'px';
+      this.ul.style.width = size + 'px';
       this.ul.style.height = outerHeight(thisElts[0]) + 'px';
     }
 
@@ -300,9 +297,7 @@
     var left = 0,
       top = 0,
       n = 0,
-      ulSize = 0,
-      posTop = 0,
-      posLeft = 0;
+      size = 0;
 
 
     var thisElts = this.elts;
@@ -312,20 +307,18 @@
       var elt = thisElts[i];
 
       if (this.options.isVertical) {
-        // get each li height in case of individual heights.
-        elt.style.top = posTop + 'px'
+        elt.style.top = size + 'px'; // get each li height in case of individual heights.
         var thisHeight = outerHeight(elt);
-        posTop += thisHeight;
-        ulSize += thisHeight;
+        var newPosTop = size
+        size += thisHeight;
+
       } else {
-        // get each li width in case of individual widths. (default)
-        elt.style.left = posLeft + 'px';
+        elt.style.left = size + 'px'; // get each li width in case of individual widths. (default)
         var thisWidth = outerWidth(elt);
-        posLeft += thisWidth;
-        ulSize += thisWidth; // calculate the size of the ul element
+        var newPosLeft = size
+        size += thisWidth;
+
       }
-      var newPosTop = posTop - thisHeight;
-      var newPosLeft = posLeft - thisWidth;
 
       addToObject(thisElts, elt, n, thisHeight, thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
 
@@ -334,9 +327,9 @@
     }
 
     if (this.options.isVertical) {
-      this.ul.style.height = ulSize + 'px';
+      this.ul.style.height = size + 'px';
     } else {
-      this.ul.style.width = ulSize + 'px';
+      this.ul.style.width = size + 'px';
       this.ul.style.height = outerHeight(thisElts[0]) + 'px'
     }
 
