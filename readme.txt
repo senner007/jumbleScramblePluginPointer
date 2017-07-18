@@ -16,7 +16,6 @@ Todo:
 + relayout is duplicating code from init - FIX ME!
 + add boolean to cutOffEnd method which prevents the function from running if the cut-off element(s) will make adjacent container fire its cutoffEnd method and thereby creating an infinite loop.
 + remove animAdded from prototype and add to animation module
-+ maybe set the instanceArr array to the JumbleScramble constructor function's constructor
 + Setup main page with Bulma css. Show all examples on one page and add a -show in full screen- link to each. Fetch each example module which are exporting objects with unique data.
   * Make examples avaiable using the routes rewrite in htaccess. When using the routes, remove anything but the example and show in full screen.
 + Assume transition support
@@ -29,22 +28,18 @@ Todo:
 + optionally implement logic to calculate animation speed based on the position of the dropped item relative to its new position
 + when using a single list, allow the option to constrain to a single axis - http://www.javascriptkit.com/javatutors/touchevents.shtml(bottom)
 + maybe set {passive: true} as third argument on event start and event move - https://developers.google.com/web/updates/2017/01/scrolling-intervention
-+ on event move, pass in only instances that are involved in the event(Pass in elt, instanceThis, instanceAdj (maybe rename)). Put dirSwitch as property on
-  instance dragging from and rename to crossTrigger,  rename crossTrigger to crossFlag and put on same instance.
-  Put remaining properties on instanceArr on each instance.
++ Put dirSwitch as property on instance dragging from and rename to crossTrigger,  rename crossTrigger to crossFlag and put on same instance.
 + add placeholder when dragging
 + allow jquery pointer polyfill as optional
 + prevent multitouch !!!
-+ refactor cutOff - pass completeHeight, comleteWidth to addLiElem
 + add more comments/lines
 + split module_main
 + crossDistance should be a property set on init/reLayout, not a method.
 + put elt object properties on namespaced separate object. Name the object dynamically to the div id.
 + pass in the element for the adjacent container on instantiation, and set/look up adjacent container by its id
   if id is not passed in options, it will assign a number based id based on the order of instantiation(default)
-
-
-getInstances() should point to array of all instances but without prototypes (Object.assign)
++ save the ul height on instance
++ getInstances() should point to array of all instances but without prototypes (Object.assign)
 
 
 
@@ -88,6 +83,9 @@ Fixed:
 + maybe add and remove the element on triggeron/tiggeroff, hide it but update its position on each reorder. Then avoid calling the addLiElem on dragstop - DONE
 + try to unify the reordering logic and refactor into a single function call - DONE
 + remove global instanceArr. DONE
++ refactor cutOff - pass completeHeight, comleteWidth to addLiElem - DONE
++ on event move, pass in only instances that are involved in the event(Pass in elt, instanceThis, instanceAdj (maybe rename)). DONE
++ Put remaining properties on instanceArr on each instance. DONE
 
 Testing:
 + Create responsive layout and test on mobile devices
