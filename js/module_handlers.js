@@ -53,7 +53,7 @@ function addHandlers() {
 
     e.preventDefault();
     if (e.type == 'touchstart' && e.touches.length > e.targetTouches.length) {
-      alert('touchstart');
+    
     }
     //  if all touches detected is greater than the touches detected on the same element - return
     //  Prevents selecting more than one element at the same time, but allows for multiple touch points(fingers) on the same element
