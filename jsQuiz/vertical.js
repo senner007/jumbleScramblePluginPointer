@@ -128,5 +128,5 @@ vertical.events = {
    console.log('layoutCompleteAll')
 
     cont2.addLiElem('Lorem ipsum dolor sit amet', 2, {elt:true,elts:true},)
-
+  
   })
