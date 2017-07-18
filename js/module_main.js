@@ -45,37 +45,26 @@
     // will increase the speed of the layout animation.
     console.time("concatenation");
     var speed;
-    if (elt.dragSpeed < 0.5) {
-      speed = '170ms ease'
-    }
-    if (elt.dragSpeed < 0.35) {
-      speed = '100ms ease'
-    }
+
     if (elt.dragSpeed < 0.2) {
       speed = '15ms ease'
     }
+    else if (elt.dragSpeed < 0.35) {
+      speed = '100ms ease'
+    }
+    else if (elt.dragSpeed < 0.5) {
+      speed = '170ms ease'
+    }
 
-    //
-    // if (o.setChars) {
-    //   setChars(elt);
-    // } // setChars function	- re-align lis after uppercase/lowercase for difficulty setting  2
     var thisInst = this
     $(elt).one('transitionend', function() {
-
       appendRemove.call(thisInst)
-
     })
 
-   animateBack(elt, o, this);
+    animateBack(elt, o, this);
     this.transToZero(elt, speed);
-    // only wait for transitionend if supported (not ie9)
-    //{once: true}  once not supported before edge 16
-
 
     function appendRemove() {
-      // if (!!o.autoValidate) {
-      //   o.autoValidate();
-      // } // calls the autovalidate function in the plugin calling script
       if (!elt.hasCrossed && elt.newPosSameCon) {
         // insert the dragged element into its new position efter drop in originating container
         // on condition that it has changed its position
@@ -87,7 +76,8 @@
           this.ul.insertBefore(elt, this.elts[elt.n + 1]);
         }
       }
-      if (elt.hasCrossed) {
+      else if (elt.hasCrossed) {
+
         if (this.adjInst.elts.length == 0) {
           this.adjInst.ul.insertBefore(this.added, this.adjInst.elts[1]);
         } else {
@@ -100,6 +90,7 @@
         }
           this.adjInst.unlock();
           this.adjInst.cutOffEnd(this);
+          elt.hasCrossed = false;
 
       }
     };
@@ -176,7 +167,6 @@
     var copy = Object.assign({}, temporaryInstanceArray[this.adjCon]);
     var copy2 = Object.assign({}, temporaryInstanceArray[this.adjCon].__proto__); // maybe find a way to copy object with proto
     delete copy.adjInst;
-    delete copy.div;
     delete copy.dfd;
     delete copy2.setInstances;
     delete copy2.getInstances;
@@ -336,10 +326,11 @@
       }
       var newPosTop = posTop - thisHeight;
       var newPosLeft = posLeft - thisWidth;
+
       addToObject(thisElts, elt, n, thisHeight, thisWidth, this.options, this.container, this.adjCon, newPosTop, newPosLeft);
 
       n = n + 1;
-      elt.style[transformPrefix] = 'translate3d(0px, 0px, 0px)';
+      elt.style[this.transformPrefix] = 'translate3d(0px, 0px, 0px)';
     }
 
     if (this.options.isVertical) {
@@ -350,6 +341,8 @@
     }
 
     this.divOffset = jsOffset(this.div)
+    this.adjInst.divOffset = jsOffset(this.adjInst.div)
+
 
   };
   /*------------------------------------------------------------------------------------------------------------------------------------*/
@@ -358,18 +351,22 @@
   JumbleScramble.prototype.cutOffEnd = function(thisInst) { // function to remove the items above cutoff limit and then prepend the adjacent container
    var thisInst = thisInst || this.adjInst; // thisInst is the instance which receives the cutOff elements. If not passed in, it will assume the instance is this.adjInst
 
-    var eltsSize = 0;
-    var eltDim = this.options.isVertical ? 'completeHeight' : 'completeWidth';
-    for (var i = 0; i < this.elts.length; i++) {
+   var elems = [],
+       eltsSize = 0,
+       eltDim = this.options.isVertical ? 'completeHeight' : 'completeWidth';
+
+    for (var i = 0; i < this.elts.length; i++) { // same as getting the ul size
       eltsSize += this.elts[i][eltDim];
     }
 
-    var elems = [];
+
     while (eltsSize > this.cutOff) {
       var eltToCut = this.elts[this.elts.length - 1];
-
-      elems.push(thisInst.addLiElem(eltToCut.textContent, 0, {elt:false,elts:true}, eltToCut.completeHeight, eltToCut.completeWidth));
-      this.removeLiElem(this.elts[this.elts.length - 1], transSupport)
+      var elt = thisInst.addLiElem(eltToCut.textContent, 0, {elt:false,elts:true}, eltToCut.completeHeight, eltToCut.completeWidth);
+      elt.style[this.transitionPrefix] = '0ms';
+      elt.style[this.transformPrefix] = 'scale(0,0)';
+      elems.push(elt);
+      this.removeLiElem(this.elts[this.elts.length - 1], this.transSupport)
       eltsSize -= this.elts[this.elts.length - 1][eltDim];
     }
 
@@ -380,28 +377,18 @@
 
 
   JumbleScramble.prototype.animAdded = function(elems) { // should be in animation module, and not on the prototype
-
     var elems = elems, // elems is an array of elements to scale in after they have been added
       _this = this;
 
-    if (transSupport && elems.length != 0) { // transition elements  but only if if there are any
-
-      for (var i = 0; i < elems.length; i++) {
-
-        elems[i].style[this.transitionPrefix] = '0ms';
-        elems[i].style[this.transformPrefix] = 'scale(0,0)';
-      }
+    if (this.transSupport && elems.length != 0) { // transition elements  but only if if there are any
 
       if (this.elts[elems.length] && !$(elems).is(':last-child')) {
-
         // callback function for when the items have moved down and made room for the newly prepended item(s)
         // this.elts[elems.length] is the first item before the added items(elems) to scale in.
         $(this.elts[elems.length]).one('transitionend', animAddedElems); // once true might not be supported in all browsers
-
       } else {
         // if there are no elements that have moved to make way for added elements(elems)
         setTimeout(function() { // setTimeout is need because transform properties need time to be set.
-
           animAddedElems();
         }, 1);
 
@@ -409,11 +396,10 @@
     }
 
     function animAddedElems() {
-
-      for (var i = 0; i < elems.length; i++) {
-        elems[i].style[_this.transitionPrefix] = '500ms';
-        elems[i].style[_this.transformPrefix] = 'scale(1,1)';
-      }
+        for (var i = 0; i < elems.length; i++) {
+          elems[i].style[_this.transitionPrefix] = '500ms';
+          elems[i].style[_this.transformPrefix] = 'scale(1,1)';
+        }
     }
   };
 
@@ -467,10 +453,12 @@
     addToObject(thisElts, elt, n, thisHeight, thisWidth, o, this.container, this.adjCon, eltObj.top, eltObj.left);
 
     if (addTrans.elt) {
+      elt.style[this.transitionPrefix] = '0ms';
+      elt.style[this.transformPrefix] = 'scale(0,0)';
       var tArr = [elt];
       this.animAdded(tArr)
       /* elt[0].style[transitionPrefix] = '500ms'; elt[0].style[transformPrefix] = 'scale(1,1)'; elt[0].style.opacity = '1';  */
-      return elt;
+
     }; // animation only needed when triggering add
 
     this.unlock();
