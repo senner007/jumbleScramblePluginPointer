@@ -67,7 +67,7 @@ function addHandlers() {
     elt.style.zIndex = 5;
     //move.addClass('dragging');
     elt.className = classDefine + ' dragging';
-    elt.hasCrossed = false;
+    
     elt.startDate = new Date();
 
     //console.log(elt instanceof jQuery)
