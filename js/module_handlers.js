@@ -49,14 +49,14 @@ function addHandlers() {
 
     if (e.target == this) return;
     elt = e.target
-    if (thisInst.locked == true) {
+    if (thisInst.props.locked == true) {
       return;
     }
 
     e.preventDefault();
-    if (e.type == 'touchstart' && e.touches.length > e.targetTouches.length) {
-
-    }
+    // if (e.type == 'touchstart' && e.touches.length > e.targetTouches.length) {
+    //
+    // }
     //  if all touches detected is greater than the touches detected on the same element - return
     //  Prevents selecting more than one element at the same time, but allows for multiple touch points(fingers) on the same element
 
@@ -91,13 +91,10 @@ function addHandlers() {
 
   function pointermoveFunction(e) {
     //console.log(instanceArr.interrupt)
-    if (e.type == 'touchmove' && e.touches.length > e.targetTouches.length) {
+    if (e.type == 'touchmove' && e.touches.length > e.targetTouches.length || !dontTouch) {
     return
     }
-    if (!dontTouch) {
-      // It will return if dontTouch is false and if interrupt is true(layout in progress)
-      return;
-    }
+
   //  alert('hello')
 
     //  console.log('after interrupt')
