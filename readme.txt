@@ -1,7 +1,6 @@
 Todo:
-+ make dropLimit work in horizontal mode
+
 + add margin for elt to constructor the first time it is calculated in animateback
-+ dirSwitch on constructor
 + setChars function should update elt object as well, it does not work when moving to another container. should probably work in conjunction with the relayout method.
 + Dragging enable/disable/lock on individual items method
 + shuffle method
@@ -11,7 +10,6 @@ Todo:
 + Add containment option to specify containment for the draggable elements.
 + Click items to delete (for showcasing)
 + working example where text is retrieved from json file with option to save
-+ allow cutOff and dropLimit to be set after init
 + Add callbacks to init, relayout, add, remove, drop (before and after animate)
 + relayout is duplicating code from init - FIX ME!
 + add boolean to cutOffEnd method which prevents the function from running if the cut-off element(s) will make adjacent container fire its cutoffEnd method and thereby creating an infinite loop.
@@ -22,7 +20,6 @@ Todo:
 + Remove jQuery dependency - Pointer events polyfill will still work without it
 + Throttle the resize events
 + Call orientationChange event in place of resize on Chrome ios
-+ option to turn off/down animations
 + use native event delegation https://stackoverflow.com/questions/14174056/native-addeventlistener-with-selector-like-on-in-jquery
 + trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
 + optionally implement logic to calculate animation speed based on the position of the dropped item relative to its new position
@@ -31,16 +28,21 @@ Todo:
 + Put dirSwitch as property on instance dragging from and rename to crossTrigger,  rename crossTrigger to crossFlag and put on same instance.
 + add placeholder when dragging
 + allow jquery pointer polyfill as optional
-
 + add more comments/lines
 + split module_main
 + crossDistance should be a property set on init/reLayout, not a method.
 + put elt object properties on namespaced separate object. Name the object dynamically to the div id.
 + pass in the element for the adjacent container on instantiation, and set/look up adjacent container by its id
   if id is not passed in options, it will assign a number based id based on the order of instantiation(default)
-+ save the ul height on instance
 + getInstances() should point to array of all instances but without prototypes (Object.assign)
 + fix lock method
++ support for custom animations set in options
++ method to turn all animations on/off
+----------------------------
++ remove onstop from prototype
++ use the eltsReorder in addLiElem
+-------------------------------
+
 
 
 
@@ -87,6 +89,15 @@ Fixed:
 + refactor cutOff - pass completeHeight, comleteWidth to addLiElem - DONE
 + on event move, pass in only instances that are involved in the event(Pass in elt, instanceThis, instanceAdj (maybe rename)). DONE
 + Put remaining properties on instanceArr on each instance. DONE
++ allow cutOff and dropLimit to be set after init - DONE
++ make dropLimit work in horizontal mode - DONE
++ refactor scale/descale elems to one function DONE
++ scale in items before transition has finished - DONE
++ make calculate a ul function - DONE
++ make a function to iterate  over elements and add to object as in init and relayout. -DONE
++ make cutOff return a collection of items and which can then be passed to add and remove function. DONE
++ make a cutoff on prototype only for external use - DONE
++ save the ul height on instance -DONE
 
 Partially fixed:
 + prevent multitouch !!! - The element will freeze and animate back if multi touch is detected. Find a way to simple ignore additional touches
