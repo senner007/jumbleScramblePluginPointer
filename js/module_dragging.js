@@ -1,6 +1,6 @@
-export {onDrag, onStop, eltsReorder, _scaleElems, _elemsToCut};
+export {_onDrag, eltsReorder, _onStop, _elemsToCut};
 import {eltsReorder, _elemsToCut} from "./module_eltsReorder.js"
-import {_animateBack, _scaleElems} from "./module_animation.js"
+import {_animateBack,_scaleElems} from "./module_animation.js"
 
 
 // ES6 MODULE IMPORT/EXPORT
@@ -8,7 +8,7 @@ import {_animateBack, _scaleElems} from "./module_animation.js"
 
 var posObj = {}
 
-function onDrag(elt, thisInst) { // Drag
+function _onDrag(elt, thisInst) { // Drag
 
  var elts = thisInst.elts,
     o = thisInst.options,
@@ -55,8 +55,8 @@ function onDrag(elt, thisInst) { // Drag
   //  }
   };
 
-  if (!dirSwitch && thisInst.crossTrigger == true && Object.keys(elts).length > 1) { // go back to originating container
-    onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+  if (!dirSwitch && thisInst.crossTrigger == true) { // go back to originating container
+     onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
   };
 
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -106,6 +106,7 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
     elt.hasCrossed = thisInst.crossTrigger;
   },
   triggerOff: function(elt, adjConElts, elts, o, thisInst) { // going back to the originating container
+
       thisInst.crossTrigger = false;
 
     //  for (var i = thisInst.added.n; i < thisInst.adjInst.elts.length ; i++) {  // Loop over adjacent conatiner elements, animating them and updating their properties
@@ -121,7 +122,7 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
   },
 };
 
-function onStop(elt, thisInst) { // Stop
+function _onStop(elt, thisInst) { // Stop
   var o = thisInst.options;
 
   elt.endDate = new Date();
@@ -147,44 +148,37 @@ function onStop(elt, thisInst) { // Stop
 
       thisInst.adjInst.lock();
       thisInst.crossTrigger = false;
+      thisInst.adjInst.ul.insertBefore(thisInst.added, thisInst.adjInst.elts[thisInst.added.n + 1]);
+      // The element (thisInst.added) is place on triggerOn,
+      // but is not moved if the user subsequently reorders(by dragging) the elements.
+      // Therefore it must be inserted/repositioned again
 
       $(elt).one('transitionend', function() {
         appendRemove.call(thisInst)
       })
 
   } else { // staying in originating container
-    elt.newPosSameCon = (elt.nStart != elt.n)
+     elt.newPosSameCon = (elt.nStart != elt.n)
 
-    if (!elt.hasCrossed && elt.newPosSameCon) {
-      // insert the dragged element into its new position efter drop in originating container
-      // on condition that it has changed its position
-      elt.n == 0 ? thisInst.ul.insertBefore(elt, thisInst.elts[1]) : thisInst.ul.insertBefore(elt, thisInst.elts[elt.n + 1]);
-    }
-
+      if (!elt.hasCrossed && elt.newPosSameCon) {
+        // insert the dragged element into its new position efter drop in originating container
+        // on condition that it has changed its position
+        elt.n == 0 ? thisInst.ul.insertBefore(elt, thisInst.elts[1]) : thisInst.ul.insertBefore(elt, thisInst.elts[elt.n + 1]);
+      }
   }
 
   _animateBack(elt, o, thisInst);
   thisInst.transToZero(elt, speed);
 
-
   function appendRemove() {
 
-      if (thisInst.adjInst.elts.length == 0) {
-        thisInst.adjInst.ul.insertBefore(thisInst.added, thisInst.adjInst.elts[1]); // The element (thisInst.added) is place on triggerOn,
-                                                                      // but is not moved if the user subsequently reorders(by dragging) the elements.
-                                                                      // Therefore it must be inserted/repositioned again
-      } else {
-        thisInst.adjInst.ul.insertBefore(thisInst.added, thisInst.adjInst.elts[thisInst.added.n + 1]);
-        thisInst.added.style.display = 'block'
-        o.isVertical ? thisInst.added.style.top = elt.style.top : thisInst.added.style.left = elt.style.left;
-        delete thisInst.added
-        thisInst.removeLiElem(elt, false);
-
-      }
+      thisInst.added.style.display = 'block'
+      o.isVertical ? thisInst.added.style.top = elt.style.top : thisInst.added.style.left = elt.style.left;
+      delete thisInst.added // the object that is a reference to the added object is deleted
+      thisInst.removeLiElem(elt, false); // the dragged elt from the previous/starting instance is deleted once animated to its position
       thisInst.adjInst.unlock();
-      var elemsCut = _elemsToCut(thisInst.adjInst)
-      _scaleElems(elemsCut(thisInst), thisInst)
-      //this.adjInst.cutOffEnd(this);
+      //var returnCutElems = _elemsToCut(thisInst, thisInst.adjInst)
+      _scaleElems(_elemsToCut(thisInst, thisInst.adjInst) , thisInst);
 
   };
 
