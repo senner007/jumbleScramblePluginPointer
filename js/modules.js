@@ -15,6 +15,7 @@ var defaults = {
   cutOff: false,
   dropLimit: false,
   hasAdjacent: true,
+  ulSize: 0
   // layoutComplete: function() { }
 }
 
