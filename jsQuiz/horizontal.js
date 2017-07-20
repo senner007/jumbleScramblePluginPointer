@@ -15,7 +15,9 @@ import JumbleScramble from "../js/module_main.js"
 
   var hello2 = new JumbleScramble(elem2, {
     isVertical: false,
-    cutOff: winWidth
+    cutOff: false,
+    dropLimit: winWidth -100
+
   })
 
   // hello.div.on('layoutCompleteAll', function () {

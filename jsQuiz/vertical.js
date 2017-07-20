@@ -97,7 +97,8 @@ vertical.events = {
 
   var cont2 = new JumbleScramble(elem2, {
     isVertical: true,
-    cutOff: winHeight
+    cutOff: false,
+    dropLimit : winHeight - 100
   })
 
   $(cont1.div).on('layoutComplete', function (hello, a) {
@@ -105,10 +106,10 @@ vertical.events = {
 
 
        //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
-  //  var toDelete = elem.find('li').first()[0]
-  //   cont1.removeLiElem(toDelete, true, function (){
-   //
-  //       })
+    var toDelete = elem.find('li').eq(2)[0]
+    cont1.removeLiElem(toDelete, true, function (){
+
+         })
 
 
 
@@ -127,6 +128,6 @@ vertical.events = {
   $(cont2.div).on('layoutCompleteAll', function () {
    console.log('layoutCompleteAll')
 
-    cont2.addLiElem('Lorem ipsum dolor sit amet', 2, {elt:true,elts:true},)
-  
+    cont2.addLiElem('Lorem ipsum dolor sit amet', 10, {elt:true,elts:true},)
+
   })
