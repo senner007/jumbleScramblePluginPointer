@@ -1,14 +1,14 @@
 import {
-  onDrag,
-  onStop
+  _onDrag,
+  _onStop
 } from "./module_dragging.js"
 export {
-  addHandlers
+  _addEventHandlers
 }
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 
-function addHandlers() {
+function _addEventHandlers(thisInst) {
 
   var isTouch = (function is_touch_device() {
     return (('ontouchstart' in window) ||
@@ -23,13 +23,13 @@ function addHandlers() {
     targetOffsetX,
     newDx,
     newDy,
-    transformPrefix = this.transformPrefix,
-    transitionPrefix = this.transitionPrefix,
-    transSupport = this.transSupport,
-    ul = this.ul,
-    adjCon = this.adjCon,
-    o = this.options,
-    thisInst = this,
+    thisInst = thisInst,
+    transformPrefix = thisInst.transformPrefix,
+    transitionPrefix = thisInst.transitionPrefix,
+    transSupport = thisInst.transSupport,
+    ul = thisInst.ul,
+    adjCon = thisInst.adjCon,
+    o = thisInst.options,
     elt,
     movePos = {},
     eStart = isTouch ? 'touchstart' : isPointer ? 'pointerdown' : 'mousedown',
@@ -127,7 +127,7 @@ function addHandlers() {
     elt.currentPos.left = targetOffsetX + newDx;
     //	console.log('moving')
 
-    onDrag(elt, thisInst);
+    _onDrag(elt, thisInst);
 
   };
 
@@ -147,7 +147,7 @@ function addHandlers() {
       if (!elt) {
         return;
       }
-      onStop(elt, thisInst);
+      _onStop(elt, thisInst);
     } else { // if it hasn't moved
       clearClass();
     }
