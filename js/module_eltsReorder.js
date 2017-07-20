@@ -60,7 +60,7 @@ var eltsReorder = {
   },
 }
 
-function _elemsToCut(adjInst) {
+function _elemsToCut(thisInst, adjInst) {
   if (adjInst.props.cutOff == false) { return function () {};}
 
   var elemsToCut = []
@@ -78,12 +78,8 @@ function _elemsToCut(adjInst) {
       counter -= 1
     }
 
-
-  return function (thisInst) { // returns a function which returns the elements to be scaled in
-
     var tempArr = [];
     if (elemsToCut.length != 0) {
-
 
       for (var i = 0; i< elemsToCut.length; i++) {
         tempArr.push(  thisInst.addLiElem(elemsToCut[i].textContent, 0, {elt: false, elts: true}, elemsToCut[i].completeHeight, elemsToCut[i].completeWidth))
@@ -91,17 +87,8 @@ function _elemsToCut(adjInst) {
 
       }
 
-
     }
     return tempArr;
-  }
+
 
 }
-
-
-
-
-
-
-
-  /*---------------------------------------------------------------------------------------------------------*/
