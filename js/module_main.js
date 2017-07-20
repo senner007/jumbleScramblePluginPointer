@@ -257,8 +257,10 @@
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
 
     var elemsToCut = _elemsToCut(this)
-    var cutElems = _cutOff (elemsToCut, this.adjInst, this )
-    _scaleElems(cutElems, this)
+
+    var elemsCut = _elemsToCut(this)
+    _scaleElems(elemsCut(this.adjInst), this.adjInst)
+
 
   };
 

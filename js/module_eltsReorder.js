@@ -74,7 +74,7 @@ function _elemsToCut(adjInst) {
   var counter = -1;
     while (size > adjInst.props.cutOff) {
       elemsToCut.splice(0, 0, adjInst.elts[adjInst.elts.length + counter])
-      size -= adjInst.elts[adjInst.elts.length -1][height]
+      size -= adjInst.elts[adjInst.elts.length + counter][height]
       counter -= 1
     }
 
