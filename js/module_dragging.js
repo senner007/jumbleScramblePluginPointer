@@ -1,4 +1,5 @@
-export {onDrag};
+export {onDrag, eltsReorder};
+import {eltsReorder} from "./module_eltsReorder.js"
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 
@@ -40,25 +41,19 @@ function onDrag(elt, thisInst) { // Drag
   // adjacent container if below
   // dropLimit - refactor to add method for horizontal too.
 
+  if (dirSwitch && thisInst.crossTrigger == false && thisInst.adjInst.props.locked == false) {
 
-  if (dirSwitch && thisInst.crossTrigger == false && thisInst.adjInst.locked == false) {
-
-    if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= thisInst.adjInst.dropLimit) {
+  //  if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= thisInst.adjInst.props.dropLimit) {
       // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
+      if (thisInst.adjInst.props.ulSize < thisInst.adjInst.props.dropLimit || thisInst.adjInst.props.dropLimit == false) {
 
-      var insertPosition = onTrigger.triggerOn(elt, adjConElts, elts, o, thisInst);
-      thisInst.added = thisInst.adjInst.addLiElem(elt.textContent, insertPosition, {elt:false,elts:true}, elt.completeHeight, elt.completeWidth);
-      thisInst.added.style.display = 'none'
-      thisInst.crossTrigger = true;
-      elt.hasCrossed = dirSwitch;
-    }
+          onTrigger.triggerOn(elt, adjConElts, elts, o, thisInst);
+        }
+  //  }
   };
 
   if (!dirSwitch && thisInst.crossTrigger == true && Object.keys(elts).length > 1) { // go back to originating container
-
-    thisInst.crossTrigger = false;
     onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
-    elt.hasCrossed = dirSwitch;
   };
 
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -74,70 +69,13 @@ function onDrag(elt, thisInst) { // Drag
 
   /*-------------------------------------------------------------------------------------------------------------*/
   var eltsToMove = thisInst.crossTrigger ? adjConElts : elts;
-  if (move == 'forward' || 'down') {  onDragElts.eltsMoveForwardOrDown(elt, eltsToMove, thisInst)  };
-  if (move == "backward" || 'up') {  onDragElts.eltsMoveBackOrUp(elt, eltsToMove, thisInst) } ;
+  if (move == 'forward' || 'down') {  eltsReorder._eltsMoveBackOrUp(elt, eltsToMove, thisInst)  };
+  if (move == "backward" || 'up') {  eltsReorder._eltsMoveForwardOrDown(elt, eltsToMove, thisInst) } ;
 
 
  };
   /*----------------------------------------------------------------------------------------------------------------*/
 
-var onDragElts = {
-  eltsMoveBackOrUp: function(elt, elts, thisInst) {
-    var height = thisInst.options.isVertical ? 'completeHeight': 'completeWidth';
-    var plane = thisInst.options.isVertical ? 'top': 'left';
-    var _elt = elt;
-    elt = thisInst.crossTrigger ? thisInst.added : elt;
-    if (elt.n > 0) {
-      var eltPrev = elts[elt.n - 1];
-      var eltPrevBound = eltPrev.pos[plane] + eltPrev[height] / 2;
-      if (_elt.currentPos[plane] < eltPrevBound) {
-        elt.pos[plane] = eltPrev.pos[plane];
-        eltPrev.pos[plane] += elt[height];
-        elts[elt.n] = eltPrev;
-        elts[elt.n - 1] = elt;
-        elts[elt.n].n = elt.n;
-        elt.n = elt.n - 1;
-
-        this.eltsAnimate(-(elt[height]), eltPrev, thisInst)
-      }
-    }
-  },
-  eltsMoveForwardOrDown: function(elt, elts, thisInst, flag) {  // flag disregards elt position check.
-                                                    // The third argument is the added element on crossTrigger and a boolean
-                                                    // when ordering the container the elt is moving from.
-
-    var height = thisInst.options.isVertical ? 'completeHeight': 'completeWidth';
-    var plane = thisInst.options.isVertical ? 'top': 'left';
-    var _elt = elt;
-    elt = thisInst.crossTrigger ? thisInst.added : elt;
-      if ( elt.n < elts.length - 1) {
-
-      var eltNext = elts[elt.n +1];
-      var eltNextBound = eltNext.pos[plane] + eltNext[height] / 2;
-      if (_elt.currentPos[plane] + _elt[height] > eltNextBound || flag) {
-
-        eltNext.pos[plane] = elt.pos[plane];
-        elt.pos[plane] += eltNext[height];
-        elts[elt.n] = eltNext;
-        elts[elt.n + 1] = elt;
-        elts[elt.n].n = elt.n;
-        elt.n = elt.n + 1;
-
-        this.eltsAnimate(elt[height], eltNext, thisInst)
-      }
-    }
-  },
-  eltsAnimate: function(eltDimension, elem, thisInst) {
-    var dir = elem.o.isVertical ? 'top' : 'left';
-    //var dirTranslate = elem.o.isVertical ? 'translateY(' : 'translateX(';
-
-    elem.style[thisInst.transitionPrefix] = '0s';
-    elem.style[dir] = elem.pos[dir] + 'px';
-    elem.style[thisInst.transformPrefix] = elem.o.isVertical ? 'translate3d(0px,' + eltDimension + 'px, 0px)' : 'translate3d(' + eltDimension + 'px, 0px, 0px)'
-    thisInst.transToZero(elem);
-  },
-}
-  /*---------------------------------------------------------------------------------------------------------*/
 
 var onTrigger = {  //These will trigger when the elt is crossing over to connected adjacent container/instance
 
@@ -151,21 +89,31 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
           break;
       };
     };
-    firstInLoop >= 0 ? firstInLoop : firstInLoop = adjConElts.length;
+    firstInLoop = (firstInLoop >= 0) ? firstInLoop : adjConElts.length;  // firstInLoop is the insert position
     // check if firstInLoop is set, if not, set it to the length of the container
     // (dropped after last item)
     // reorder the elements in the originating container
     for (var i = elt.n + 1; i < elts.length; i++) {
-      onDragElts.eltsMoveForwardOrDown(elt, elts, thisInst, true);
+      eltsReorder._eltsMoveBackOrUp(elt, elts, thisInst, true);
       // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
     };
-    return firstInLoop;
+    thisInst.added = thisInst.adjInst.addLiElem(elt.textContent, firstInLoop, {elt:false,elts:true}, elt.completeHeight, elt.completeWidth);
+    thisInst.added.style.display = 'none'
+    thisInst.crossTrigger = true;
+    elt.hasCrossed = thisInst.crossTrigger;
   },
   triggerOff: function(elt, adjConElts, elts, o, thisInst) { // going back to the originating container
+      thisInst.crossTrigger = false;
 
-     thisInst.adjInst.removeLiElem(thisInst.added, true, false)
-     for (var i = 0; i < elts.length - 1; i++) { // Loop over originating Container elements
-       onDragElts.eltsMoveBackOrUp(elt, elts, thisInst);
+    //  for (var i = thisInst.added.n; i < thisInst.adjInst.elts.length ; i++) {  // Loop over adjacent conatiner elements, animating them and updating their properties
+    //    eltsReorder._eltsMoveForwardOrDown(thisInst.added, thisInst.adjInst.elts,  thisInst.adjInst, true);
+    //    // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
+    //  };
+      thisInst.adjInst.removeLiElem(thisInst.added, false)
+
+     for (var i = 0; i < elts.length - 1; i++) { // Loop over originating Container elements, animating them and updating their properties
+       eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
      }
+     elt.hasCrossed = thisInst.crossTrigger;
   },
 };
