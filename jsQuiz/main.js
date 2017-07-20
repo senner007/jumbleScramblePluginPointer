@@ -68,10 +68,13 @@ var exampleObject = {
 
     $(window).on('resize', function() {
       var winWidth = window.innerWidth - 50;
-      hello.cutOff = winWidth;
-      hello2.cutOff = winWidth;
+      hello.setCutOff(winWidth);
+      hello2.setCutOff(winWidth);
 
-      hello.reLayout()
+      console.log(hello)
+      console.log(hello2)
+
+    hello.reLayout()
       hello2.reLayout()
       hello.cutOffEnd()
       hello2.cutOffEnd()
