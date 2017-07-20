@@ -1,12 +1,12 @@
 export {
   _animateBack,
-  transToZero,
+  _transToZero,
   _scaleElems
 };
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 
-function transToZero(elt, speed) {
+function _transToZero(elt, speed) {
 
   var thisInst = this;
   if (speed == undefined) {
