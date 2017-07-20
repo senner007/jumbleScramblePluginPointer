@@ -18,8 +18,12 @@
   } from "./module_animation.js"
 
   import {
-      eltsReorder
+      eltsReorder,
+      _scaleElems,
+      _elemsToCut,
+      _cutOff
   } from "./module_dragging.js"
+
 
 
   export default JumbleScramble;
@@ -28,76 +32,6 @@
 
   JumbleScramble.prototype.transToZero = transToZero;
 
-  JumbleScramble.prototype.onStop = function(elt) { // Stop
-    var o = this.options;
-
-    elt.endDate = new Date();
-    elt.dragSpeed = (elt.endDate.getTime() - elt.startDate.getTime()) / 1000;
-
-    // elt.dragSpeed measuresthe time it takes to initialize the drag to when it is dropped. A smaller difference
-    // will increase the speed of the layout animation.
-    var speed;
-
-    if (elt.dragSpeed < 0.2) {
-      speed = '15ms ease'
-    } else if (elt.dragSpeed < 0.35) {
-      speed = '100ms ease'
-    } else if (elt.dragSpeed < 0.5) {
-      speed = '170ms ease'
-    }
-
-    // A lower elt.dragSpeed value will speed up the animation and subsequently the add and remove logic after dropping an item.
-    // (If the difference in time between the initialized drag and the release is less than specified,
-    // it will increase the transition speed of the dropped item going to its new position)
-
-    if (this.crossTrigger == true) { // going to new container
-
-        this.adjInst.lock();
-        this.crossTrigger = false;
-
-        $(elt).one('transitionend', function() {
-          appendRemove.call(thisInst)
-        })
-
-    } else { // staying in originating container
-      elt.newPosSameCon = (elt.nStart != elt.n)
-
-      if (!elt.hasCrossed && elt.newPosSameCon) {
-        // insert the dragged element into its new position efter drop in originating container
-        // on condition that it has changed its position
-        elt.n == 0 ? this.ul.insertBefore(elt, this.elts[1]) : this.ul.insertBefore(elt, this.elts[elt.n + 1]);
-      }
-
-    }
-
-    _animateBack(elt, o, this);
-    this.transToZero(elt, speed);
-
-    var thisInst = this
-
-    function appendRemove() {
-
-        if (this.adjInst.elts.length == 0) {
-          this.adjInst.ul.insertBefore(this.added, this.adjInst.elts[1]); // The element (this.added) is place on triggerOn,
-                                                                        // but is not moved if the user subsequently reorders(by dragging) the elements.
-                                                                        // Therefore it must be inserted/repositioned again
-        } else {
-          this.adjInst.ul.insertBefore(this.added, this.adjInst.elts[this.added.n + 1]);
-          this.added.style.display = 'block'
-          o.isVertical ? this.added.style.top = elt.style.top : this.added.style.left = elt.style.left;
-          delete this.added
-          this.removeLiElem(elt, false);
-
-        }
-        this.adjInst.unlock();
-        var elemsToCut = _elemsToCut(this.adjInst)
-
-       _cutOff (elemsToCut, this, this.adjInst)
-        //this.adjInst.cutOffEnd(this);
-
-    };
-
-  };
 
 
   function _addToObject(thisElts, elt, n, thisHeight, thisWidth, o, thisContainer, adjCon, posTop, posLeft) {
@@ -255,14 +189,8 @@
       thisInst.ul.style.width = size + 'px';
     //  thisInst.ul.style.height = _outerHeight(thisInst.elts[0]) + 'px';
     }
-
     thisInst.props.ulSize = size;
-
-
-
   }
-
-
 
   JumbleScramble.prototype.init = function() {
 
@@ -334,67 +262,9 @@
 
   };
 
-function _elemsToCut(thisInst) {
-  if (thisInst.props.cutOff == false) { return [];}
-  var elems = []
-  var size =0;
-  var height = thisInst.options.isVertical ? 'completeHeight': 'completeWidth';
-
-  for (var i = 0; i<thisInst.elts.length; i++) {
-        size += thisInst.elts[i][height]
-  }
-
-  var counter = -1;
-    while (size > thisInst.props.cutOff) {
-      elems.splice(0, 0, thisInst.elts[thisInst.elts.length + counter])
-      size -= thisInst.elts[thisInst.elts.length -1][height]
-      counter -= 1
-    }
-
-  return elems;
-
-}
-
-function _cutOff (elemsToCut, thisInst, adjInst) {
-
-  var tempArr = []
-  if (elemsToCut.length != 0) {
-
-
-    for (var i = 0; i< elemsToCut.length; i++) {
-      tempArr.push(  thisInst.addLiElem(elemsToCut[i].textContent, 0, {elt: false, elts: true}, elemsToCut[i].completeHeight, elemsToCut[i].completeWidth))
-      adjInst.removeLiElem(adjInst.elts[adjInst.elts.length - 1], adjInst.transSupport, false)
-
-    }
-      _scaleElems(tempArr, thisInst);
-
-  }
-}
 
   /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-
-  function _scaleElems(elems, thisInst) { // should be in animation module, and not on the prototype
-    var elems = elems, // elems is an array of elements to scale in after they have been added
-      thisInst = thisInst;
-
-    scaleElems('off');
-
-    if (thisInst.transSupport && elems.length != 0) { // transition elements  but only if if there are any
-
-       setTimeout(function() { scaleElems('on'); }, 1);
-        // setTimeout is need because transform properties need time to be set.
-    }
-
-    function scaleElems(trigger) {
-      for (var i = 0; i < elems.length; i++) {
-        elems[i].style[thisInst.transitionPrefix] = trigger == 'on' ? '500ms' : '0ms';
-        elems[i].style[thisInst.transformPrefix] = trigger == 'on' ? 'scale(1,1)' : 'scale(0,0)';
-      }
-    }
-  };
-
-  /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
   JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans, completeHeight, completeWidth) { // Add new li to previous collection
 
