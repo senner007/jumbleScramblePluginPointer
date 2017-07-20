@@ -1,5 +1,6 @@
 import {
-  onDrag
+  onDrag,
+  onStop
 } from "./module_dragging.js"
 export {
   addHandlers
@@ -146,7 +147,7 @@ function addHandlers() {
       if (!elt) {
         return;
       }
-      thisInst.onStop(elt, o);
+      onStop(elt, thisInst);
     } else { // if it hasn't moved
       clearClass();
     }
