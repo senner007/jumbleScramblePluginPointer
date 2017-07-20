@@ -79,7 +79,7 @@ function _elemsToCut(adjInst) {
     }
 
 
-  return function (thisInst) {
+  return function (thisInst) { // returns a function which returns the elements to be scaled in
 
     var tempArr = [];
     if (elemsToCut.length != 0) {
