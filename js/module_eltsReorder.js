@@ -1,4 +1,5 @@
-export {eltsReorder};
+export {eltsReorder, _elemsToCut, _cutOff, _scaleElems};
+
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 
@@ -58,4 +59,64 @@ var eltsReorder = {
     thisInst.transToZero(elem);
   },
 }
+
+function _elemsToCut(thisInst) {
+  if (thisInst.props.cutOff == false) { return [];}
+  var elems = []
+  var size =0;
+  var height = thisInst.options.isVertical ? 'completeHeight': 'completeWidth';
+
+  for (var i = 0; i<thisInst.elts.length; i++) {
+        size += thisInst.elts[i][height]
+  }
+
+  var counter = -1;
+    while (size > thisInst.props.cutOff) {
+      elems.splice(0, 0, thisInst.elts[thisInst.elts.length + counter])
+      size -= thisInst.elts[thisInst.elts.length -1][height]
+      counter -= 1
+    }
+
+  return elems;
+
+}
+
+function _cutOff (elemsToCut, thisInst, adjInst) {
+
+  var tempArr = []
+  if (elemsToCut.length != 0) {
+
+
+    for (var i = 0; i< elemsToCut.length; i++) {
+      tempArr.push(  thisInst.addLiElem(elemsToCut[i].textContent, 0, {elt: false, elts: true}, elemsToCut[i].completeHeight, elemsToCut[i].completeWidth))
+      adjInst.removeLiElem(adjInst.elts[adjInst.elts.length - 1], adjInst.transSupport, false)
+
+    }
+      _scaleElems(tempArr, thisInst);
+
+  }
+}
+
+function _scaleElems(elems, thisInst) { // should be in animation module, and not on the prototype
+  var elems = elems, // elems is an array of elements to scale in after they have been added
+    thisInst = thisInst;
+
+  scaleElems('off');
+
+  if (thisInst.transSupport && elems.length != 0) { // transition elements  but only if if there are any
+
+     setTimeout(function() { scaleElems('on'); }, 1);
+      // setTimeout is need because transform properties need time to be set.
+  }
+
+  function scaleElems(trigger) {
+    for (var i = 0; i < elems.length; i++) {
+      elems[i].style[thisInst.transitionPrefix] = trigger == 'on' ? '500ms' : '0ms';
+      elems[i].style[thisInst.transformPrefix] = trigger == 'on' ? 'scale(1,1)' : 'scale(0,0)';
+    }
+  }
+};
+
+
+
   /*---------------------------------------------------------------------------------------------------------*/
