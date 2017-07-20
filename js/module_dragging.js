@@ -1,5 +1,8 @@
-export {onDrag, eltsReorder};
-import {eltsReorder} from "./module_eltsReorder.js"
+export {onDrag, onStop, eltsReorder, _scaleElems, _elemsToCut, _cutOff};
+import {eltsReorder, _elemsToCut, _cutOff, _scaleElems} from "./module_eltsReorder.js"
+import {_animateBack} from "./module_animation.js"
+
+
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 
@@ -116,4 +119,74 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
      }
      elt.hasCrossed = thisInst.crossTrigger;
   },
+};
+
+function onStop(elt, thisInst) { // Stop
+  var o = thisInst.options;
+
+  elt.endDate = new Date();
+  elt.dragSpeed = (elt.endDate.getTime() - elt.startDate.getTime()) / 1000;
+
+  // elt.dragSpeed measuresthe time it takes to initialize the drag to when it is dropped. A smaller difference
+  // will increase the speed of the layout animation.
+  var speed;
+
+  if (elt.dragSpeed < 0.2) {
+    speed = '15ms ease'
+  } else if (elt.dragSpeed < 0.35) {
+    speed = '100ms ease'
+  } else if (elt.dragSpeed < 0.5) {
+    speed = '170ms ease'
+  }
+
+  // A lower elt.dragSpeed value will speed up the animation and subsequently the add and remove logic after dropping an item.
+  // (If the difference in time between the initialized drag and the release is less than specified,
+  // it will increase the transition speed of the dropped item going to its new position)
+
+  if (thisInst.crossTrigger == true) { // going to new container
+
+      thisInst.adjInst.lock();
+      thisInst.crossTrigger = false;
+
+      $(elt).one('transitionend', function() {
+        appendRemove.call(thisInst)
+      })
+
+  } else { // staying in originating container
+    elt.newPosSameCon = (elt.nStart != elt.n)
+
+    if (!elt.hasCrossed && elt.newPosSameCon) {
+      // insert the dragged element into its new position efter drop in originating container
+      // on condition that it has changed its position
+      elt.n == 0 ? thisInst.ul.insertBefore(elt, thisInst.elts[1]) : thisInst.ul.insertBefore(elt, thisInst.elts[elt.n + 1]);
+    }
+
+  }
+
+  _animateBack(elt, o, thisInst);
+  thisInst.transToZero(elt, speed);
+
+
+  function appendRemove() {
+
+      if (thisInst.adjInst.elts.length == 0) {
+        thisInst.adjInst.ul.insertBefore(thisInst.added, thisInst.adjInst.elts[1]); // The element (thisInst.added) is place on triggerOn,
+                                                                      // but is not moved if the user subsequently reorders(by dragging) the elements.
+                                                                      // Therefore it must be inserted/repositioned again
+      } else {
+        thisInst.adjInst.ul.insertBefore(thisInst.added, thisInst.adjInst.elts[thisInst.added.n + 1]);
+        thisInst.added.style.display = 'block'
+        o.isVertical ? thisInst.added.style.top = elt.style.top : thisInst.added.style.left = elt.style.left;
+        delete thisInst.added
+        thisInst.removeLiElem(elt, false);
+
+      }
+      thisInst.adjInst.unlock();
+      var elemsToCut = _elemsToCut(thisInst.adjInst)
+
+     _cutOff (elemsToCut, thisInst, thisInst.adjInst)
+      //this.adjInst.cutOffEnd(this);
+
+  };
+
 };
