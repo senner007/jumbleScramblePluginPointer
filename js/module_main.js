@@ -20,8 +20,7 @@
   import {
       eltsReorder,
       _scaleElems,
-      _elemsToCut,
-      _cutOff
+      _elemsToCut
   } from "./module_dragging.js"
 
 
@@ -258,7 +257,8 @@
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
 
     var elemsToCut = _elemsToCut(this)
-    _cutOff (elemsToCut, this.adjInst, this )
+    var cutElems = _cutOff (elemsToCut, this.adjInst, this )
+    _scaleElems(cutElems, this)
 
   };
 

@@ -1,6 +1,6 @@
-export {onDrag, onStop, eltsReorder, _scaleElems, _elemsToCut, _cutOff};
-import {eltsReorder, _elemsToCut, _cutOff, _scaleElems} from "./module_eltsReorder.js"
-import {_animateBack} from "./module_animation.js"
+export {onDrag, onStop, eltsReorder, _scaleElems, _elemsToCut};
+import {eltsReorder, _elemsToCut} from "./module_eltsReorder.js"
+import {_animateBack, _scaleElems} from "./module_animation.js"
 
 
 // ES6 MODULE IMPORT/EXPORT
@@ -182,9 +182,8 @@ function onStop(elt, thisInst) { // Stop
 
       }
       thisInst.adjInst.unlock();
-      var elemsToCut = _elemsToCut(thisInst.adjInst)
-
-     _cutOff (elemsToCut, thisInst, thisInst.adjInst)
+      var elemsCut = _elemsToCut(thisInst.adjInst)
+      _scaleElems(elemsCut(thisInst), thisInst)
       //this.adjInst.cutOffEnd(this);
 
   };

@@ -1,6 +1,7 @@
 export {
   _animateBack,
-  transToZero
+  transToZero,
+  _scaleElems
 };
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
@@ -43,4 +44,25 @@ function _animateBack(elt, o, thisInst) {
   elt.style.top = thisTop + 'px'
   elt.style[thisInst.transformPrefix] = 'translate3d(' + (thisX - eltMarginLeft) + 'px,' + thisY + 'px,0px)';
 
+};
+
+function _scaleElems(elems, thisInst) { // should be in animation module, and not on the prototype
+ if (elems == undefined) { return; }
+  var elems = elems, // elems is an array of elements to scale in after they have been added
+    thisInst = thisInst;
+
+  scaleElems('off');
+
+  if (thisInst.transSupport && elems.length != 0) { // transition elements  but only if if there are any
+
+     setTimeout(function() { scaleElems('on'); }, 1);
+      // setTimeout is need because transform properties need time to be set.
+  }
+
+  function scaleElems(trigger) {
+    for (var i = 0; i < elems.length; i++) {
+      elems[i].style[thisInst.transitionPrefix] = trigger == 'on' ? '500ms' : '0ms';
+      elems[i].style[thisInst.transformPrefix] = trigger == 'on' ? 'scale(1,1)' : 'scale(0,0)';
+    }
+  }
 };
