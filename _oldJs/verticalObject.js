@@ -1,5 +1,5 @@
-export {cont1, cont2, vertical};
-import JumbleScramble from "../js/module_main.js";
+//export {cont1, cont2, vertical};
+//import JumbleScramble from "../js/module_main.js";
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 
@@ -82,52 +82,23 @@ vertical.events = {
 }
 
 
-
-
-  var elem = $("#jMyPuzzleId0").show();
-  var elem2 = $("#jMyPuzzleId1").show();
-
-  var winHeight = window.innerHeight - 50; // recalculate windows height for cutoff on resize.
-
-  var cont1 = new JumbleScramble(elem, {
-    isVertical: true,
-    cutOff: winHeight
-  })
-
-
-  var cont2 = new JumbleScramble(elem2, {
-    isVertical: true,
-    cutOff: winHeight
-    // dropLimit : winHeight - 100
-  })
-
-  $(cont1.div).on('layoutComplete', function (hello, a) {
-  // console.log('container 1 layoutComplete')
-
-
-       //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
-    var toDelete = elem.find('li').eq(2)[0]
-    cont1.removeLiElem(toDelete, true, function (){
-
-         })
-
-
-
-  })
-
-
-  $(cont2.div).on('layoutComplete', function () {
-  // console.log('container 2 layoutComplete')
-
-
-
-    //    console.log(cont2)
-
-  })
-//  example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
-  $(cont2.div).on('layoutCompleteAll', function () {
-   console.log('layoutCompleteAll')
-
-    cont2.addLiElem('Lorem ipsum dolor sit amet', 10, {elt:true,elts:true},)
-
-  })
+    // var divId = vertical.init.divId(),
+    //     nLi = Object.keys(vertical.text).length;
+    //
+    //
+    // for (var index = 0; index<vertical.init.nDivs; index++) {
+    //
+    //   $(".container").append("<div class='jMyPuzzle' id=" + divId[index]  + "><ul touch-action='none' class=" + vertical.init.ulClass + "></ul></div>"); // create the divs with uls
+    //   $("#" + divId[i]).find('ul').css(vertical.init.ulCss);  // set the ul css
+    //
+    //       for (var i = 0; i<nLi; i++) {
+    //
+    //             var thisLi = Object.keys(vertical.text)[i]
+    //             $("#" + divId[index]).find('ul').append("<li>" + vertical.text[thisLi] + "</li>") // create the lis
+    //             $("#" + divId[index]).find('ul').find('li').eq(i).css(vertical.init.liCss) // attach the css for the lis
+    //
+    //
+    //
+    //       }
+    //
+    // }
