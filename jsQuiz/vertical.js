@@ -97,8 +97,8 @@ vertical.events = {
 
   var cont2 = new JumbleScramble(elem2, {
     isVertical: true,
-    cutOff: false,
-    dropLimit : winHeight - 100
+    cutOff: winHeight
+    // dropLimit : winHeight - 100
   })
 
   $(cont1.div).on('layoutComplete', function (hello, a) {
