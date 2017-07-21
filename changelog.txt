@@ -18,3 +18,4 @@ Working:
 + Adds touch support with fallback to pointer and then mouse as input
 + Lock/unlock methods which prevents dragging to and from instance
 + The crossDistance method. The crossing distance to the adjacent container
++ Shuffle method
