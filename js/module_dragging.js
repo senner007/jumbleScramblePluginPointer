@@ -24,6 +24,7 @@ function _onDrag(elt, thisInst) { // Drag
   posObj = eltPos; //its current position derived from $draggable object
 
 
+
   if ("adjInst" in thisInst && o.isVertical) {   //vertical
     var adjConElts = thisInst.adjInst.elts;
     var adjacentDir = thisInst.crossDistance();
@@ -57,6 +58,7 @@ function _onDrag(elt, thisInst) { // Drag
 
   if (!dirSwitch && thisInst.crossTrigger == true) { // go back to originating container
      onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+
   };
 
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -69,12 +71,10 @@ function _onDrag(elt, thisInst) { // Drag
     return;
   } // doing nothing
 
-
   /*-------------------------------------------------------------------------------------------------------------*/
   var eltsToMove = thisInst.crossTrigger ? adjConElts : elts;
-  if (move == 'forward' || 'down') {  eltsReorder._eltsMoveBackOrUp(elt, eltsToMove, thisInst)  };
-  if (move == "backward" || 'up') {  eltsReorder._eltsMoveForwardOrDown(elt, eltsToMove, thisInst) } ;
-
+  if (move == 'forward' || move == 'down') {  eltsReorder._eltsMoveBackOrUp(elt, eltsToMove, thisInst); };
+  if (move == "backward" || move == 'up') {  eltsReorder._eltsMoveForwardOrDown(elt, eltsToMove, thisInst);}
 
  };
   /*----------------------------------------------------------------------------------------------------------------*/
@@ -100,7 +100,8 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
       eltsReorder._eltsMoveBackOrUp(elt, elts, thisInst, true);
       // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
     };
-    thisInst.added = thisInst.adjInst.addLiElem(elt.textContent, firstInLoop, {elt:false,elts:true}, elt.completeHeight, elt.completeWidth);
+
+    thisInst.added = thisInst.adjInst.addLiElem(elt.innerHTML, firstInLoop, {elt:false,elts:true}, elt.completeHeight, elt.completeWidth);
     thisInst.added.style.display = 'none'
     thisInst.crossTrigger = true;
     elt.hasCrossed = thisInst.crossTrigger;
@@ -159,7 +160,7 @@ function _onStop(elt, thisInst) { // Stop
 
   } else { // staying in originating container
      elt.newPosSameCon = (elt.nStart != elt.n)
-
+    //  console.log(elt.pos.left)
       if (!elt.hasCrossed && elt.newPosSameCon) {
         // insert the dragged element into its new position efter drop in originating container
         // on condition that it has changed its position
