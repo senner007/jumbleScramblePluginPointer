@@ -9,13 +9,22 @@ body {
 }
 
 
-button {
+.bodyButton {
   color: black;
   font-weight: bold;
   font-size : 40px;
   display: none;
    width: 100%;
 }
+.liButton {
+  color: black;
+  font-weight: bold;
+  font-size : 25px;
+
+   width: 50%;
+}
+
+
 
 .container {
   margin: 0;
@@ -32,6 +41,7 @@ button {
   height: 90%;
   position: absolute;
   display: none;
+
 }
 
 #jMyPuzzleId1 {
@@ -62,9 +72,10 @@ button {
 }
 
 .splitList {
-  width: 100%;
+  width:100%;
   position: absolute;
   display: block;
+
 
 }
 
@@ -79,7 +90,8 @@ position: absolute;
   position: absolute;
   list-style: none;
   margin-bottom: 5px;
-  padding: 5px;
+  padding: 1.25%;
+ margin-left: 1.25%;
   width: 95%;
   color: rgba(34, 34, 34, 1);
   border-radius: 1px;
@@ -90,8 +102,26 @@ position: absolute;
   background: white;
   z-index: 1;
   font-size: 15px;
+  border : 1px solid black;
   /*text-align: justify;
     text-justify: inter-word;*/
+}
+
+.listItem::first-letter{
+  font-size: 40px;
+  padding: 5px;
+  color: blue
+
+}
+.listItem span{
+  font-size: 20px;
+  color: blue
+
+}
+
+span .green {
+  color: green;
+    font-weight: bold;
 }
 
 .listItem-horizontal {
