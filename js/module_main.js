@@ -147,6 +147,54 @@
     return this.props.ulSize;
   }
 
+  JumbleScramble.prototype.shuffle = function() {
+
+
+    function shuffle(a) {
+      for (let i = a.length; i; i--) {
+          let j = Math.floor(Math.random() * i);
+          [a[i - 1], a[j]] = [a[j], a[i - 1]];
+      }
+    }
+
+    function _getElems (inst, adj) {
+      var elems = []
+
+        for (let ii = 0; ii<arguments.length; ii++) {
+         let i = 0, p;
+            while (arguments[ii].elts[i] != undefined ) {
+              elems.push(arguments[ii].elts[i].innerHTML)
+              i++
+            }
+        }
+
+
+      shuffle(elems)
+
+      return function () {
+          var count = 0
+          for (let i = 0; i<inst.elts.length; i++) {
+              inst.elts[i].innerHTML = elems[count]
+              count++;
+          }
+
+          for (let i = 0; i<adj.elts.length; i++) {
+              adj.elts[i].innerHTML = elems[count]
+              count++
+          }
+          return elems;
+      };
+    };
+
+
+      var _setElems = _getElems(this, this.adjInst);
+      _setElems()
+      this.reLayout()
+    this.adjInst.reLayout()
+
+
+  }
+
 
   function _setEltsProps(elts, thisInst) {
 
@@ -247,7 +295,7 @@
     _setUlSize(ulSize, this)
 
     this.divOffset = jsOffset(this.div)
-    this.adjInst.divOffset = jsOffset(this.adjInst.div)
+
 
 
 
@@ -294,11 +342,9 @@
 
     // Iterate over the all elts after insert and update accordingly
 
-
     for (var i = n; i < thisElts.length; i++) {
       var el = thisElts[i];
-      var marginLeft = o.isVertical ? 0 : (el.completeWidth - el.offsetWidth); // account for margin
-
+      var marginLeft = o.isVertical ? el.offsetLeft : (el.completeWidth - el.offsetWidth); // account for margin
       el.style[this.transitionPrefix] = '0ms';
       el.style[this.transformPrefix] = this.transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
       el.style.left = parseInt(el.style.left) + thisWidth + 'px'
