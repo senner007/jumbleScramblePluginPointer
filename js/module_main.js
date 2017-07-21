@@ -9,17 +9,17 @@
 
 
   import {
-    addHandlers
+    _addEventHandlers
   } from "./module_handlers.js"
 
   import {
     _animateBack,
-    transToZero
+    _transToZero,
+    _scaleElems
   } from "./module_animation.js"
 
   import {
       eltsReorder,
-      _scaleElems,
       _elemsToCut
   } from "./module_dragging.js"
 
@@ -29,7 +29,8 @@
   // ES6 MODULE IMPORT/EXPORT
   ////////////////////////////
 
-  JumbleScramble.prototype.transToZero = transToZero;
+  JumbleScramble.prototype.transToZero = _transToZero;
+
 
 
 
@@ -124,7 +125,6 @@
     return crossDistance;
   }
 
-  JumbleScramble.prototype.addHandlers = addHandlers;
 
   JumbleScramble.prototype.setInstances = function() {
 
@@ -197,7 +197,8 @@
     this.elts = new Array(lis.length);
     var ulSize = _setEltsProps(lis, this); // setting properties function return the ul size
     _setUlSize(ulSize, this)
-    this.addHandlers();
+
+    _addEventHandlers(this);
 
     $(this.div).trigger('layoutComplete', [parseInt(this.ul.style.height)]) // example of sending the ul height as second parameter to the callback
     this.init = true;
@@ -257,8 +258,7 @@
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
 
 
-    var elemsCut = _elemsToCut(this)
-    _scaleElems(elemsCut(this.adjInst), this.adjInst)
+    _scaleElems(_elemsToCut(this, this.adjInst) , this);
 
 
   };
@@ -339,6 +339,7 @@
 
   JumbleScramble.prototype.removeLiElem = function(elt, transition, callBack) { // Remove new li to previous collection
 
+    if (elt == undefined) {return;} // if the requested elt to delete doesn't exist
     var n = elt.n,
       thisElts = this.elts,
       eltHeight = thisElts[n].completeHeight,
