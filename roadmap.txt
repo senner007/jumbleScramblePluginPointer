@@ -1,24 +1,27 @@
 Roadmap:
+2.0
++ Multiple container drop ( long term )
 
+0.2 - Plugin showcasing
++ Click items to delete (for showcasing)
++ Setup main page with Bulma css. Show all examples on one page and add a -show in full screen- link to each. Fetch each example module which are exporting objects with unique data.
+  * Make examples avaiable using the routes rewrite in htaccess. When using the routes, remove anything but the example and show in full screen.
++ Throttle the resize events
++ support for custom animations set in options
+
+0.1
 + add margin for elt to constructor the first time it is calculated in animateback
 + setChars function should update elt object as well, it does not work when moving to another container. should probably work in conjunction with the relayout method.
 + Dragging enable/disable/lock on individual items method
 + shuffle method
-+ test in slider
-+ Multiple container drop ( long term )
 + Improve add and remove method. eg. all or an array as parameter, allow index(number) as elt selctor in removeLiElem
 + Add containment option to specify containment for the draggable elements.
-+ Click items to delete (for showcasing)
-+ working example where text is retrieved from json file with option to save
 + Add callbacks to init, relayout, add, remove, drop (before and after animate)
 + relayout is duplicating code from init - FIX ME!
 + add boolean to cutOffEnd method which prevents the function from running if the cut-off element(s) will make adjacent container fire its cutoffEnd method and thereby creating an infinite loop.
 + remove animAdded from prototype and add to animation module
-+ Setup main page with Bulma css. Show all examples on one page and add a -show in full screen- link to each. Fetch each example module which are exporting objects with unique data.
-  * Make examples avaiable using the routes rewrite in htaccess. When using the routes, remove anything but the example and show in full screen.
 + Assume transition support
 + Remove jQuery dependency - Pointer events polyfill will still work without it
-+ Throttle the resize events
 + Call orientationChange event in place of resize on Chrome ios
 + use native event delegation https://stackoverflow.com/questions/14174056/native-addeventlistener-with-selector-like-on-in-jquery
 + trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
@@ -34,9 +37,6 @@ Roadmap:
   if id is not passed in options, it will assign a number based id based on the order of instantiation(default)
 + getInstances() should point to array of all instances but without prototypes (Object.assign)
 + fix lock method
-+ support for custom animations set in options
 + method to turn all animations on/off
 + remove _transToZero from prototype
-----------------------------
 + use the eltsReorder in addLiElem
--------------------------------
