@@ -48,13 +48,13 @@ function _addEventHandlers(thisInst) {
 
     function pointerstart (e) {
 
-    if (e.target == this) return;
-    elt = e.target
-    if (thisInst.props.locked == true) {
-      return;
-    }
 
-    e.preventDefault();
+    if (e.target.localName == 'ul' || thisInst.props.locked == true || e.target.localName == 'button') return;
+    elt = e.target
+    if (e.target.localName == 'span' ) {  elt = e.target.offsetParent; }
+
+
+   e.preventDefault();
     // if (e.type == 'touchstart' && e.touches.length > e.targetTouches.length) {
     //
     // }
@@ -69,7 +69,7 @@ function _addEventHandlers(thisInst) {
     elt.style[transitionPrefix] = '0s';
     elt.style.zIndex = 5;
     //move.addClass('dragging');
-    elt.className = classDefine + ' dragging';
+  //  elt.className = classDefine + ' dragging';
 
     elt.startDate = new Date();
 
@@ -82,8 +82,9 @@ function _addEventHandlers(thisInst) {
 
     //if (e.type == 'touchstart') { e = e.originalEvent.touches[0] }
     startX = e.pageX, startY = e.pageY;
-    targetOffsetY = e.target.offsetTop;
-    targetOffsetX = e.target.offsetLeft;
+    targetOffsetY = elt.offsetTop;
+    targetOffsetX = elt.offsetLeft;
+
     ul.removeEventListener(eStart, pointerstart);
     window.addEventListener(eEnd, pointerupFunction); // refactor to add the once: true object to similar to jquery once. Wait for browser compatibility
     window.addEventListener(eMove, pointermoveFunction,);
@@ -107,17 +108,17 @@ function _addEventHandlers(thisInst) {
     newDx = e.pageX - startX;
     newDy = e.pageY - startY;
 
-    if (transSupport) {
+    //if (transSupport) {
       elt.style[transformPrefix] = 'translate3d(' + newDx + 'px, ' + newDy + 'px, 0px) translateZ(0)';
-    } else {
-      elt.style.top = targetOffsetY + movePos.dy + 'px';
-      elt.style.left = targetOffsetX + movePos.dx + 'px';
-
-      movePos = {
-        dx: newDx,
-        dy: newDy
-      };
-    }
+    // } else {
+    //   elt.style.top = targetOffsetY + movePos.dy + 'px';
+    //   elt.style.left = targetOffsetX + movePos.dx + 'px';
+    //
+    //   movePos = {
+    //     dx: newDx,
+    //     dy: newDy
+    //   };
+    // }
 
     // we need to save last made offset
 
@@ -138,12 +139,12 @@ function _addEventHandlers(thisInst) {
     if (hasMoved == true) {
       hasMoved = false;
       clearClass();
-      if (transSupport) {
+    //  if (transSupport) {
         elt.style[transformPrefix] = 'translateZ(0) translate3d(' + 0 + 'px, ' + 0 + 'px, 0px)';
-      } else {
-        elt.style.top = targetOffsetY + movePos.dy + 'px';
-        elt.style.left = targetOffsetX + movePos.dx + 'px';
-      }
+      // } else {
+      //   elt.style.top = targetOffsetY + movePos.dy + 'px';
+      //   elt.style.left = targetOffsetX + movePos.dx + 'px';
+      // }
       if (!elt) {
         return;
       }
@@ -160,7 +161,7 @@ function _addEventHandlers(thisInst) {
       };
       ul.style.zIndex = '1';
 
-      elt.className = classDefine;
+    //  elt.className = classDefine;
       dontTouch = false;
     };
     window.removeEventListener(eMove, pointermoveFunction);
