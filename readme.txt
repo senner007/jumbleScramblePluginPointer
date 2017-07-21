@@ -6,7 +6,7 @@ Todo:
 + shuffle method
 + test in slider
 + Multiple container drop ( long term )
-+ Improve add and remove method. eg. all or an array as parameter.
++ Improve add and remove method. eg. all or an array as parameter, allow index(number) as elt selctor in removeLiElem
 + Add containment option to specify containment for the draggable elements.
 + Click items to delete (for showcasing)
 + working example where text is retrieved from json file with option to save
@@ -28,8 +28,6 @@ Todo:
 + Put dirSwitch as property on instance dragging from and rename to crossTrigger,  rename crossTrigger to crossFlag and put on same instance.
 + add placeholder when dragging
 + allow jquery pointer polyfill as optional
-+ add more comments/lines
-+ split module_main
 + crossDistance should be a property set on init/reLayout, not a method.
 + put elt object properties on namespaced separate object. Name the object dynamically to the div id.
 + pass in the element for the adjacent container on instantiation, and set/look up adjacent container by its id
@@ -38,8 +36,8 @@ Todo:
 + fix lock method
 + support for custom animations set in options
 + method to turn all animations on/off
++ remove _transToZero from prototype
 ----------------------------
-+ remove onstop from prototype
 + use the eltsReorder in addLiElem
 -------------------------------
 
@@ -98,6 +96,7 @@ Fixed:
 + make cutOff return a collection of items and which can then be passed to add and remove function. DONE
 + make a cutoff on prototype only for external use - DONE
 + save the ul height on instance -DONE
++ remove onstop from prototype - Done
 
 Partially fixed:
 + prevent multitouch !!! - The element will freeze and animate back if multi touch is detected. Find a way to simple ignore additional touches
