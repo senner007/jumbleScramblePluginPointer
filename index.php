@@ -14,31 +14,21 @@
 
 		<div class="jMyPuzzle" id="jMyPuzzleId0">
 			<ul class="splitList">
-				<li class='listItem'>Lorem ipssasaum sdolor sit amet</li>
-				<li class='listItem'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et mi sapien. Nullam rutrum velit vel quam convallis sagittis. Aliquam molestie urna sit amet lacus finibus, ac aliquet libero congue. Pellentesque in nisl quis ligula placerat ultrices.
-					Nunc dapibus pellentesque orci, ut consectetur lorem hendrerit ornare. In tempus tellus et massa hendrerit, ut convallis lacus mattis. Mauris eget sollicitudin eros. Cras in eros sed nisi suscipit auctor. Sed efficitur sem quis posuere pulvinar.
-					Nulla mauris urna, finibus ut magna et.</li>
-				<li class='listItem'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et mi sapien. Nullam rutrum velit vel quam convallis sagittis. Aliquam molestie urna sit amet lacus finibus, ac aliquet libero congue. Pellentesque in nisl quis ligula placerat ultrices.
-					Nunc dapibus pellentesque orci, ut consectetur lorem hendrerit ornare.</li>
-				<li class='listItem'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-				<li class='listItem'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et mi sapien. Nullam rutrum velit vel quam convallis sagittis. Aliquam molestie urna sit amet lacus finibus, ac aliquet libero congue. Pellentesque in nisl quis ligula placerat ultrices.
-					Nunc dapibus pellentesque orci, ut consectetur lorem hendrerit ornare.</li>
-				<li class='listItem'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-				<li class='listItem'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et mi sapien. Nullam rutrum velit vel quam convallis sagittis. Aliquam molestie urna sit amet lacus finibus, ac aliquet libero congue. Pellentesque in nisl quis ligula placerat ultrices.
-					Nunc dapibus pellentesque orci, ut consectetur lorem hendrerit ornare.</li>
-				<li class='listItem'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+				<li class='listItem'>1st Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla placerat neque nec diam tempor, id tristique arcu viverra. Morbi eget massa posuere, bibendum erat a, interdum dolor. </li>
+				<li class='listItem'>2nd Element.  </br><button class="liButton">Shuffle</button></br> It has a nested button</li>
+				<li class='listItem'>3rd Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla placerat neque nec diam tempor, id tristique arcu viverra. Morbi eget massa posuere, bibendum erat a, interdum dolor. </li>
+				<li class='listItem'>4th Element.</li>
+
 			</ul>
 		</div>
 
 		<div class="jMyPuzzle" id="jMyPuzzleId1">
 			<ul class="splitList">
-				<li class='listItem'>Lorem ipssasaum sdolor sit amet</li>
-				<li class='listItem'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et mi sapien. Nullam rutrum velit vel quam convallis sagittis. Aliquam molestie urna sit amet lacus finibus, ac aliquet libero congue. Pellentesque in nisl quis ligula placerat ultrices.
-					Nunc dapibus pellentesque orci, ut consectetur lorem hendrerit ornare. In tempus tellus et massa hendrerit, ut convallis lacus mattis. Mauris eget sollicitudin eros. Cras in eros sed nisi suscipit auctor. Sed efficitur sem quis posuere pulvinar.
-					Nulla mauris urna, finibus ut magna et.</li>
-				<li class='listItem'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et mi sapien. Nullam rutrum velit vel quam convallis sagittis. Aliquam molestie urna sit amet lacus finibus, ac aliquet libero congue. Pellentesque in nisl quis ligula placerat ultrices.
-					Nunc dapibus pellentesque orci, ut consectetur lorem hendrerit ornare.</li>
-				<li class='listItem'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+				<li class='listItem'>5th Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla placerat neque nec diam tempor, id tristique arcu viverra. Morbi eget massa posuere, bibendum erat a, interdum dolor. </li>
+				<li class='listItem'>6th Element.</li>
+				<li class='listItem'>7th Element. <span>This text is in a span element.</span></li>
+				<li class='listItem'>8th Element.</li>
+
 			</ul>
 		</div>
 
@@ -65,8 +55,8 @@
 		</div>
 
 	</div>
- <button id="button1">vertical</button>
- <button id="button2">horizontal</button>
+ <button class="bodyButton" id="button1">vertical</button>
+ <button class="bodyButton" id="button2">horizontal</button>
 
 	<script type="text/javascript" src="js/jquery-3.2.1.slim.min.js"></script>
 	<!-- <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script> -->
