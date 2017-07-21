@@ -10,10 +10,10 @@ Roadmap:
 + support for custom animations set in options
 
 0.1
++ Refactor shuffle method to scale out and in use the _scaleElems method, call cutoff method after shuffle
 + add margin for elt to constructor the first time it is calculated in animateback
 + setChars function should update elt object as well, it does not work when moving to another container. should probably work in conjunction with the relayout method.
 + Dragging enable/disable/lock on individual items method
-+ shuffle method
 + Improve add and remove method. eg. all or an array as parameter, allow index(number) as elt selctor in removeLiElem
 + Add containment option to specify containment for the draggable elements.
 + Add callbacks to init, relayout, add, remove, drop (before and after animate)
