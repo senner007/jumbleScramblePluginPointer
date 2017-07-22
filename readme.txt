@@ -4,6 +4,7 @@ Add todo plugin in atom
 Comments - other:
 Added bookmarker and minimap plugins https://github.com/atom/bookmarks - switch between bookmarks with F2. Also visible in minimap
 Added highlight - double click to highlight - select multiple with ctrl-d
+Added delete whitelines package - Alt-Shift-d
 
 Fixed:
 + allow dragging and dropping over other instances - Fixed
