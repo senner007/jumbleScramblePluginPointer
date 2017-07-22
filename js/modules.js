@@ -1,6 +1,7 @@
 export {
+  _shuffle,
   defaults,
-  setChars,
+  _setChars,
   transSupport,
   transitionPrefix,
   transformPrefix,
@@ -19,7 +20,53 @@ var defaults = {
   // layoutComplete: function() { }
 }
 
-function setChars(elt) {
+function _shuffle() {
+
+      function shuffle(a) {
+        for (let i = a.length; i; i--) {
+            let j = Math.floor(Math.random() * i);
+            [a[i - 1], a[j]] = [a[j], a[i - 1]];
+        }
+      }
+
+      function _getElems (inst, adj) {
+        var elems = []
+
+          for (let ii = 0; ii<arguments.length; ii++) {
+           let i = 0, p;
+              while (arguments[ii].elts[i] != undefined ) {
+                arguments[ii].elts[i].style[arguments[ii].transitionPrefix] = '0ms'; // make sure elts dont animate into new position
+                elems.push(arguments[ii].elts[i].innerHTML)
+                i++
+              }
+          }
+
+
+        shuffle(elems)
+
+        return function () {                  // Refactor me
+            var count = 0
+            for (let i = 0; i<inst.elts.length; i++) {
+                inst.elts[i].innerHTML = elems[count]
+                count++;
+            }
+
+            for (let i = 0; i<adj.elts.length; i++) {
+                adj.elts[i].innerHTML = elems[count]
+                count++
+            }
+            return elems;
+        };
+      };
+
+
+        var _setElems = _getElems(this, this.adjInst);
+        _setElems()
+        this.reLayout()
+      this.adjInst.reLayout()
+}
+
+function _setChars(elt) {
   var left = 0;
   $.each(this.elts, function(i, e) {
     var v = this.text();

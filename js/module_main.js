@@ -1,6 +1,7 @@
   import {
+    _shuffle,
     defaults,
-    setChars,
+    _setChars,
     transSupport,
     transitionPrefix,
     transformPrefix,
@@ -78,7 +79,7 @@
                     //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
     this.div = element[0];
     this.id = this.div.id;
-    this.divOffset = jsOffset(this.div);
+    this.props.divOffset = jsOffset(this.div);
     this.ul = this.div.querySelector('ul');
 
     this.props.locked = false;
@@ -121,7 +122,7 @@
   }
 
   JumbleScramble.prototype.crossDistance = function(instThis, instAdj) {
-    var crossDistance = this.options.isVertical ? this.adjInst.divOffset.left - this.divOffset.left : this.adjInst.divOffset.top - this.divOffset.top;
+    var crossDistance = this.options.isVertical ? this.adjInst.props.divOffset.left - this.props.divOffset.left : this.adjInst.props.divOffset.top - this.props.divOffset.top;
     return crossDistance;
   }
 
@@ -147,53 +148,7 @@
     return this.props.ulSize;
   }
 
-  JumbleScramble.prototype.shuffle = function() {
-
-
-    function shuffle(a) {
-      for (let i = a.length; i; i--) {
-          let j = Math.floor(Math.random() * i);
-          [a[i - 1], a[j]] = [a[j], a[i - 1]];
-      }
-    }
-
-    function _getElems (inst, adj) {
-      var elems = []
-
-        for (let ii = 0; ii<arguments.length; ii++) {
-         let i = 0, p;
-            while (arguments[ii].elts[i] != undefined ) {
-              elems.push(arguments[ii].elts[i].innerHTML)
-              i++
-            }
-        }
-
-
-      shuffle(elems)
-
-      return function () {
-          var count = 0
-          for (let i = 0; i<inst.elts.length; i++) {
-              inst.elts[i].innerHTML = elems[count]
-              count++;
-          }
-
-          for (let i = 0; i<adj.elts.length; i++) {
-              adj.elts[i].innerHTML = elems[count]
-              count++
-          }
-          return elems;
-      };
-    };
-
-
-      var _setElems = _getElems(this, this.adjInst);
-      _setElems()
-      this.reLayout()
-    this.adjInst.reLayout()
-
-
-  }
+  JumbleScramble.prototype.shuffle = _shuffle;
 
 
   function _setEltsProps(elts, thisInst) {
@@ -218,7 +173,7 @@
         size += thisWidth;
 
       }
-
+      elt.style[thisInst.transitionPrefix] = '0ms'; // make sure the elts don't animate into position
       _addToObject(thisInst.elts, elt, n, thisHeight, thisWidth, thisInst.options, thisInst.container, thisInst.adjCon, newPosTop, newPosLeft);
 
       n = n + 1;
@@ -294,7 +249,7 @@
     var ulSize = _setEltsProps(this.elts, this) // setting properties function return the ul size
     _setUlSize(ulSize, this)
 
-    this.divOffset = jsOffset(this.div)
+    this.props.divOffset = jsOffset(this.div)
 
 
 
@@ -377,6 +332,7 @@
     }; // animation only needed when triggering add
 
     //this.unlock();
+
     return elt;
   }
 
