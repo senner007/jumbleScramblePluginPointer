@@ -1,0 +1,43 @@
+#jMyPuzzleId2 {
+  margin: 0;
+  position: absolute;
+  width: inherit;
+  height: 60px;
+  display: none;
+}
+#jMyPuzzleId3 {
+  position: absolute;
+  width: inherit;
+  height: 60px;
+  margin-top: 70px;
+  display: none;
+}
+.splitList-horizontal {
+  width: inherit;
+  position: absolute;
+  display: block;
+}
+.listItem-horizontal {
+  position: absolute;
+  list-style: none;
+  height: 42px;
+  line-height: 40px;
+  margin-left: 10px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border: 1px solid black;
+  white-space: nowrap;
+}
+.listItem-horizontal span {
+  font-size: 18px;
+  color: #00A2CD;
+  z-index: 210;
+  font-style: italic;
+  opacity: 1;
+}
+.listItem-horizontal .liButton {
+  width: 150px;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+D
