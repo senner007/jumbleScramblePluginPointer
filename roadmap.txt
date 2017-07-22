@@ -39,4 +39,5 @@ Roadmap:
 + fix lock method
 + method to turn all animations on/off
 + remove _transToZero from prototype
-+ use the eltsReorder in addLiElem
++ use the eltsReorder in addLiElem - then publish reorder event ehen reorder in eltsReorder functions 
++ set up css in options overwritring the css in css file
