@@ -1,7 +1,7 @@
 import {vertical} from "./examples/vertical.js"
 import {horizontal} from "./examples/horizontal.js"
 import {pageSetup} from "./pageSetup.js"
-import JumbleScramble from "../js/module_main.js";
+import JumbleScramble from "../plugin_js/module_main.js";
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 

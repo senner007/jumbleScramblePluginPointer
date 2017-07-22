@@ -1,5 +1,5 @@
 export {vertical};
-import JumbleScramble from "../../js/module_main.js"
+import JumbleScramble from "../../plugin_js/module_main.js"
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 

@@ -6,7 +6,7 @@
     transitionPrefix,
     transformPrefix,
     ifGpu
-  } from "./modules.js"
+  } from "./module_utils.js"
 
 
   import {
