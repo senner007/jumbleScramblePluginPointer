@@ -245,13 +245,8 @@
 
   JumbleScramble.prototype.reLayout = function() {
 
-    //var li = this.div.find('li'); // Variables declaration
-    var ulSize = _setEltsProps(this.elts, this) // setting properties function return the ul size
-    _setUlSize(ulSize, this)
-
+    _setUlSize(_setEltsProps(this.elts, this), this) //setting properties function return the ul size
     this.props.divOffset = jsOffset(this.div)
-
-
 
 
   };
@@ -260,9 +255,7 @@
 
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
 
-
-    _scaleElems(_elemsToCut(this, this.adjInst) , this);
-
+    _scaleElems( _elemsToCut(this, this.adjInst) , this); //_elemsToCut function return the elts to scale
 
   };
 

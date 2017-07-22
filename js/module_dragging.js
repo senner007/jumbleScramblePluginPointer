@@ -178,7 +178,6 @@ function _onStop(elt, thisInst) { // Stop
       delete thisInst.added // the object that is a reference to the added object is deleted
       thisInst.removeLiElem(elt, false); // the dragged elt from the previous/starting instance is deleted once animated to its position
       thisInst.adjInst.unlock();
-      //var returnCutElems = _elemsToCut(thisInst, thisInst.adjInst)
       _scaleElems(_elemsToCut(thisInst, thisInst.adjInst) , thisInst);
 
   };
