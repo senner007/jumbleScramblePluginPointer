@@ -25,8 +25,12 @@ var vertical = function () {
   //  example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
     $(cont2.div).on('layoutCompleteAll', function () {
 
-      cont2.addLiElem("<span>This element is added after the 'layoutCompleteAll' event.<span class='green'> This text is in a nested span element with the class of green.</span> The text is in a span element.</span>", 10, {elt:true,elts:true},)
+      cont2.addLiElem("This element is added after the 'layoutCompleteAll' event.<span></br>This text <div class='blue'> This text is in a nested span element.</div>  is in a span element.</span>", 10, {elt:true,elts:true},)
     })
+
+
+
+
 
     $('ul').on('pointerdown.hello', function(ev) { // namespaced event added on top of events set in plugin. requires that stopPropagation is not used in plugin
     //  ev.preventDefault()
@@ -46,6 +50,7 @@ var vertical = function () {
 
     $(window).on('resize', function() {
       var winHeight = window.innerHeight - 50;
+
       cont1.cutOff = winHeight;
       cont2.cutOff = winHeight;
       cont1.reLayout()
