@@ -25,10 +25,10 @@ function _animateBack(elt, o, thisInst) {
   if (elt.hasCrossed) {
     var adjEltBefore = thisInst.adjInst.elts[thisInst.added.n - 1];
     if (o.isVertical) {
-      var thisLeft = thisInst.adjInst.divOffset.left - thisInst.divOffset.left;
+      var thisLeft = thisInst.adjInst.props.divOffset.left - thisInst.props.divOffset.left;
       var thisTop = thisInst.added.n > 0 ? adjEltBefore.pos.top + adjEltBefore.completeHeight : 0;
     } else {
-      var thisTop = thisInst.adjInst.divOffset.top - thisInst.divOffset.top;
+      var thisTop = thisInst.adjInst.props.divOffset.top - thisInst.props.divOffset.top;
       var thisLeft = thisInst.added.n > 0 ? adjEltBefore.pos.left + adjEltBefore.completeWidth : 0;
     }
     var thisX = elt.currentPos.left - thisLeft,

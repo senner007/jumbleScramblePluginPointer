@@ -82,7 +82,7 @@ function _elemsToCut(thisInst, adjInst) {
     if (elemsToCut.length != 0) {
 
       for (var i = 0; i< elemsToCut.length; i++) {
-        tempArr.push(  thisInst.addLiElem(elemsToCut[i].textContent, 0, {elt: false, elts: true}, elemsToCut[i].completeHeight, elemsToCut[i].completeWidth))
+        tempArr.push(  thisInst.addLiElem(elemsToCut[i].innerHTML, 0, {elt: false, elts: true}, elemsToCut[i].completeHeight, elemsToCut[i].completeWidth))
         adjInst.removeLiElem(adjInst.elts[adjInst.elts.length - 1], adjInst.transSupport, false)
 
       }

@@ -51,7 +51,7 @@ function _addEventHandlers(thisInst) {
 
     if (e.target.localName == 'ul' || thisInst.props.locked == true || e.target.localName == 'button') return;
     elt = e.target
-    if (e.target.localName == 'span' ) {  elt = e.target.offsetParent; }
+    if (e.target.localName == 'span' || e.target.localName == 'div' ) {  elt = e.target.offsetParent; }
 
 
    e.preventDefault();
@@ -64,7 +64,7 @@ function _addEventHandlers(thisInst) {
     dontTouch = true;
     // flag to prevent multi
     //	e.stopPropagation();
-
+    console.dir(elt)
     elt.nStart = elt.n
     elt.style[transitionPrefix] = '0s';
     elt.style.zIndex = 5;
@@ -154,7 +154,7 @@ function _addEventHandlers(thisInst) {
     }
 
     function clearClass() {
-      elt.style[transitionPrefix] = 'box-shadow 250ms';
+      //elt.style[transitionPrefix] = 'box-shadow 250ms';
       elt.style.zIndex = 1;
       if (thisInst.adjInst) {
         thisInst.adjInst.ul.style.zIndex = '1'
