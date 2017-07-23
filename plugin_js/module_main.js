@@ -274,14 +274,15 @@
       o = this.options,
       tempArr = [];
     var eltObj = {
-      'left': n > 0 ? thisElts[n - 1].pos.left + thisElts[n - 1].completeWidth : 0,
-      'top': n > 0 ? thisElts[n - 1].pos.top + thisElts[n - 1].completeHeight : 0
+      'left': liPosition > 0 ? thisElts[liPosition - 1].pos.left + thisElts[liPosition - 1].completeWidth : 0,
+      'top': liPosition > 0 ? thisElts[liPosition - 1].pos.top + thisElts[liPosition - 1].completeHeight : 0
     }
+
     var item = ('<li style="left:' + eltObj.left + 'px;top:' + eltObj.top + 'px" class=' + (o.isVertical ? 'listItem' : 'listItem-horizontal') + '>' + liText + '</li>');
     var elt = document.createElement('li');
     elt.innerHTML = item;
     elt = elt.firstChild;
-    elt.n = n
+    elt.n = liPosition
 
     if (thisElts.length == 0) {  this.ul.appendChild(elt)  } // if there are no elements present at drop
     else { (liPosition > 0) ? this.ul.insertBefore(elt, thisElts[liPosition]) : this.ul.insertBefore(elt, thisElts[liPosition]) }
@@ -294,7 +295,7 @@
     _setUlSize(ulSize, this)
 
 
-    _addToObject(thisElts, elt, n, thisHeight, thisWidth, o, this.container, this.adjCon, eltObj.top, eltObj.left);
+    _addToObject(thisElts, elt, thisElts.length, thisHeight, thisWidth, o, this.container, this.adjCon, eltObj.top, eltObj.left);
 
 
     for (var i = liPosition +1; i < thisElts.length; i++) {
@@ -303,8 +304,8 @@
       // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
     };
 
-    elt.style.top = elt.pos.top + 'px';
-    elt.style.left = elt.pos.left + 'px';
+    // elt.style.top = elt.pos.top + 'px';
+    // elt.style.left = elt.pos.left + 'px';
 
 
     if (addTrans.elt) {
