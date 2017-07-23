@@ -17,7 +17,10 @@ var horizontal = function () {
   var hello = new JumbleScramble(elem, {isVertical: false, cutOff: winWidth})
   var hello2 = new JumbleScramble(elem2, {  isVertical: false, cutOff: false, dropLimit: winWidth -100 })
 
-  $(hello2.div).on('layoutCompleteAll', function () {  })
+  $(hello2.div).on('layoutCompleteAll', function () {
+
+      hello.addLiElem("Added after the 'layoutCompleteAll' event", 0, {elt:true,elts:true},)
+   })
 
   hello.init();
   hello2.init();

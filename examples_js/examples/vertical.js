@@ -21,11 +21,13 @@ var vertical = function () {
          //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
         // var toDelete = elem.find('li').eq(2)[0]
         // cont1.removeLiElem(toDelete, true, function (){ })
+        cont1.addLiElem("This element is added after the 'layoutCompleteAll' event", 1, {elt:true,elts:true},)
     })
   //  example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
     $(cont2.div).on('layoutCompleteAll', function () {
 
-      cont2.addLiElem("This element is added after the 'layoutCompleteAll' event.<span></br>This text <div class='blue'> This text is in a nested span element.</div>  is in a span element.</span>", 10, {elt:true,elts:true},)
+   cont2.addLiElem("This element is added after the 'layoutCompleteAll' event.<span></br>This text <div class='blue'> This text is in a nested span element.</div>  is in a span element.</span>",4, {elt:true,elts:true},)
+
     })
 
 

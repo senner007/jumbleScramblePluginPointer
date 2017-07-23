@@ -1,3 +1,12 @@
+<?php
+//  only set var if its not empty or 0 in length. E.g when loading the base url
+$server = 'examples';
+if(isset($_GET['p']) && strlen($_GET['p'])>0)
+{
+	//Sanitize the string
+	$server = filter_var($_GET['p'],FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+}
+?>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -10,43 +19,10 @@
 	<!-- 	to prevent zoom on drag move to edge on ipad -->
 </head>
 <body>
+	<div id="getPHP"><?php echo $server; ?></div>
 	<div class="container">
-		<div class="jMyPuzzle" id="jMyPuzzleId0">
-			<ul class="splitList">
-				<li class='listItem'>1st Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla placerat neque nec diam tempor, id tristique arcu viverra. Morbi eget massa posuere, bibendum erat a, interdum dolor. </li>
-				<li class='listItem'>2nd Element. </br><button class="liButton">Shuffle elements</button></br> It has a nested button.</li>
-				<li class='listItem'>3rd Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla placerat neque nec diam tempor, id tristique arcu viverra. Morbi eget massa posuere, bibendum erat a, interdum dolor. </li>
-				<li class='listItem'>4th Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla placerat neque nec diam tempor, id tristique arcu viverra. Morbi eget massa posuere, bibendum erat a, interdum dolor.</li>
-        <li class='listItem'>5th Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
-			</ul>
-		</div>
-		<div class="jMyPuzzle" id="jMyPuzzleId1">
-			<ul class="splitList">
-				<li class='listItem'>6th Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla placerat neque nec diam tempor, id tristique arcu viverra. Morbi eget massa posuere, bibendum erat a, interdum dolor. </li>
-				<li class='listItem'>7th Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-				<li class='listItem'>8th Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla placerat neque nec diam tempor, id tristique arcu viverra. </li>
-				<li class='listItem'>9th Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla placerat neque nec diam tempor, id tristique arcu viverra. Morbi eget massa posuere, bibendum erat a, interdum dolor.</li>
-				<li class='listItem'>10th Element. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-			</ul>
-		</div>
-		<div class="jMyPuzzle" id="jMyPuzzleId2">
-			<ul touch-action="none" class="splitList-horizontal">
-				<li class='listItem-horizontal'>1st Element<button class="liButton">Shuffle elements</button><span>This text is in span<span></li>
-				<li class='listItem-horizontal'>2nd Element</li>
-				<li class='listItem-horizontal'>3rd Element</li>
-				<li class='listItem-horizontal'>4th Element</li>
-				<li class='listItem-horizontal'>5th Element</li>
-			</ul>
-		</div>
-		<div class="jMyPuzzle" id="jMyPuzzleId3">
-			<ul touch-action="none" class="splitList-horizontal">
-				<li class='listItem-horizontal'>6th Element</li>
-				<li class='listItem-horizontal'>7th Element</li>
-				<li class='listItem-horizontal'>8th Element</li>
-				<li class='listItem-horizontal'>9th Element</li>
-				<li class='listItem-horizontal'>10th Element</li>
-			</ul>
-		</div>
+	  <?php include 'examples_js/examples/vertical.php';?>
+  <?php include 'examples_js/examples/horizontal.php';?>
 	</div>
  <button class="bodyButton" id="button1">vertical</button>
  <button class="bodyButton" id="button2">horizontal</button>
