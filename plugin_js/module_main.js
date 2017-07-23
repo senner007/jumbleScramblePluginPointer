@@ -135,6 +135,9 @@
     delete copy.dfd;
     delete copy2.setInstances;
     delete copy2.getInstances;
+    delete copy2.addLiElem;
+    delete copy2.removeLiElem;
+    delete copy2.reLayout;
     delete copy2.onStop;
     delete copy2.addHandlers;
     delete copy2.init;
@@ -267,7 +270,7 @@
 
     var thisElts = this.elts;
 
-    var n = Math.min(Math.max(parseInt(liPosition), 0), thisElts.length),
+    var n = thisElts.length,
       o = this.options,
       tempArr = [];
     var eltObj = {
@@ -280,42 +283,29 @@
     elt = elt.firstChild;
     elt.n = n
 
-
     if (thisElts.length == 0) {  this.ul.appendChild(elt)  } // if there are no elements present at drop
-    else { (n > 0) ? this.ul.insertBefore(elt, thisElts[elt.n]) : this.ul.insertBefore(elt, thisElts[n]) }
+    else { (liPosition > 0) ? this.ul.insertBefore(elt, thisElts[liPosition]) : this.ul.insertBefore(elt, thisElts[liPosition]) }
 
     var thisWidth = completeWidth || (o.isVertical ? 0 : _outerWidth(elt)),
       thisHeight = completeHeight || (o.isVertical ? _outerHeight(elt) : 0);
 
-
-    // Iterate over the all elts after insert and update accordingly
-
-    for (var i = n; i < thisElts.length; i++) {
-      var el = thisElts[i];
-      var marginLeft = o.isVertical ? el.offsetLeft : (el.completeWidth - el.offsetWidth); // account for margin
-      el.style[this.transitionPrefix] = '0ms';
-      el.style[this.transformPrefix] = this.transSupport ? 'translate3d(0px,0px,0px)' : 'translate(0px,0px)';
-      el.style.left = parseInt(el.style.left) + thisWidth + 'px'
-      el.style.top = parseInt(el.style.top) + thisHeight + 'px'
-      el.pos.left = el.offsetLeft - marginLeft;
-      el.pos.top = el.offsetTop;
-      el.n = el.n + 1
-      tempArr.push(el);
-      if (addTrans.elts) {
-        el.style[this.transformPrefix] = 'translate(' + -(thisWidth) + 'px,' + -(thisHeight) + 'px)';
-        this.transToZero(el);
-      }
-    };
-
-    for (var i = 0; i < tempArr.length; i++) {
-      thisElts[n + 1 + i] = tempArr[i];
-    }
 
     var ulSize = o.isVertical ? parseInt(this.ul.style.height) + thisHeight : parseInt(this.ul.style.width) + thisWidth;
     _setUlSize(ulSize, this)
 
 
     _addToObject(thisElts, elt, n, thisHeight, thisWidth, o, this.container, this.adjCon, eltObj.top, eltObj.left);
+
+
+    for (var i = liPosition +1; i < thisElts.length; i++) {
+
+      eltsReorder._eltsMoveForwardOrDown(elt, thisElts, this, true);
+      // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
+    };
+
+    elt.style.top = elt.pos.top + 'px';
+    elt.style.left = elt.pos.left + 'px';
+
 
     if (addTrans.elt) {
 
@@ -340,7 +330,7 @@
       eltHeight = thisElts[n].completeHeight,
       eltWidth = thisElts[n].completeWidth;
 
-    for (var i = n; i < thisElts.length ; i++) {  // Loop over adjacent conatiner elements, animating them and updating their properties
+    for (var i = n; i < thisElts.length; i++) {  // Loop over adjacent conatiner elements, animating them and updating their properties
       eltsReorder._eltsMoveBackOrUp(elt, thisElts,  this, true);
       // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
     };
@@ -360,7 +350,9 @@
         }
       }, 250);
     } else {
+
       elt.remove();
+
     }
     // recalculate the height or width of the ul after deleting items
 
