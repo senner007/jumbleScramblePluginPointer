@@ -5,7 +5,7 @@ Working:
 + Cross-dragging between list containers
 + Individual height or width of list items
 + Optional margin between list items
-+ Option to disallow drop to containe when above height (dropLimit option)
++ Option to disallow drop to container when above height (dropLimit option)
 + Add and remove items from containers
 + Callback function after animation on remove method
 + Automatically remove and prepend items to containers to prevent overflow (cutOff option)
@@ -13,9 +13,11 @@ Working:
 + reLayout method is added to allow repositioning and updates to position data in object instances. Can be fired after window resize event(which is also fired on orientation change on mobile devices)
 + No longer uses jquery plugin structure. Instantiate object using new keyword. Ex var myList = new JumbleScramble(divElem, options)
 + Examples of add and remove method calls
-+ option to fire layoutComplete after all instances have been initialized
++ layoutCompleteAll after all instances have been initialized
 + Animation speed logic to determine when to speed up animations.
 + Adds touch support with fallback to pointer and then mouse as input
 + Lock/unlock methods which prevents dragging to and from instance
 + The crossDistance method. The crossing distance to the adjacent container
 + Shuffle method
++ onReorder callback
++ Allow for nestted elements in list items
