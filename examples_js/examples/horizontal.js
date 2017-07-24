@@ -14,24 +14,42 @@ var horizontal = function () {
 
   var winWidth = window.innerWidth - 50; // recalculate windows height for cutoff on resize. Also run cutoff on resize
 
-  var hello = new JumbleScramble(elem, {isVertical: false, cutOff: winWidth})
-  var hello2 = new JumbleScramble(elem2, {  isVertical: false, cutOff: false, dropLimit: winWidth -100 })
+  var cont1 = new JumbleScramble(elem, {isVertical: false, cutOff: winWidth})
+  var cont2 = new JumbleScramble(elem2, {  isVertical: false, cutOff: false, dropLimit: winWidth -100 })
 
-  $(hello2.div).on('layoutCompleteAll', function () {
+  /*---------------------------------------------------------------------------------------------------------------------------------------*/
+   // SETUP CALLBACKS
+   /////////////////////////////////////////
+  $(cont2.div).on('layoutCompleteAll', function () {
 
-      hello.addLiElem("Added after the 'layoutCompleteAll' event", 0, {elt:true,elts:true},)
+      cont1.addLiElem("Added after the 'layoutCompleteAll' event", 0, {elt:true,elts:true},)
    })
 
-  hello.init();
-  hello2.init();
+   $('ul').on('pointerup.hello', function(ev) { // namespaced event added on top of events set in plugin. requires that stopPropagation is not used in plugin
+   //  ev.preventDefault()
+
+     if (ev.target.localName == 'button') {
+
+       cont1.shuffle(cont1, cont1.adjInst)
+     }
+     //$(this).off('pointerdown.hello');
+   })
+
+   /*---------------------------------------------------------------------------------------------------------------------------------------*/
+
+  cont1.init();
+  cont2.init();
 
   $(window).on('resize', function() {
     var winWidth = window.innerWidth - 50;
-    hello.setCutOff(winWidth);
-    hello2.setCutOff(winWidth);
-    hello.reLayout()
-    hello2.reLayout()
-    hello.cutOffEnd()
-    hello2.cutOffEnd()
+    cont1.setCutOff(winWidth);
+    cont2.setCutOff(winWidth);
+    cont1.reLayout()
+    cont2.reLayout()
+    cont1.cutOffEnd()
+    cont2.cutOffEnd()
   });
+
+
+
 }
