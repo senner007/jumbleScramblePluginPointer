@@ -1,5 +1,6 @@
 export {
   _shuffle,
+  _elemsToCut,
   defaults,
   _setChars,
   transSupport,
@@ -15,56 +16,82 @@ var defaults = {
   setChars: false,
   cutOff: false,
   dropLimit: false,
-  hasAdjacent: true,
-  ulSize: 0
+  hasAdjacent: true
+
   // layoutComplete: function() { }
+}
+
+function _elemsToCut(thisInst, adjInst) {
+  if (adjInst.props.cutOff == false) {
+    return function() {};
+  }
+
+  var elemsToCut = [],
+      size = thisInst.getUlSize.call(adjInst),
+      height = adjInst.options.isVertical ? 'completeHeight' : 'completeWidth',
+      counter = -1;
+
+  while (size > adjInst.props.cutOff) {
+    elemsToCut.push(adjInst.elts[adjInst.elts.length + counter])
+    size -= adjInst.elts[adjInst.elts.length + counter][height]
+    counter -= 1
+  }
+
+  var addedElemsArray = [];
+  if (elemsToCut.length != 0) {
+
+    for (var i = 0; i < elemsToCut.length; i++) {
+      addedElemsArray.push(thisInst.addLiElem(elemsToCut[i].innerHTML, 0, {elt: false, elts: true}, elemsToCut[i].completeHeight, elemsToCut[i].completeWidth))
+      thisInst.removeLiElem.call(adjInst, adjInst.elts[adjInst.elts.length - 1], adjInst.transSupport, false)
+    }
+
+  }
+  return addedElemsArray;
+
+}
+
+function _shuffleArray(a) {
+  for (let i = a.length; i; i--) {
+    let j = Math.floor(Math.random() * i);
+    [a[i - 1], a[j]] = [a[j], a[i - 1]];
+  }
 }
 
 function _shuffle() {
 
-      function shuffle(a) {
-        for (let i = a.length; i; i--) {
-            let j = Math.floor(Math.random() * i);
-            [a[i - 1], a[j]] = [a[j], a[i - 1]];
-        }
+    var elems = [],
+        instances = arguments;  // account for n number of instances to shuffle
+
+    for (let ii = 0; ii < instances.length; ii++) { // get the elems
+
+      let n = 0;
+      while (instances[ii].elts[n] != undefined) {
+        instances[ii].elts[n].style[instances[ii].transitionPrefix] = '0ms'; // make sure elts dont animate into new position
+        elems.push(instances[ii].elts[n].innerHTML)
+        n++
       }
 
-      function _getElems (inst, adj) {
-        var elems = []
+    }
 
-          for (let ii = 0; ii<arguments.length; ii++) {
-           let i = 0, p;
-              while (arguments[ii].elts[i] != undefined ) {
-                arguments[ii].elts[i].style[arguments[ii].transitionPrefix] = '0ms'; // make sure elts dont animate into new position
-                elems.push(arguments[ii].elts[i].innerHTML)
-                i++
-              }
+    _shuffleArray(elems)          // shuffle the elems
+
+      var count = 0
+      for (let ii = 0; ii < instances.length; ii++) {   // insert the elems
+
+          for (let n = 0; n < instances[ii].elts.length; n++) {
+            instances[ii].elts[n].innerHTML = elems[count]
+            count++;
           }
 
+      }
 
-        shuffle(elems)
+  this.reLayout()                             // reLayout the instances
+  this.reLayout.call(this.adjInst)
 
-        return function () {                  // Refactor me
-            var count = 0
-            for (let i = 0; i<inst.elts.length; i++) {
-                inst.elts[i].innerHTML = elems[count]
-                count++;
-            }
-
-            for (let i = 0; i<adj.elts.length; i++) {
-                adj.elts[i].innerHTML = elems[count]
-                count++
-            }
-            return elems;
-        };
-      };
-
-
-        var _setElems = _getElems(this, this.adjInst);
-        _setElems()
-        this.reLayout()
-      this.adjInst.reLayout()
+  return elems;
 }
+
+
 
 function _setChars(elt) {
   var left = 0;
