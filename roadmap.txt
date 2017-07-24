@@ -35,11 +35,7 @@ Roadmap:
 + pass in the element for the adjacent container on instantiation, and set/look up adjacent container by its id
   if id is not passed in options, it will get the div id or assign a number based id based on the order of instantiation(default)
 --------------------------------------------------
-+ remove remaining methods from adjInst prototype
 + fix lock method
-+ remove _transToZero from prototype
-+ Put dirSwitch as property on instance dragging from and rename to crossTrigger,  rename crossTrigger to crossFlag and put on same instance.
-+ crossDistance should be a property set on init/reLayout, not a method. Or is in fact superfluous.
 + call scale method in removeLiElem
 
 
@@ -69,6 +65,8 @@ Fixed:
 + use the eltsReorder in addLiElem - then publish reorder event when reorder in eltsReorder functions - Done
 + relayout is duplicating code from init - DONE
 + reduce params to addToObject function - DONE
++ remove _transToZero from prototype -DONE
++ remove remaining methods from adjInst prototype - DONE
 
 Partially fixed:
 + prevent multitouch !!! - The element will freeze and animate back if multi touch is detected. Find a way to simple ignore additional touches
