@@ -44,12 +44,12 @@
   font-style: italic;
 }
 
-.listItem::first-letter {
-  font-size: 40px;
-  padding: 5px;
+.numberToFont {
+  font-size: 20px;
+  padding: 3px;
   color: rgba(68, 68, 68, 1);
   font-family: 'UnderwoodChampionRegular';
-  font-weight: normal;
+
 }
 
 span .blue {
