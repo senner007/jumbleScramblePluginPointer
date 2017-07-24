@@ -11,7 +11,7 @@
 
   import {
     _addEventHandlers
-  } from "./module_handlers.js"
+  } from "../../_dragHandler/module_handlers.js"
 
   import {
     _animateBack,
@@ -22,7 +22,7 @@
   import {
       eltsReorder,
       _elemsToCut
-  } from "./module_dragging.js"
+  } from "./module_eltsReorder.js"
 
 
 
@@ -30,36 +30,23 @@
   // ES6 MODULE IMPORT/EXPORT
   ////////////////////////////
 
-  JumbleScramble.prototype.transToZero = _transToZero;
 
 
-
-
-  function _addToObject(thisElts, elt, n, thisHeight, thisWidth, o, thisContainer, adjCon, posTop, posLeft) {
-
+  function _addToObject(elt, n, thisHeight, thisWidth, thisInst, eltObj) {
+    var thisElts = thisInst.elts
     thisElts[n] = elt;
     thisElts[n].completeWidth = thisWidth || 0; // its size (with the margin)
     thisElts[n].completeHeight = thisHeight || 0; // its height (with the margin)
-    thisElts[n].pos = {
-      top: posTop,
-      left: posLeft
-    }; // its position (left and top position)
-    o.isVertical == true ? thisElts[n].pos = {
-      top: posTop,
-      left: 0
-    } : thisElts[n].pos = {
-      top: 0,
-      left: posLeft
-    };
+    thisElts[n].pos = { top: eltObj.top, left: eltObj.left }; // its position (left and top position)
+    thisInst.options.isVertical == true ? thisInst.elts[n].pos = { top: eltObj.top, left: 0 } : thisElts[n].pos = {  top: 0, left: eltObj.left };
     thisElts[n].initialN = n; // its initial position (as per the other elements)
     thisElts[n].n = n; // its current position (as per the other elements)
-    thisElts[n].o = o; // its current position (as per the other elements)
+    thisElts[n].o = thisInst.options; // its current position (as per the other elements)
     thisElts[n].hasCrossed = false; // has the elt crossed over to the other container
     thisElts[n].newPosSameCon = false; // has the element changed position but remained in the same container
-    thisElts[n].belongsTo = thisContainer;
-    thisElts[n].movesTo = adjCon;
+    thisElts[n].belongsTo = thisInst.container;
+    thisElts[n].movesTo = thisInst.adjCon;
     thisElts[n].currentPos = {};
-
   };
 
   function jsOffset(el) { // replaces jquery offset
@@ -90,6 +77,8 @@
     this.props.dropLimit = this.options.dropLimit;
     this.ul.style[transformPrefix] = 'translate3d(0px,0px,0px)';
     this.props.ulSize = this.options.ulSize;
+    this.transitionPrefix = transitionPrefix;
+
 
     window.temporaryInstanceArray.push(this);
 
@@ -97,7 +86,6 @@
 
   JumbleScramble.prototype.crossTrigger = false;
   JumbleScramble.prototype.transSupport = transSupport;
-  JumbleScramble.prototype.transitionPrefix = transitionPrefix;
   JumbleScramble.prototype.transformPrefix = transformPrefix;
   JumbleScramble.prototype.ifGpu = ifGpu;
 
@@ -121,28 +109,17 @@
     this.props.locked = false;
   }
 
-  JumbleScramble.prototype.crossDistance = function(instThis, instAdj) {
-    var crossDistance = this.options.isVertical ? this.adjInst.props.divOffset.left - this.props.divOffset.left : this.adjInst.props.divOffset.top - this.props.divOffset.top;
-    return crossDistance;
+  JumbleScramble.prototype.crossDistance = function(thisInst, adjInst) {
+    return this.options.isVertical ? (adjInst.props.divOffset.left - this.props.divOffset.left) : (adjInst.props.divOffset.top - this.props.divOffset.top);
   }
 
 
   JumbleScramble.prototype.setInstances = function() {
 
     var copy = Object.assign({}, temporaryInstanceArray[this.adjCon]);
-    var copy2 = Object.assign({}, temporaryInstanceArray[this.adjCon].__proto__); // maybe find a way to copy object with proto
     delete copy.adjInst;
-    delete copy.dfd;
-    delete copy2.setInstances;
-    delete copy2.getInstances;
-    delete copy2.addLiElem;
-    delete copy2.removeLiElem;
-    delete copy2.reLayout;
-    delete copy2.onStop;
-    delete copy2.addHandlers;
-    delete copy2.init;
     this.adjInst = copy;
-    this.adjInst.__proto__ = copy2;
+
 
 
   }
@@ -152,7 +129,7 @@
   }
 
   JumbleScramble.prototype.shuffle = _shuffle;
-
+  /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
   function _setEltsProps(elts, thisInst) {
 
@@ -177,25 +154,26 @@
 
       }
       elt.style[thisInst.transitionPrefix] = '0ms'; // make sure the elts don't animate into position
-      _addToObject(thisInst.elts, elt, n, thisHeight, thisWidth, thisInst.options, thisInst.container, thisInst.adjCon, newPosTop, newPosLeft);
+      _addToObject(elt, n, thisHeight, thisWidth, thisInst, {top:newPosTop, left:newPosLeft});
 
       n = n + 1;
       elt.style[thisInst.transformPrefix] = 'translate3d(0px, 0px, 0px)';
     };
     return size; // return the size of the ul
-
-
   };
+    /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
   function _setUlSize(size, thisInst) {
+    var style = thisInst.ul.style;
     if (thisInst.options.isVertical) {
-      thisInst.ul.style.height = size + 'px';
+      style.height = size + 'px';
     } else {
-      thisInst.ul.style.width = size + 'px';
+      style.width = size + 'px';
     //  thisInst.ul.style.height = _outerHeight(thisInst.elts[0]) + 'px';
     }
     thisInst.props.ulSize = size;
   }
+    /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
   JumbleScramble.prototype.init = function() {
 
@@ -210,19 +188,20 @@
     this.init = true;
 
     var counter = 0;
-    for (var i = 0; i < temporaryInstanceArray.length; i++) {
+
+    for (var i = 0; i < temporaryInstanceArray.length; i++) { // loop over the array and get all instances that have been initialized
       if (temporaryInstanceArray[i].init == true) {
         counter++
       }
-      if (counter == temporaryInstanceArray.length) {
-        $.each(temporaryInstanceArray, function(index, value) {
-          this.setInstances()
-          $(value.div).trigger('layoutCompleteAll') // trigger callback on each instance
-        });
-        temporaryInstanceArray.length = 0
-        // delete the global instance array
+    }
 
-      }
+    if (counter == temporaryInstanceArray.length) {           // if all instances have been initialized
+      $.each(temporaryInstanceArray, function(index, value) {
+        this.setInstances()
+        $(value.div).trigger('layoutCompleteAll') // trigger callback on each instance
+      });
+      temporaryInstanceArray = null
+      // delete the global instance array
     }
     console.log(this)
 
@@ -269,6 +248,7 @@
   JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans, completeHeight, completeWidth) { // Add new li to previous collection
 
     var thisElts = this.elts;
+    var liPosition = Math.min(Math.max(parseInt(liPosition), 0), thisElts.length); // this is to make sure that the insert position is not greater than the number of elts present.
 
     var n = thisElts.length,
       o = this.options,
@@ -282,35 +262,29 @@
     var elt = document.createElement('li');
     elt.innerHTML = item;
     elt = elt.firstChild;
-    elt.n = liPosition
 
-    if (thisElts.length == 0) {  this.ul.appendChild(elt)  } // if there are no elements present at drop
-    else { (liPosition > 0) ? this.ul.insertBefore(elt, thisElts[liPosition]) : this.ul.insertBefore(elt, thisElts[liPosition]) }
+    // insert the elt before the current element at liPosition
+    this.ul.insertBefore(elt, thisElts[liPosition])
 
+    // get its height and width
     var thisWidth = completeWidth || (o.isVertical ? 0 : _outerWidth(elt)),
       thisHeight = completeHeight || (o.isVertical ? _outerHeight(elt) : 0);
 
-
-    var ulSize = o.isVertical ? parseInt(this.ul.style.height) + thisHeight : parseInt(this.ul.style.width) + thisWidth;
+      //update the ul size
+    var ulSize = o.isVertical ? this.props.ulSize + thisHeight : this.props.ulSize + thisWidth;
     _setUlSize(ulSize, this)
 
+    // the elt is inserted at the specified liPosition-position but with the n-property set to the last position.
+    // It is then moved up to its position by calling the eltsReorder [liPosition + 1] times
+    _addToObject(elt, n, thisHeight, thisWidth, this, eltObj);
 
-    _addToObject(thisElts, elt, thisElts.length, thisHeight, thisWidth, o, this.container, this.adjCon, eltObj.top, eltObj.left);
-
+    //reorder the elts above its starting position(last) and finally update the elt.n
 
     for (var i = liPosition +1; i < thisElts.length; i++) {
-
       eltsReorder._eltsMoveForwardOrDown(elt, thisElts, this, true);
-      // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
     };
 
-    // elt.style.top = elt.pos.top + 'px';
-    // elt.style.left = elt.pos.left + 'px';
-
-
     if (addTrans.elt) {
-
-
       _scaleElems([elt], this)
 
     }; // animation only needed when triggering add
@@ -320,7 +294,7 @@
     return elt;
   }
 
-  /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
+  /*------------------------------------------------------------------------------------------------------------------------*/
 
 
   JumbleScramble.prototype.removeLiElem = function(elt, transition, callBack) { // Remove new li to previous collection
@@ -340,9 +314,10 @@
 
     if (transition) { // if the option to animate in the removeLiElem method used after init is true. Used in cutOff method
 
-      elt.style[transformPrefix] = 'scale(0.5,0.5)';
+
+      elt.style[this.transformPrefix] = 'scale(0.5,0.5)';
       elt.style.opacity = '0';
-      elt.style[transitionPrefix] = '250ms';
+      elt.style[this.transitionPrefix] = '250ms';
       setTimeout(function() {
         elt.remove()
         if (callBack) {
@@ -357,6 +332,6 @@
     }
     // recalculate the height or width of the ul after deleting items
 
-    var ulSize = this.options.isVertical ? parseInt(this.ul.style.height) - eltHeight : parseInt(this.ul.style.width) - eltWidth;
+    var ulSize = this.options.isVertical ? this.props.ulSize - eltHeight : this.props.ulSize - eltWidth;
     _setUlSize(ulSize, this)
   };
