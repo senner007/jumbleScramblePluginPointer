@@ -13,19 +13,19 @@ var exampleObject = {
 
 }
 
-history.replaceState(null, document.title, document.location.href);
-
 var path = window.location.pathname.split('/');
-if (path[1].length == 0) {
+if (path[2].length == 0) {
     $('.bodyButton').show().on('click', function(e) {
       console.log('hello')
       exampleObject[e.target.textContent]();
     });
 }
-else if (path[1] == 'vertical' ){
+else if (path[2] == 'vertical' ){
     exampleObject.vertical();
+
+
 }
-else if (path[1] == 'horizontal' ) {
+else if (path[2] == 'horizontal' ) {
   exampleObject.horizontal();
 }
 
