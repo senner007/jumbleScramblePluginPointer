@@ -18,6 +18,7 @@ Roadmap:
 + maybe set {passive: true} as third argument on event start and event move - https://developers.google.com/web/updates/2017/01/scrolling-intervention
 
 0.1
++ REname the plugin
 + Refactor shuffle method to scale out and in use the _scaleElems method, call cutoff method after shuffle
 + setChars function should update elt object as well, it does not work when moving to another container. should probably work in conjunction with the relayout method.
 + Dragging enable/disable/lock on individual items method
@@ -39,9 +40,8 @@ Roadmap:
 + remove _transToZero from prototype
 + Put dirSwitch as property on instance dragging from and rename to crossTrigger,  rename crossTrigger to crossFlag and put on same instance.
 + crossDistance should be a property set on init/reLayout, not a method. Or is in fact superfluous.
-+ put adjCon on props
 + call scale method in removeLiElem
-+ reduce params to addToObject function
+
 
 
 Fixed:
@@ -68,6 +68,7 @@ Fixed:
 + remove onstop from prototype - Done
 + use the eltsReorder in addLiElem - then publish reorder event when reorder in eltsReorder functions - Done
 + relayout is duplicating code from init - DONE
++ reduce params to addToObject function - DONE
 
 Partially fixed:
 + prevent multitouch !!! - The element will freeze and animate back if multi touch is detected. Find a way to simple ignore additional touches
