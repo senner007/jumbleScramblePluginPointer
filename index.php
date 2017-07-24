@@ -26,7 +26,7 @@ if(isset($_GET['p']) && strlen($_GET['p'])>0)
 	</div>
  <button class="bodyButton" id="button1">vertical</button>
  <button class="bodyButton" id="button2">horizontal</button>
-	<script type="text/javascript" src="_jquery/jquery-3.2.1.slim.min.js"></script>
+	<script type="text/javascript" src="../_jquery/jquery-3.2.1.slim.min.js"></script>
 	<!-- <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script> -->
 	<script type='module' src='examples_js/main.js'></script>
 </body>
