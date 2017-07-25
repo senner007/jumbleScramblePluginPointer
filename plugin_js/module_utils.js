@@ -1,6 +1,7 @@
 export {
   _shuffle,
   _elemsToCut,
+  setEvents,
   defaults,
   _setChars,
   transSupport,
@@ -20,6 +21,13 @@ var defaults = {
 
   // layoutComplete: function() { }
 }
+
+var setEvents = {
+        onLayoutAll: new Event('onLayoutAll'),
+        onLayout : new Event('onLayout'),
+        onReorder: new Event('onReorder'),
+
+  };
 
 function _elemsToCut(thisInst, adjInst) {
   if (adjInst.props.cutOff == false) {
