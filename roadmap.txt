@@ -38,6 +38,7 @@ Roadmap:
 + fix onReorder event to only show reorder on the desired instance
 + fix lock method
 + call scale method in removeLiElem
++ remove setInstances, addLiElem, removeLiElem from proto
 
 
 
