@@ -50,7 +50,9 @@
   };
 
   function jsOffset(el) { // replaces jquery offset
+
     var temp = el.getBoundingClientRect();
+
     return {
       top: temp.top + document.body.scrollTop,
       left: temp.left + document.body.scrollLeft
@@ -64,9 +66,9 @@
     this.props = {}; // The values that are to remain a reference as a shallow copy and update accordingly in adjInst must reside in a nested oobject.
                     // it is a sideeffect of Object.assign :
                     //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
-    this.div = element[0];
+    this.div = element;
     this.id = this.div.id;
-    this.props.divOffset = jsOffset(this.div);
+    this.props.divOffset = jsOffset(element);
     this.ul = this.div.querySelector('ul');
 
     this.props.locked = false;
@@ -78,14 +80,15 @@
     this.ul.style[transformPrefix] = 'translate3d(0px,0px,0px)';
     this.props.ulSize = this.options.ulSize;
     this.transitionPrefix = transitionPrefix;
+    this.transformPrefix = transformPrefix;
+    this.ifGpu = ifGpu;
+    this.transSupport = transSupport;
+
 
     window.temporaryInstanceArray.push(this);
   };
 
   JumbleScramble.prototype.crossTrigger = false;
-  JumbleScramble.prototype.transSupport = transSupport;
-  JumbleScramble.prototype.transformPrefix = transformPrefix;
-  JumbleScramble.prototype.ifGpu = ifGpu;
 
   JumbleScramble.prototype.setCutOff = function (cutOff){
 
@@ -111,10 +114,40 @@
 
 
   JumbleScramble.prototype.setInstances = function() {
+    console.log('hello')
+    var adjInstances = this.options.adjIds;
+    var adjConnected = [];
+    // console.log(adjInstances)
+    // console.log(temporaryInstanceArray.length)
 
-    var copy = Object.assign({}, temporaryInstanceArray[this.adjCon]);
-    delete copy.adjInst;
-    this.adjInst = copy;
+    for (var i= 0;i<temporaryInstanceArray.length; i++) {
+
+
+
+        for (var n = 0; n<adjInstances.length; n++) {
+
+           if (temporaryInstanceArray[i].id == adjInstances[n]) {
+
+                adjConnected.push(temporaryInstanceArray[i])
+                var copy = Object.assign({}, temporaryInstanceArray[i]);
+                delete copy.adjInst;
+                delete copy.adjInst1;
+                if (n > 0) { this['adjInst' + n] = copy;}
+                else { this['adjInst'] = copy }
+
+
+           }
+        }
+
+
+    }
+    console.log(adjConnected)
+
+
+    //
+    // var copy = Object.assign({}, temporaryInstanceArray[this.adjCon]);
+    // delete copy.adjInst;
+    // this.adjInst = copy;
 
   }
 
@@ -198,7 +231,7 @@
         instance.div.dispatchEvent(setEvents.onLayoutAll)
       });
 
-      temporaryInstanceArray = null
+      //temporaryInstanceArray = null
       // delete the global instance array
     }
     console.log(this)
@@ -244,11 +277,11 @@
 
 
 
-  JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans, completeHeight, completeWidth) { // Add new li to previous collection
+  JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans, completeHeight, completeWidth, display) { // Add new li to previous collection
 
     var thisElts = this.elts;
     var liPosition = Math.min(Math.max(parseInt(liPosition), 0), thisElts.length); // this is to make sure that the insert position is not greater than the number of elts present.
-
+    if (!display) {display = 'block'}
     var n = thisElts.length,
       o = this.options,
       tempArr = [];
@@ -257,7 +290,7 @@
         'top': liPosition > 0 ? thisElts[liPosition - 1].pos.top + thisElts[liPosition - 1].completeHeight : 0
       }
 
-    var item = ('<li style="left:' + eltObj.left + 'px;top:' + eltObj.top + 'px" class=' + (o.isVertical ? 'listItem' : 'listItem-horizontal') + '>' + liText + '</li>');
+    var item = ('<li style="display:' + display  +';left:' + eltObj.left + 'px;top:' + eltObj.top + 'px" class=' + (o.isVertical ? 'listItem' : 'listItem-horizontal') + '>' + liText + '</li>');
     var elt = document.createElement('li');
     elt.innerHTML = item;
     elt = elt.firstChild;
@@ -277,11 +310,13 @@
     // It is then moved up to its position by calling the eltsReorder [liPosition + 1] times
     _addToObject(elt, n, thisHeight, thisWidth, this, eltObj);
 
-    //reorder the elts above its starting position(last) and finally update the elt.n
+    //reorder the elts below its insert position(last) and update the elt properties(elt.n & elt.pos)
+    //if the elt is added when crossing to adjacent instance, the elt will be referred to by the name of thisInst.added
 
-    for (var i = liPosition +1; i < thisElts.length; i++) {
+    for (var i = liPosition ; i < thisElts.length -1; i++) {
       eltsReorder._eltsMoveForwardOrDown(elt, thisElts, this, true);
     };
+
 
     if (addTrans.elt) {
       _scaleElems([elt], this)
