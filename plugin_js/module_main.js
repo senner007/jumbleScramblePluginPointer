@@ -1,5 +1,6 @@
   import {
     _shuffle,
+    setEvents,
     defaults,
     _setChars,
     transSupport,
@@ -29,7 +30,6 @@
   export default JumbleScramble;
   // ES6 MODULE IMPORT/EXPORT
   ////////////////////////////
-
 
 
   function _addToObject(elt, n, thisHeight, thisWidth, thisInst, eltObj) {
@@ -79,9 +79,7 @@
     this.props.ulSize = this.options.ulSize;
     this.transitionPrefix = transitionPrefix;
 
-
     window.temporaryInstanceArray.push(this);
-
   };
 
   JumbleScramble.prototype.crossTrigger = false;
@@ -92,8 +90,6 @@
   JumbleScramble.prototype.setCutOff = function (cutOff){
 
       this.props.cutOff = cutOff
-
-
   };
 
   JumbleScramble.prototype.getInstances = function() {
@@ -120,8 +116,6 @@
     delete copy.adjInst;
     this.adjInst = copy;
 
-
-
   }
 
   JumbleScramble.prototype.getUlSize = function() {
@@ -129,6 +123,7 @@
   }
 
   JumbleScramble.prototype.shuffle = _shuffle;
+
   /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
   function _setEltsProps(elts, thisInst) {
@@ -184,7 +179,7 @@
 
     _addEventHandlers(this);
 
-    $(this.div).trigger('layoutComplete', [parseInt(this.ul.style.height)]) // example of sending the ul height as second parameter to the callback
+    this.div.dispatchEvent(setEvents.onLayout) // example of sending the ul height as second parameter to the callback
     this.init = true;
 
     var counter = 0;
@@ -196,10 +191,13 @@
     }
 
     if (counter == temporaryInstanceArray.length) {           // if all instances have been initialized
-      $.each(temporaryInstanceArray, function(index, value) {
+      $.each(temporaryInstanceArray, function(index, instance) {
         this.setInstances()
-        $(value.div).trigger('layoutCompleteAll') // trigger callback on each instance
+        // $(value.div).trigger('layoutCompleteAll') // trigger callback on each instance
+
+        instance.div.dispatchEvent(setEvents.onLayoutAll)
       });
+
       temporaryInstanceArray = null
       // delete the global instance array
     }
@@ -245,6 +243,7 @@
   /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 
+
   JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans, completeHeight, completeWidth) { // Add new li to previous collection
 
     var thisElts = this.elts;
@@ -253,10 +252,10 @@
     var n = thisElts.length,
       o = this.options,
       tempArr = [];
-    var eltObj = {
-      'left': liPosition > 0 ? thisElts[liPosition - 1].pos.left + thisElts[liPosition - 1].completeWidth : 0,
-      'top': liPosition > 0 ? thisElts[liPosition - 1].pos.top + thisElts[liPosition - 1].completeHeight : 0
-    }
+      var eltObj = {
+        'left': liPosition > 0 ? thisElts[liPosition - 1].pos.left + thisElts[liPosition - 1].completeWidth : 0,
+        'top': liPosition > 0 ? thisElts[liPosition - 1].pos.top + thisElts[liPosition - 1].completeHeight : 0
+      }
 
     var item = ('<li style="left:' + eltObj.left + 'px;top:' + eltObj.top + 'px" class=' + (o.isVertical ? 'listItem' : 'listItem-horizontal') + '>' + liText + '</li>');
     var elt = document.createElement('li');

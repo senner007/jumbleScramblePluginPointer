@@ -22,18 +22,30 @@ var vertical = function () {
      // SETUP CALLBACKS
      /////////////////////////////////////////
 
-    $(cont1.div).on('layoutCompleteAll', function (hello, a) {
+    cont1.div.addEventListener('onLayout', function () {
          //example of using the removeLiElem method on the object's prototype. Callback is fired when animation is done
         // var toDelete = elem.find('li').eq(2)[0]
         // cont1.removeLiElem(toDelete, true, function (){ })
         cont1.addLiElem("This element is added after the 'layoutCompleteAll' event", 1, {elt:true,elts:true},)
-        console.log(cont1.elts[1].pos)
+        console.log('cont1 layout')
     })
+    cont1.div.addEventListener('onReorder', function () {
+
+        console.log('cont1 onReorder')
+    })
+    cont2.div.addEventListener('onReorder', function () {
+
+        console.log('cont2 onReorder')
+    })
+
+
+
+
   //  example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
-    $(cont2.div).on('layoutCompleteAll', function () {
-
-   cont2.addLiElem("This element is added after the 'layoutCompleteAll' event.<span></br>This text <div class='blue'> This text is in a nested span element.</div>  is in a span element.</span>",0, {elt:true,elts:true},)
-
+    cont2.div.addEventListener('onLayoutAll', function () {
+      //
+      // cont2.addLiElem("This element is added after the 'layoutCompleteAll' event.<span></br>This text <div class='blue'> This text is in a nested span element.</div>  is in a span element.</span>",0, {elt:true,elts:true},)
+      console.log('onLayoutAll')
     })
     $(cont1.div).on('onReorder', function (ev, elt, elts) {
 

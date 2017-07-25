@@ -1,5 +1,5 @@
 export {_onDrag, eltsReorder, _onStop, _elemsToCut};
-import {_elemsToCut} from "./module_utils.js"
+import {_elemsToCut,setEvents} from "./module_utils.js"
 import {_animateBack,_scaleElems, _transToZero} from "./module_animation.js"
 
 
@@ -106,6 +106,7 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
       thisInst.added = thisInst.addLiElem.call(thisInst.adjInst, elt.innerHTML, firstInLoop, {elt:false,elts:true}, elt.completeHeight, elt.completeWidth);
       thisInst.added.style.display = 'none'
       elt.hasCrossed = thisInst.crossTrigger;
+
   },
   triggerOff: function(elt, adjConElts, elts, o, thisInst) { // going back to the originating container
 
@@ -176,12 +177,12 @@ var eltsReorder = {
   },
   eltsAnimate: function(eltDimension, elem, thisInst) {
 
-    $(thisInst.div).trigger('onReorder', [elem, thisInst.elts, thisInst] )
-    var dir = elem.o.isVertical ? 'top' : 'left';
-    //var dirTranslate = elem.o.isVertical ? 'translateY(' : 'translateX(';
+  thisInst.div.dispatchEvent(setEvents.onReorder);
+
+    var plane = elem.o.isVertical ? 'top' : 'left';
 
     elem.style[thisInst.transitionPrefix] = '0s';
-    elem.style[dir] = elem.pos[dir] + 'px';
+    elem.style[plane] = elem.pos[plane] + 'px';
     elem.style[thisInst.transformPrefix] = elem.o.isVertical ? 'translate3d(0px,' + eltDimension + 'px, 0px)' : 'translate3d(' + eltDimension + 'px, 0px, 0px)'
     _transToZero(elem, thisInst);
   },
@@ -210,7 +211,7 @@ function _onStop(elt, thisInst) { // Stop
   // it will increase the transition speed of the dropped item going to its new position)
 
   if (thisInst.crossTrigger == true) { // going to new container
-      console.log(thisInst.added.n)
+
       thisInst.lock.call(thisInst.adjInst);
       thisInst.crossTrigger = false;
       thisInst.adjInst.ul.insertBefore(thisInst.added, thisInst.adjInst.elts[thisInst.added.n + 1]);
@@ -218,9 +219,13 @@ function _onStop(elt, thisInst) { // Stop
       // but is not moved if the user subsequently reorders(by dragging) the elements.
       // Therefore it must be inserted/repositioned again
 
-      $(elt).one('transitionend', function() {
-        appendRemove.call(thisInst)
-      })
+      elt.addEventListener('transitionend', _callback);
+
+      function _callback () {
+          appendRemove.call(thisInst)
+          this.removeEventListener('transitionend', _callback);
+      }
+
 
   } else { // staying in originating container
 
@@ -233,8 +238,6 @@ function _onStop(elt, thisInst) { // Stop
 
   _animateBack(elt, o, thisInst);
   _transToZero(elt, thisInst,speed);
-
-
 
 
   function appendRemove() {
