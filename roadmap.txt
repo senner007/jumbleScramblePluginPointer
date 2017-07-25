@@ -25,16 +25,17 @@ Roadmap:
 + Improve add and remove method. eg. all or an array as parameter, allow index(number) as elt selctor in removeLiElem
 + add boolean to cutOffEnd method which prevents the function from running if the cut-off element(s) will make adjacent container fire its cutoffEnd method and thereby creating an infinite loop.
 + Assume transition support
++ replace $.extend with object.assign
 + Remove jQuery dependency - Pointer events polyfill will still work without it
 + Call orientationChange event in place of resize on Chrome ios
 + use native event delegation https://stackoverflow.com/questions/14174056/native-addeventlistener-with-selector-like-on-in-jquery
-+ trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events
 + when using a single list, allow the option to constrain to a single axis - http://www.javascriptkit.com/javatutors/touchevents.shtml(bottom)
 + allow jquery pointer polyfill as optional
 + put elt object properties on namespaced separate object. Name the object dynamically to the div id.
 + pass in the element for the adjacent container on instantiation, and set/look up adjacent container by its id
   if id is not passed in options, it will get the div id or assign a number based id based on the order of instantiation(default)
 --------------------------------------------------
++ fix onReorder event to only show reorder on the desired instance
 + fix lock method
 + call scale method in removeLiElem
 
@@ -67,6 +68,7 @@ Fixed:
 + reduce params to addToObject function - DONE
 + remove _transToZero from prototype -DONE
 + remove remaining methods from adjInst prototype - DONE
++ trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events - DONE
 
 Partially fixed:
 + prevent multitouch !!! - The element will freeze and animate back if multi touch is detected. Find a way to simple ignore additional touches
