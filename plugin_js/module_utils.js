@@ -17,7 +17,8 @@ var defaults = {
   setChars: false,
   cutOff: false,
   dropLimit: false,
-  hasAdjacent: true
+  hasAdjacent: true,
+  adjIds : []
 
   // layoutComplete: function() { }
 }
