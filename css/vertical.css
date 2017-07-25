@@ -1,13 +1,20 @@
 #jMyPuzzleId0 {
-  width: 50%;
+  width: 33.33%;
   height: 90%;
   position: absolute;
   display: none;
 }
 
 #jMyPuzzleId1 {
-  margin-left: 50%;
-  width: 50%;
+  margin-left: 33.33%;
+  width: 33.33%;
+  height: 90%;
+  position: absolute;
+  display: none;
+}
+#jMyPuzzleId2 {
+  margin-left: 66.66%;
+  width: 33.33%;
   height: 90%;
   position: absolute;
   display: none;

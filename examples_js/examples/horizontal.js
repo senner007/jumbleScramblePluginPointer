@@ -9,13 +9,33 @@ var horizontal = function () {
   $('.bodyButton').remove()
   $('.container').show()
 
-  var elem = $("#jMyPuzzleId2").show();
-  var elem2 = $("#jMyPuzzleId3").show();
+  // var elem = $("#jMyPuzzleId3").show();
+  // var elem2 = $("#jMyPuzzleId4").show();
+
+  var elem = document.getElementById('jMyPuzzleId3');
+ elem.style.display = 'block'
+  var elem2 = document.getElementById('jMyPuzzleId4');
+  elem2.style.display = 'block'
 
   var winWidth = window.innerWidth - 50; // recalculate windows height for cutoff on resize. Also run cutoff on resize
 
-  var cont1 = new JumbleScramble(elem, {isVertical: false, cutOff: winWidth})
-  var cont2 = new JumbleScramble(elem2, {  isVertical: false, cutOff: false, dropLimit: winWidth -100 })
+  var cont1 = new JumbleScramble(elem, {
+    isVertical: false,
+    cutOff: winWidth,
+    adjIds: [
+      elem2.id
+    ]
+  })
+
+  var cont2 = new JumbleScramble(elem2, {
+    isVertical: false,
+    cutOff: false,
+    dropLimit: winWidth -100,
+    adjIds: [
+      elem.id
+
+    ]
+   })
 
   /*---------------------------------------------------------------------------------------------------------------------------------------*/
    // SETUP CALLBACKS
