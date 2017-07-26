@@ -39,6 +39,7 @@ Roadmap:
 + fix lock method
 + call scale method in removeLiElem
 + remove setInstances, addLiElem, removeLiElem from proto
++ fix z-index
 
 
 

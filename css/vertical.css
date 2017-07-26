@@ -1,20 +1,34 @@
 #jMyPuzzleId0 {
-  width: 33.33%;
+  width: 20%;
   height: 90%;
   position: absolute;
   display: none;
 }
 
 #jMyPuzzleId1 {
-  margin-left: 33.33%;
-  width: 33.33%;
+  margin-left: 20%;
+  width: 20%;
   height: 90%;
   position: absolute;
   display: none;
 }
 #jMyPuzzleId2 {
-  margin-left: 66.66%;
-  width: 33.33%;
+  margin-left: 40%;
+  width: 20%;
+  height: 90%;
+  position: absolute;
+  display: none;
+}
+#jMyPuzzleId3 {
+  margin-left: 60%;
+  width: 20%;
+  height: 90%;
+  position: absolute;
+  display: none;
+}
+#jMyPuzzleId4 {
+  margin-left: 80%;
+  width: 20%;
   height: 90%;
   position: absolute;
   display: none;
@@ -24,6 +38,7 @@
   width: 100%;
   position: absolute;
   display: block;
+
 }
 
 .listItem {
@@ -42,12 +57,13 @@
   border-left: 2px solid #777;
   /*text-align: justify;
     text-justify: inter-word;*/
+
 }
 
 .listItem span {
   font-size: 18px;
   color: #00A2CD;
-  z-index: 210;
+
   font-style: italic;
 }
 

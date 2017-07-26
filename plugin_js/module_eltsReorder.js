@@ -8,6 +8,8 @@ import {_animateBack,_scaleElems, _transToZero} from "./module_animation.js"
 
 var posObj = {}
 
+
+
 function _onDrag(elt, thisInst) { // Drag
 
  var elts = thisInst.elts,
@@ -25,13 +27,139 @@ function _onDrag(elt, thisInst) { // Drag
 
 
 
-  if ("adjInst" in thisInst && o.isVertical) {   //vertical
-    var adjConElts = thisInst.adjInst.elts;
-    var adjacentDir = thisInst.crossDistance(thisInst, thisInst.adjInst);
-  //  var adjacentDir = instanceArr[elt.movesTo].divOffset.left - instanceArr[elt.belongsTo].divOffset.left;
+  // Array.min = function( array ){
+  //    return Math.min.apply( Math, array );
+  // };
+  //
+  // var closestMinus;
+  // var closestPlus;
+  //
+  // var minusCount = -10000000000;
+  // var plusCount = 1000000000;
+  //
+  //
+  //  for (var i = 0; i<thisInst.currentlyIn.adjCon.length; i++) {
+  //    let p = thisInst.adjCon[i];
+  //    if ( thisInst[p].distanceTo < 0 ) {
+  //
+  //      if (thisInst[p].distanceTo > minusCount) {
+  //
+  //        closestMinus = thisInst[p];
+  //        minusCount = thisInst[p].distanceTo
+  //
+  //      }
+  //
+  //
+  //
+  //    }
+  //    else {
+  //
+  //      if (thisInst[p].distanceTo < plusCount) {
+  //
+  //        closestPlus = thisInst[p];
+  //        plusCount = thisInst[p].distanceTo
+  //      }
+  //
+  //    }
+  //  }
+  //
 
-    var dirSwitch = (thisInst.container % 2 == 0 ? posObj.left > adjacentDir / 2 : posObj.left < adjacentDir / 2);
-  }
+ //console.log(closestMinus.id)
+
+
+ // for (let i = 0; i<thisInst.adjCon.length; i++) {
+ //  let p = thisInst.adjCon[i];
+ //  //    console.log(p)
+ //     if (posObj.left < (p.distanceTo  + (p.div.offsetWidth/2)) && posObj.left > (p.distanceTo  - (p.div.offsetWidth/2))) {
+ //           console.log('moving in adj')
+ //
+ //           for (let ii = 0; ii<thisInst.adjCon.length; ii++) {
+ //             if (  thisInst[p + 1].currentlyIn == true ) {
+ //               onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+ //
+ //               thisInst[p+1].currentlyIn = false;
+ //             }
+ //           }
+ //
+ //
+ //       var adjConElts = p.elts;
+ //       thisInst.newInst =   p
+ //        p.currentlyIn = true;
+ //       var dirSwitch = true
+ //     }
+
+
+
+  if ("adjInst" in thisInst && o.isVertical) {   //vertical
+
+ for (let i = 0; i<thisInst.adjCon.length; i++) {
+   let p = thisInst.adjCon[i]
+
+     if (posObj.left < (thisInst[p].distanceTo  + (thisInst[p].div.offsetWidth/2)) && posObj.left > (thisInst[p].distanceTo  - (thisInst[p].div.offsetWidth/2))) {
+
+        for (let ii = 0; ii<thisInst.adjCon.length; ii++) {
+
+            if (thisInst.adjCon[ii] !=  p) {
+
+             if (  thisInst[thisInst.adjCon[ii]].currentlyIn == true ) {
+               onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+                  // console.log('moving in adj')
+               thisInst[thisInst.adjCon[ii]].currentlyIn = false;
+             }
+           }
+        }
+       var adjConElts = thisInst[p].elts;
+       thisInst.newInst =   thisInst[p]
+         thisInst[p].currentlyIn = true;
+       var dirSwitch = true
+     }
+
+}
+      // if (posObj.left < (thisInst.adjInst1.distanceTo  + (thisInst.adjInst1.div.offsetWidth/2)) && posObj.left > (thisInst.adjInst1.distanceTo  - (thisInst.adjInst1.div.offsetWidth/2)) ) {
+      //
+      //   if (  thisInst.adjInst.currentlyIn == true ) {
+      //           console.log('moving in adj1')
+      //     onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+      //
+      //     thisInst.adjInst.currentlyIn = false;
+      //   }
+      //   if (  thisInst.adjInst2.currentlyIn == true ) {
+      //           console.log('moving in adj1')
+      //     onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+      //
+      //     thisInst.adjInst2.currentlyIn = false;
+      //   }
+      //
+      //   var adjConElts = thisInst.adjInst1.elts;
+      //   thisInst.newInst =   thisInst.adjInst1
+      //   thisInst.adjInst1.currentlyIn = true;
+      //   var dirSwitch = true
+      // }
+      //
+      // if (posObj.left < (thisInst.adjInst2.distanceTo  + (thisInst.adjInst2.div.offsetWidth/2)) && posObj.left > (thisInst.adjInst2.distanceTo  - (thisInst.adjInst2.div.offsetWidth/2)) ) {
+      //
+      //   if (  thisInst.adjInst1.currentlyIn == true ) {
+      //               console.log('moving in adj2')
+      //     onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+      //
+      //     thisInst.adjInst1.currentlyIn = false;
+      //   }
+      //   if (  thisInst.adjInst.currentlyIn == true ) {
+      //               console.log('moving in adj2')
+      //     onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+      //
+      //     thisInst.adjInst.currentlyIn = false;
+      //   }
+      //
+      //   var adjConElts = thisInst.adjInst2.elts;
+      //   thisInst.newInst =   thisInst.adjInst2
+      //   thisInst.adjInst2.currentlyIn = true;
+      //   var dirSwitch = true
+      // }
+
+ }
+
+
   if ("adjInst" in thisInst && !o.isVertical) {  // horizontal
     var adjConElts = thisInst.adjInst.elts;
     var adjacentDir = thisInst.crossDistance(thisInst, thisInst.adjInst);
@@ -39,17 +167,19 @@ function _onDrag(elt, thisInst) { // Drag
     var dirSwitch = (thisInst.container % 2 == 0 ? posObj.top > adjacentDir / 2 : posObj.top < adjacentDir / 2);  // REfactor get the div id instead of thisInst.con
   }
 
+
   /*---------------------------------------------------------------------------------------------------------------*/
 
   // trigger animations for
   // adjacent container if below
   // dropLimit - refactor to add method for horizontal too.
 
-  if (dirSwitch && thisInst.crossTrigger == false && thisInst.adjInst.props.locked == false) {
+  if (dirSwitch && thisInst.crossTrigger == false) {
 
+   thisInst.collapsed = false
   //  if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= thisInst.adjInst.props.dropLimit) {
       // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
-      if (thisInst.adjInst.props.ulSize < thisInst.adjInst.props.dropLimit || thisInst.adjInst.props.dropLimit == false) {
+      if (thisInst.newInst.props.ulSize < thisInst.newInst.props.dropLimit || thisInst.newInst.props.dropLimit == false) {
 
           onTrigger.triggerOn(elt, adjConElts, elts, o, thisInst);
         }
@@ -57,7 +187,9 @@ function _onDrag(elt, thisInst) { // Drag
   };
 
   if (!dirSwitch && thisInst.crossTrigger == true) { // go back to originating container
-     onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+
+  thisInst.collapsed = false
+          onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
 
   };
 
@@ -101,16 +233,20 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
     // check if firstInLoop is set, if not, set it to the length of the container
     // (dropped after last item)
     // reorder the elements in the originating container
+      if (thisInst.collapsed != true) {
+        for (var i = elt.n + 1; i < elts.length; i++) { // originating
 
-    for (var i = elt.n + 1; i < elts.length; i++) { // originating
-      eltsReorder._eltsMoveBackOrUp(elt, elts, thisInst, true);
-      // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
-    };
+          eltsReorder._eltsMoveBackOrUp(elt, elts, thisInst, true);
+          // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
 
+        }
+        thisInst.collapsed = true
+      }
       thisInst.crossTrigger = true;
       var display = 'none'
 
-      thisInst.added = thisInst.addLiElem.call(thisInst.adjInst, elt.innerHTML, firstInLoop, {elt:false,elts:true}, elt.completeHeight, elt.completeWidth, display);
+      thisInst.added = thisInst.addLiElem.call(thisInst.newInst, elt.innerHTML, firstInLoop, {elt:false,elts:true}, elt.completeHeight, elt.completeWidth, display);
+
       elt.hasCrossed = thisInst.crossTrigger;
 
 
@@ -119,11 +255,18 @@ var onTrigger = {  //These will trigger when the elt is crossing over to connect
 
       thisInst.crossTrigger = false;
 
-      thisInst.removeLiElem.call(thisInst.adjInst, thisInst.added, false)
+      thisInst.removeLiElem.call(thisInst.newInst, thisInst.added, false)
 
-     for (var i = 0; i < elts.length - 1; i++) { // Loop over originating Container elements, animating them and updating their properties
-       eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
-     }
+      if (thisInst.collapsed != true) {
+        for (var i = 0; i < elts.length - 1; i++) { // Loop over originating Container elements, animating them and updating their properties
+
+          eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
+        }
+        thisInst.collapsed = true
+
+      }
+
+
      elt.hasCrossed = thisInst.crossTrigger;
      delete thisInst.added
 
@@ -213,9 +356,9 @@ function _onStop(elt, thisInst) { // Stop
 
   if (thisInst.crossTrigger == true) { // going to new container
 
-      thisInst.lock.call(thisInst.adjInst);
+      thisInst.lock.call(thisInst.newInst);
       thisInst.crossTrigger = false;
-      thisInst.adjInst.ul.insertBefore(thisInst.added, thisInst.adjInst.elts[thisInst.added.n + 1]);
+      thisInst.newInst.ul.insertBefore(thisInst.added, thisInst.newInst.elts[thisInst.added.n + 1]);
       // The element (thisInst.added) is place on triggerOn,
       // but is not moved if the user subsequently reorders(by dragging) the elements.
       // Therefore it must be inserted/repositioned again
@@ -247,12 +390,12 @@ function _onStop(elt, thisInst) { // Stop
       o.isVertical ? thisInst.added.style.top = elt.style.top : thisInst.added.style.left = elt.style.left;
       delete thisInst.added // the object that is a reference to the added object is deleted
       thisInst.removeLiElem(elt, false); // the dragged elt from the previous/starting instance is deleted once animated to its position
-      thisInst.unlock.call(thisInst.adjInst);
-      _scaleElems(_elemsToCut(thisInst, thisInst.adjInst) , thisInst);
+      thisInst.unlock.call(thisInst.newInst);
+      _scaleElems(_elemsToCut(thisInst, thisInst.newInst) , thisInst);
 
 
     //    console.clear()
-    // for (var i =0; i < thisInst.adjInst.elts.length; i++) { // originating
+    // for (var i =0; i < thisInst.newInst.elts.length; i++) { // originating
     //     console.log('- : ' + this.adjInst.elts[i].n)
     //     console.log(this.adjInst.elts[i].pos.left)
     //     console.log(this.adjInst.elts[i].style.left)

@@ -12,9 +12,9 @@ var horizontal = function () {
   // var elem = $("#jMyPuzzleId3").show();
   // var elem2 = $("#jMyPuzzleId4").show();
 
-  var elem = document.getElementById('jMyPuzzleId3');
+  var elem = document.getElementById('jMyPuzzleId5');
  elem.style.display = 'block'
-  var elem2 = document.getElementById('jMyPuzzleId4');
+  var elem2 = document.getElementById('jMyPuzzleId6');
   elem2.style.display = 'block'
 
   var winWidth = window.innerWidth - 50; // recalculate windows height for cutoff on resize. Also run cutoff on resize

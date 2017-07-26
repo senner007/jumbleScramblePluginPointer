@@ -10,43 +10,79 @@ var vertical = function () {
     $('.container').show()
 
   // var elem = $("#jMyPuzzleId0").show();
-    var elem = document.getElementById('jMyPuzzleId0');
-   elem.style.display = 'block'
+    var elem1 = document.getElementById('jMyPuzzleId0');
+   elem1.style.display = 'block'
     var elem2 = document.getElementById('jMyPuzzleId1');
     elem2.style.display = 'block'
-    // var elem3 = document.getElementById('jMyPuzzleId2');
-    // elem3.style.display = 'block'
+    var elem3 = document.getElementById('jMyPuzzleId2');
+    elem3.style.display = 'block'
+    var elem4 = document.getElementById('jMyPuzzleId3');
+    elem4.style.display = 'block'
+    var elem5 = document.getElementById('jMyPuzzleId4');
+    elem5.style.display = 'block'
   //  console.log(elem.id)
 
     var winHeight = window.innerHeight - 50; // recalculate windows height for cutoff on resize.
 
-    var cont1 = new JumbleScramble(elem, {
+    var cont1 = new JumbleScramble(elem1, {
       isVertical: true,
       cutOff: winHeight,
       adjIds: [
         elem2.id,
-      //  elem3.id
+        elem3.id,
+        elem4.id,
+        elem5.id
 
       ]
     })
+
+
+          var cont3 = new JumbleScramble(elem3, {
+            isVertical: true,
+            cutOff: winHeight,
+            adjIds : [
+              elem1.id,
+              elem2.id,
+              elem4.id,
+              elem5.id
+            ]
+            })
+
 
     var cont2 = new JumbleScramble(elem2, {
       isVertical: true,
       cutOff: winHeight,
       adjIds : [
-        elem.id,
-      //  elem3.id
+        elem1.id,
+        elem3.id,
+        elem4.id,
+        elem5.id
       ]
       })
 
-      // var cont3 = new JumbleScramble(elem3, {
-      //   isVertical: true,
-      //   cutOff: winHeight,
-      //   adjIds : [
-      //     elem.id,
-      //     elem2.id
-      //   ]
-      //   })
+        var cont5 = new JumbleScramble(elem5, {
+          isVertical: true,
+          cutOff: winHeight,
+          adjIds : [
+            elem1.id,
+            elem2.id,
+            elem3.id,
+            elem4.id
+          ]
+          })
+
+
+        var cont4 = new JumbleScramble(elem4, {
+          isVertical: true,
+          cutOff: winHeight,
+          adjIds : [
+            elem1.id,
+            elem2.id,
+            elem3.id,
+            elem5.id
+          ]
+          })
+
 
 
     /*---------------------------------------------------------------------------------------------------------------------------------------*/
@@ -75,7 +111,7 @@ var vertical = function () {
   //  example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
     cont2.div.addEventListener('onLayoutAll', function () {
       //
-       cont2.addLiElem("This element is added after the 'layoutCompleteAll' event.<span></br>This text <div class='blue'> This text is in a nested span element.</div>  is in a span element.</span>",0, {elt:true,elts:true},)
+      // cont2.addLiElem("This element is added after the 'layoutCompleteAll' event.<span></br>This text <div class='blue'> This text is in a nested span element.</div>  is in a span element.</span>",0, {elt:true,elts:true},)
 
     })
     $(cont1.div).on('onReorder', function (ev, elt, elts) {
@@ -97,10 +133,12 @@ var vertical = function () {
     })
 
   /*---------------------------------------------------------------------------------------------------------------------------------------*/
-
+  cont3.init();
+  cont4.init();
     cont1.init();
     cont2.init();
-  //  cont3.init();
+
+  cont5.init();
 
     $(window).on('resize', function() {
       var winHeight = window.innerHeight - 50;

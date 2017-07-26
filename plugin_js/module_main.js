@@ -73,12 +73,13 @@
 
     this.props.locked = false;
     this.container = window.temporaryInstanceArray.length;
-    this.adjCon = this.container % 2 == 0 ? this.container + 1 : this.container - 1;
+    this.adjCon = [];
     this.options = $.extend({}, defaults, options);
     this.props.cutOff = this.options.cutOff
     this.props.dropLimit = this.options.dropLimit;
     this.ul.style[transformPrefix] = 'translate3d(0px,0px,0px)';
     this.props.ulSize = this.options.ulSize;
+    this.currentlyIn = this;
     this.transitionPrefix = transitionPrefix;
     this.transformPrefix = transformPrefix;
     this.ifGpu = ifGpu;
@@ -132,8 +133,9 @@
                 var copy = Object.assign({}, temporaryInstanceArray[i]);
                 delete copy.adjInst;
                 delete copy.adjInst1;
-                if (n > 0) { this['adjInst' + n] = copy;}
-                else { this['adjInst'] = copy }
+                if (n > 0) { this['adjInst' + n] = copy; this.adjCon.push('adjInst' + n)}
+                else { this['adjInst'] = copy; this.adjCon.push('adjInst')}
+                copy.distanceTo = this.crossDistance(this, temporaryInstanceArray[i])
 
 
            }
@@ -141,7 +143,8 @@
 
 
     }
-    console.log(adjConnected)
+
+
 
 
     //

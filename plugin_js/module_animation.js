@@ -12,7 +12,6 @@ function _transToZero(elt, thisInst, speed) {
   if (speed == undefined) {
     var speed = '250ms ease'
   }
-
   window.getComputedStyle(elt)[thisInst.transformPrefix] // needed to apply the transition style dynamically
   elt.style[thisInst.transitionPrefix] = speed;
   elt.style[thisInst.transformPrefix] = thisInst.ifGpu // translateZ doesn't work for ie9
@@ -25,9 +24,9 @@ function _animateBack(elt, o, thisInst) {
   if (elt.hasCrossed) {
     if (o.isVertical) {
       var thisTop = thisInst.added.pos.top;
-      var thisLeft = thisInst.crossDistance(thisInst, thisInst.adjInst);
+      var thisLeft = thisInst.crossDistance(thisInst, thisInst.newInst);
     } else {
-      var thisTop = thisInst.crossDistance(thisInst, thisInst.adjInst);
+      var thisTop = thisInst.crossDistance(thisInst, thisInst.newInst);
       var thisLeft = thisInst.added.pos.left;
     }
   } else {
