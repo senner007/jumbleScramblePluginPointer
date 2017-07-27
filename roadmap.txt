@@ -17,6 +17,7 @@ Roadmap:
 + add placeholder when dragging
 + maybe set {passive: true} as third argument on event start and event move - https://developers.google.com/web/updates/2017/01/scrolling-intervention
 + allow individual width of each instance in vertical
+
 0.1
 
 + REname the plugin
@@ -75,6 +76,7 @@ Fixed:
 + trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events - DONE
 + account for margin/space  between instances - DONE
 + remove setInstances, addLiElem, removeLiElem from proto - DONE
++ fix shaking animation in edge - DONE (occurs when .container class position is not set to absolute in css)
 
 Partially fixed:
 + prevent multitouch !!! - The element will freeze and animate back if multi touch is detected. Find a way to simple ignore additional touches
