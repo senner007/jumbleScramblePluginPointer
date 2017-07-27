@@ -16,6 +16,8 @@ var horizontal = function () {
  elem.style.display = 'block'
   var elem2 = document.getElementById('jMyPuzzleId6');
   elem2.style.display = 'block'
+  var elem3 = document.getElementById('jMyPuzzleId7');
+  elem3.style.display = 'block'
 
   var winWidth = window.innerWidth - 50; // recalculate windows height for cutoff on resize. Also run cutoff on resize
 
@@ -23,19 +25,29 @@ var horizontal = function () {
     isVertical: false,
     cutOff: winWidth,
     adjIds: [
-      elem2.id
+      elem2.id,
+      elem3.id
     ]
   })
 
   var cont2 = new JumbleScramble(elem2, {
     isVertical: false,
     cutOff: false,
-    dropLimit: winWidth -100,
     adjIds: [
-      elem.id
+      elem.id,
+      elem3.id
 
     ]
    })
+   var cont3 = new JumbleScramble(elem3, {
+     isVertical: false,
+     cutOff: false,
+     adjIds: [
+       elem.id,
+       elem2.id
+
+     ]
+    })
 
   /*---------------------------------------------------------------------------------------------------------------------------------------*/
    // SETUP CALLBACKS
@@ -59,6 +71,7 @@ var horizontal = function () {
 
   cont1.init();
   cont2.init();
+  cont3.init();
 
   $(window).on('resize', function() {
     var winWidth = window.innerWidth - 50;

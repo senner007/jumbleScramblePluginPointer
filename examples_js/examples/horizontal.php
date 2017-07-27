@@ -1,5 +1,5 @@
 <?php
-echo "<div class='jMyPuzzle' id='jMyPuzzleId4'>
+echo "<div class='jMyPuzzle' id='jMyPuzzleId5'>
   <ul touch-action='none' class='splitList-horizontal'>
     <li class='listItem-horizontal'>1st Element<button class='liButton'>Shuffle elements</button><span>This text is in span<span></li>
     <li class='listItem-horizontal'>2nd Element</li>
@@ -8,7 +8,16 @@ echo "<div class='jMyPuzzle' id='jMyPuzzleId4'>
     <li class='listItem-horizontal'>5th Element</li>
   </ul>
 </div>
-<div class='jMyPuzzle' id='jMyPuzzleId5'>
+<div class='jMyPuzzle' id='jMyPuzzleId6'>
+  <ul touch-action='none' class='splitList-horizontal'>
+    <li class='listItem-horizontal'>6th Element</li>
+    <li class='listItem-horizontal'>7th Element</li>
+    <li class='listItem-horizontal'>8th Element</li>
+    <li class='listItem-horizontal'>9th Element</li>
+    <li class='listItem-horizontal'>10th Element</li>
+  </ul>
+</div>
+<div class='jMyPuzzle' id='jMyPuzzleId7'>
   <ul touch-action='none' class='splitList-horizontal'>
     <li class='listItem-horizontal'>6th Element</li>
     <li class='listItem-horizontal'>7th Element</li>
