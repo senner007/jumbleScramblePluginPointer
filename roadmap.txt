@@ -16,8 +16,9 @@ Roadmap:
 + Add containment option to specify containment for the draggable elements.
 + add placeholder when dragging
 + maybe set {passive: true} as third argument on event start and event move - https://developers.google.com/web/updates/2017/01/scrolling-intervention
-
++ allow individual width of each instance in vertical
 0.1
+
 + REname the plugin
 + Refactor shuffle method to scale out and in use the _scaleElems method, call cutoff method after shuffle
 + setChars function should update elt object as well, it does not work when moving to another container. should probably work in conjunction with the relayout method.
@@ -38,9 +39,10 @@ Roadmap:
 + fix onReorder event to only show reorder on the desired instance
 + fix lock method
 + call scale method in removeLiElem
-+ remove setInstances, addLiElem, removeLiElem from proto
 + fix z-index
-
++ allow option to cutoff to specified instance
++ recalculate adjInst(n).distanceTo & props.divWidth/divHeight on reLayout
++ loop over copy.adjInst(n) to be removed in setInstances
 
 
 Fixed:
@@ -71,6 +73,8 @@ Fixed:
 + remove _transToZero from prototype -DONE
 + remove remaining methods from adjInst prototype - DONE
 + trigger events using native js - https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events - DONE
++ account for margin/space  between instances - DONE
++ remove setInstances, addLiElem, removeLiElem from proto - DONE
 
 Partially fixed:
 + prevent multitouch !!! - The element will freeze and animate back if multi touch is detected. Find a way to simple ignore additional touches
