@@ -20,8 +20,6 @@ import {
 
 var posObj = {}
 
-
-
 function _onDrag(elt, thisInst) { // Drag
 
   var elts = thisInst.elts,
@@ -37,31 +35,30 @@ function _onDrag(elt, thisInst) { // Drag
 
   posObj = eltPos; //its current position derived from $draggable object
 
-
-
-
   if (thisInst.adjInst1) { //if it has adjacent instances and is vertical
 
-    var dir = o.isVertical ? 'left' : 'top';
-    var measure = o.isVertical ? 'divWidth' : 'divHeight';
+    var dir = o.isVertical ? 'left' : 'top',
+        measure = o.isVertical ? 'divWidth' : 'divHeight',
+        adjConLenght = thisInst.adjCon.length;
 
-    for (var i = 0; i < thisInst.adjCon.length; i++) {
+
+    for (var i = 0; i < adjConLenght; i++) {
       var p = thisInst.adjCon[i];
       //  console.log(posObj[dir])
 
       if (posObj[dir] <= (  thisInst[p].distanceTo + thisInst[p].props[measure] / 2  ) && posObj[dir] >= ( thisInst[p].distanceTo - thisInst[p].props[measure] / 2 )   ) {
-          console.log('distance to: '  +  thisInst[p].distanceTo  + thisInst[p].props[measure] / 2)
-        for (var ii = 0; ii < thisInst.adjCon.length; ii++) {
+
+        for (var ii = 0; ii < adjConLenght; ii++) {
 
           if (thisInst.adjCon[ii] != p && thisInst[thisInst.adjCon[ii]].currentlyIn == true) {  // all the instances that elt is currently not moving in that have their ptoperty currentlyIn set to true
 
             thisInst.crossFlag = false;
             thisInst.removeLiElem.call(thisInst.newInst, thisInst.added, false)
             delete thisInst.added
-
             thisInst[thisInst.adjCon[ii]].currentlyIn = false;
             break;
           }
+
         }
         var adjConElts = thisInst[p].elts;
         thisInst.newInst = thisInst[p]
@@ -86,8 +83,8 @@ function _onDrag(elt, thisInst) { // Drag
     //  }
   };
 
-  var home = posObj[dir] > (  0 - thisInst.props[measure]   )  && posObj[dir] < (  thisInst.props[measure] )  ; // only execute if moving within home instance distance
-                                                                                                              // of home instance -/+ instance width/height
+  var home = posObj[dir] > (  0 - thisInst.props[measure] /2   )  && posObj[dir] < (  thisInst.props[measure] /2)  ; // only execute if moving within home instance distance
+                                                                                                                    // of home instance -/+ instance (width/height /2)
 
   if (!dirSwitch && thisInst.crossFlag == true) { // go back to originating container
 
@@ -162,28 +159,17 @@ var onTrigger = { //These will trigger when the elt is crossing over to connecte
 
     elt.hasCrossed = thisInst.crossFlag;
 
-
   },
   triggerOff: function(elt, adjConElts, elts, o, thisInst) { // going back to the originating container
 
     thisInst.crossFlag = false;
-
     thisInst.removeLiElem.call(thisInst.newInst, thisInst.added, false)
 
-
       for (var i = 0; i < elts.length - 1; i++) { // Loop over originating Container elements, animating them and updating their properties
-
         eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
       }
-
-
-
-
-
     elt.hasCrossed = thisInst.crossFlag;
     delete thisInst.added
-
-
   },
 };
 
@@ -250,7 +236,6 @@ function _onStop(elt, thisInst) { // Stop
 
   elt.endDate = new Date();
   elt.dragSpeed = (elt.endDate.getTime() - elt.startDate.getTime()) / 1000;
-  console.log(elt.hasCrossed)
   // elt.dragSpeed measuresthe time it takes to initialize the drag to when it is dropped. A smaller difference
   // will increase the speed of the layout animation.
   var speed;
