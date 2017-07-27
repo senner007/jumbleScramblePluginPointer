@@ -37,40 +37,28 @@ var vertical = function () {
     })
 
 
-          var cont3 = new JumbleScramble(elem3, {
+          var cont2 = new JumbleScramble(elem2, {
             isVertical: true,
             cutOff: winHeight,
             adjIds : [
               elem1.id,
-              elem2.id,
+              elem3.id,
               elem4.id,
               elem5.id
             ]
             })
 
 
-    var cont2 = new JumbleScramble(elem2, {
+    var cont3 = new JumbleScramble(elem3, {
       isVertical: true,
       cutOff: winHeight,
       adjIds : [
         elem1.id,
-        elem3.id,
+        elem2.id,
         elem4.id,
         elem5.id
       ]
       })
-
-        var cont5 = new JumbleScramble(elem5, {
-          isVertical: true,
-          cutOff: winHeight,
-          adjIds : [
-            elem1.id,
-            elem2.id,
-            elem3.id,
-            elem4.id
-          ]
-          })
-
 
         var cont4 = new JumbleScramble(elem4, {
           isVertical: true,
@@ -80,6 +68,18 @@ var vertical = function () {
             elem2.id,
             elem3.id,
             elem5.id
+          ]
+          })
+
+
+        var cont5 = new JumbleScramble(elem5, {
+          isVertical: true,
+          cutOff: winHeight,
+          adjIds : [
+            elem1.id,
+            elem2.id,
+            elem3.id,
+            elem4.id
           ]
           })
 
@@ -133,24 +133,36 @@ var vertical = function () {
     })
 
   /*---------------------------------------------------------------------------------------------------------------------------------------*/
+
+  cont1.init();
+  cont2.init();
   cont3.init();
   cont4.init();
-    cont1.init();
-    cont2.init();
-
   cont5.init();
 
-    $(window).on('resize', function() {
-      var winHeight = window.innerHeight - 50;
-
-      cont1.cutOff = winHeight;
-      cont2.cutOff = winHeight;
-      cont1.reLayout()
-      cont2.reLayout()
-      // example of using the cutOffEnd method on the object's prototype.
-      //Here, upon resize, it cuts the list when height is above specified value and prepends to adjacent container
-      cont1.cutOffEnd()
-      cont2.cutOffEnd()
-    });
+    // $(window).on('resize', function() {
+    //   var winHeight = window.innerHeight - 50;
+    //
+    //   cont1.cutOff = winHeight;
+    //   cont2.cutOff = winHeight;
+    //   cont3.cutOff = winHeight;
+    //   cont4.cutOff = winHeight;
+    //   cont5.cutOff = winHeight;
+    //
+    //   cont1.reLayout()
+    //   cont2.reLayout()
+    //   cont3.reLayout()
+    //   cont4.reLayout()
+    //   cont5.reLayout()
+    //
+    //   // example of using the cutOffEnd method on the object's prototype.
+    //   //Here, upon resize, it cuts the list when height is above specified value and prepends to adjacent container
+    //   cont1.cutOffEnd()
+    //   cont2.cutOffEnd()
+    //   cont3.cutOffEnd()
+    //   cont4.cutOffEnd()
+    //   cont5.cutOffEnd()
+    //
+    // });
 
 }
