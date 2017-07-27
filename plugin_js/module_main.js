@@ -44,8 +44,8 @@
     thisElts[n].o = thisInst.options; // its current position (as per the other elements)
     thisElts[n].hasCrossed = false; // has the elt crossed over to the other container
     thisElts[n].newPosSameCon = false; // has the element changed position but remained in the same container
-    thisElts[n].belongsTo = thisInst.container;
-    thisElts[n].movesTo = thisInst.adjCon;
+    // thisElts[n].belongsTo = thisInst.container;
+    //thisElts[n].movesTo = thisInst.adjCon;
     thisElts[n].currentPos = {};
   };
 
@@ -69,27 +69,29 @@
     this.div = element;
     this.id = this.div.id;
     this.props.divOffset = jsOffset(element);
+    this.props.divWidth = this.div.offsetWidth;
+    this.props.divHeight = this.div.offsetHeight;
     this.ul = this.div.querySelector('ul');
 
     this.props.locked = false;
-    this.container = window.temporaryInstanceArray.length;
+    // this.container = window.temporaryInstanceArray.length;
     this.adjCon = [];
     this.options = $.extend({}, defaults, options);
     this.props.cutOff = this.options.cutOff
     this.props.dropLimit = this.options.dropLimit;
     this.ul.style[transformPrefix] = 'translate3d(0px,0px,0px)';
     this.props.ulSize = this.options.ulSize;
-    this.currentlyIn = this;
     this.transitionPrefix = transitionPrefix;
     this.transformPrefix = transformPrefix;
     this.ifGpu = ifGpu;
     this.transSupport = transSupport;
 
 
+
     window.temporaryInstanceArray.push(this);
   };
 
-  JumbleScramble.prototype.crossTrigger = false;
+  JumbleScramble.prototype.crossFlag = false;
 
   JumbleScramble.prototype.setCutOff = function (cutOff){
 
@@ -115,7 +117,7 @@
 
 
   JumbleScramble.prototype.setInstances = function() {
-    console.log('hello')
+
     var adjInstances = this.options.adjIds;
     var adjConnected = [];
     // console.log(adjInstances)
@@ -131,10 +133,14 @@
 
                 adjConnected.push(temporaryInstanceArray[i])
                 var copy = Object.assign({}, temporaryInstanceArray[i]);
-                delete copy.adjInst;
-                delete copy.adjInst1;
-                if (n > 0) { this['adjInst' + n] = copy; this.adjCon.push('adjInst' + n)}
-                else { this['adjInst'] = copy; this.adjCon.push('adjInst')}
+
+                delete copy.adjInst1;           // Refactor me!
+                delete copy.adjInst2;
+                delete copy.adjInst3;
+                delete copy.adjInst4;
+                delete copy.adjCon;
+                this['adjInst' + (n +1)] = copy; this.adjCon.push('adjInst' + (n +1))
+
                 copy.distanceTo = this.crossDistance(this, temporaryInstanceArray[i])
 
 
@@ -244,6 +250,7 @@
   /*--------------------------------------------------------------------*/
 
   function _outerHeight(el) { // replacing jquery outerWidth(true)
+
     var height = el.offsetHeight;
     var style = getComputedStyle(el);
     height += parseInt(style.marginTop) + parseInt(style.marginBottom);
@@ -251,6 +258,7 @@
   }
 
   function _outerWidth(el) { // replacing jquery outerWidth(true)
+
     var width = el.offsetWidth;
     var style = getComputedStyle(el);
     width += parseInt(style.marginLeft) + parseInt(style.marginRight);
