@@ -20,4 +20,5 @@ Working:
 + The crossDistance method. The crossing distance to the adjacent container
 + Shuffle method
 + onReorder callback
-+ Allow for nestted elements in list items
++ Allow for nested elements in list items
++ Allows dragging/dropping between n numnber of instances
