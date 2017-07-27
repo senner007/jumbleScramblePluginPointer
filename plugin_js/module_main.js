@@ -142,21 +142,9 @@
                 this['adjInst' + (n +1)] = copy; this.adjCon.push('adjInst' + (n +1))
 
                 copy.distanceTo = this.crossDistance(this, temporaryInstanceArray[i])
-
-
            }
         }
-
-
     }
-
-
-
-
-    //
-    // var copy = Object.assign({}, temporaryInstanceArray[this.adjCon]);
-    // delete copy.adjInst;
-    // this.adjInst = copy;
 
   }
 
@@ -268,6 +256,7 @@
 
 
   JumbleScramble.prototype.reLayout = function() {
+
 
     _setUlSize(_setEltsProps(this.elts, this), this) //setting properties function return the ul size
     this.props.divOffset = jsOffset(this.div)

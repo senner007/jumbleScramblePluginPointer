@@ -95,7 +95,7 @@ function _shuffle() {
       }
 
   this.reLayout()                             // reLayout the instances
-  this.reLayout.call(this.adjInst)
+  this.reLayout.call(this.adjInst1)
 
   return elems;
 }

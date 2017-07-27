@@ -62,7 +62,7 @@ var horizontal = function () {
 
      if (ev.target.localName == 'button') {
 
-       cont1.shuffle(cont1, cont1.adjInst)
+       cont1.shuffle(cont1, cont2)
      }
      //$(this).off('pointerdown.hello');
    })
