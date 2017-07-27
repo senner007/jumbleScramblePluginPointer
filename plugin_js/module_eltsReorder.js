@@ -37,29 +37,31 @@ function _onDrag(elt, thisInst) { // Drag
 
   posObj = eltPos; //its current position derived from $draggable object
 
- var math = Math.random()
 
 
-  if (thisInst.adjInst && o.isVertical) { //if it has adjacent instances and is vertical
+
+  if (thisInst.adjInst1) { //if it has adjacent instances and is vertical
+
+    var dir = o.isVertical ? 'left' : 'top';
+    var measure = o.isVertical ? 'divWidth' : 'divHeight';
 
     for (var i = 0; i < thisInst.adjCon.length; i++) {
-      var p = thisInst.adjCon[i]
+      var p = thisInst.adjCon[i];
+      //  console.log(posObj[dir])
 
-
-
-      if (posObj.left <= (thisInst[p].distanceTo + (thisInst[p].props.divWidth / 2)) && posObj.left >= (thisInst[p].distanceTo - (thisInst[p].props.divWidth / 2))) {
-
+      if (posObj[dir] <= (  thisInst[p].distanceTo + thisInst[p].props[measure] / 2  ) && posObj[dir] >= ( thisInst[p].distanceTo - thisInst[p].props[measure] / 2 )   ) {
+          console.log('distance to: '  +  thisInst[p].distanceTo  + thisInst[p].props[measure] / 2)
         for (var ii = 0; ii < thisInst.adjCon.length; ii++) {
 
           if (thisInst.adjCon[ii] != p && thisInst[thisInst.adjCon[ii]].currentlyIn == true) {  // all the instances that elt is currently not moving in that have their ptoperty currentlyIn set to true
 
-             onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
-              // console.log('moving in adj')
-              thisInst[thisInst.adjCon[ii]].currentlyIn = false;
-              break;
+            thisInst.crossFlag = false;
+            thisInst.removeLiElem.call(thisInst.newInst, thisInst.added, false)
+            delete thisInst.added
+
+            thisInst[thisInst.adjCon[ii]].currentlyIn = false;
+            break;
           }
-
-
         }
         var adjConElts = thisInst[p].elts;
         thisInst.newInst = thisInst[p]
@@ -68,30 +70,11 @@ function _onDrag(elt, thisInst) { // Drag
 
         break;
       }
-
-
-
     }
-
-
   }
 
 
-  if ("adjInst" in thisInst && !o.isVertical) { // horizontal
-    var adjConElts = thisInst.adjInst.elts;
-    var adjacentDir = thisInst.crossDistance(thisInst, thisInst.adjInst);
-    //  var adjacentDir = instanceArr[elt.movesTo].divOffset.top - instanceArr[elt.belongsTo].divOffset.top;
-    var dirSwitch = (thisInst.container % 2 == 0 ? posObj.top > adjacentDir / 2 : posObj.top < adjacentDir / 2); // REfactor get the div id instead of thisInst.con
-  }
-
-
-  /*---------------------------------------------------------------------------------------------------------------*/
-
-  // trigger animations for
-  // adjacent container if below
-  // dropLimit - refactor to add method for horizontal too.
-
-  if (dirSwitch && thisInst.crossTrigger == false) {
+  if (dirSwitch && thisInst.crossFlag == false) {
 
     thisInst.collapsed = false;
     //  if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= thisInst.adjInst.props.dropLimit) {
@@ -103,11 +86,16 @@ function _onDrag(elt, thisInst) { // Drag
     //  }
   };
 
-  if (!dirSwitch && thisInst.crossTrigger == true) { // go back to originating container
-    console.log('from trigger off: ' + math)
-    thisInst.collapsed = false;
-    onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+  var home = posObj[dir] > (  0 - thisInst.props[measure]   )  && posObj[dir] < (  thisInst.props[measure] )  ; // only execute if moving within home instance distance
+                                                                                                              // of home instance -/+ instance width/height
 
+  if (!dirSwitch && thisInst.crossFlag == true) { // go back to originating container
+
+    if (home) {
+
+      onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+    }
+    else { return;}
   };
 
   /*-------------------------------------------------------------------------------------------------------------*/
@@ -122,7 +110,7 @@ function _onDrag(elt, thisInst) { // Drag
 
   /*-------------------------------------------------------------------------------------------------------------*/
 
-  if (thisInst.crossTrigger) {
+  if (thisInst.crossFlag) {
     elts = adjConElts;
     thisInst.added.currentPos = elt.currentPos
     elt = thisInst.added
@@ -164,7 +152,7 @@ var onTrigger = { //These will trigger when the elt is crossing over to connecte
       }
       thisInst.collapsed = true;
     }
-    thisInst.crossTrigger = true;
+    thisInst.crossFlag = true;
     var display = 'none'
 
     thisInst.added = thisInst.addLiElem.call(thisInst.newInst, elt.innerHTML, firstInLoop, {
@@ -172,27 +160,27 @@ var onTrigger = { //These will trigger when the elt is crossing over to connecte
       elts: true
     }, elt.completeHeight, elt.completeWidth, display);
 
-    elt.hasCrossed = thisInst.crossTrigger;
+    elt.hasCrossed = thisInst.crossFlag;
 
 
   },
   triggerOff: function(elt, adjConElts, elts, o, thisInst) { // going back to the originating container
 
-    thisInst.crossTrigger = false;
+    thisInst.crossFlag = false;
 
     thisInst.removeLiElem.call(thisInst.newInst, thisInst.added, false)
 
-    if (thisInst.collapsed == false) {
+
       for (var i = 0; i < elts.length - 1; i++) { // Loop over originating Container elements, animating them and updating their properties
 
         eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
       }
-      thisInst.collapsed = true;
-
-    }
 
 
-    elt.hasCrossed = thisInst.crossTrigger;
+
+
+
+    elt.hasCrossed = thisInst.crossFlag;
     delete thisInst.added
 
 
@@ -262,7 +250,7 @@ function _onStop(elt, thisInst) { // Stop
 
   elt.endDate = new Date();
   elt.dragSpeed = (elt.endDate.getTime() - elt.startDate.getTime()) / 1000;
-
+  console.log(elt.hasCrossed)
   // elt.dragSpeed measuresthe time it takes to initialize the drag to when it is dropped. A smaller difference
   // will increase the speed of the layout animation.
   var speed;
@@ -279,10 +267,10 @@ function _onStop(elt, thisInst) { // Stop
   // (If the difference in time between the initialized drag and the release is less than specified,
   // it will increase the transition speed of the dropped item going to its new position)
 
-  if (thisInst.crossTrigger == true) { // going to new container
+  if (thisInst.crossFlag == true) { // going to new container
 
     thisInst.lock.call(thisInst.newInst);
-    thisInst.crossTrigger = false;
+    thisInst.crossFlag = false;
     thisInst.newInst.ul.insertBefore(thisInst.added, thisInst.newInst.elts[thisInst.added.n + 1]);
     // The element (thisInst.added) is place on triggerOn,
     // but is not moved if the user subsequently reorders(by dragging) the elements.
