@@ -17,6 +17,7 @@ Roadmap:
 + add placeholder when dragging
 + maybe set {passive: true} as third argument on event start and event move - https://developers.google.com/web/updates/2017/01/scrolling-intervention
 + allow individual width of each instance in vertical
++ if id is not passed in options, it will get the div id or assign a number based id based on the order of instantiation(default)
 
 0.1
 
@@ -34,8 +35,6 @@ Roadmap:
 + when using a single list, allow the option to constrain to a single axis - http://www.javascriptkit.com/javatutors/touchevents.shtml(bottom)
 + allow jquery pointer polyfill as optional
 + put elt object properties on namespaced separate object. Name the object dynamically to the div id.
-+ pass in the element for the adjacent container on instantiation, and set/look up adjacent container by its id
-  if id is not passed in options, it will get the div id or assign a number based id based on the order of instantiation(default)
 --------------------------------------------------
 + fix onReorder event to only show reorder on the desired instance
 + fix lock method
@@ -44,6 +43,7 @@ Roadmap:
 + allow option to cutoff to specified instance
 + recalculate adjInst(n).distanceTo & props.divWidth/divHeight on reLayout
 + loop over copy.adjInst(n) to be removed in setInstances
++ allow shuffle method with no parameters, otherwise should take an array of instances
 
 
 Fixed:
@@ -77,6 +77,7 @@ Fixed:
 + account for margin/space  between instances - DONE
 + remove setInstances, addLiElem, removeLiElem from proto - DONE
 + fix shaking animation in edge - DONE (occurs when .container class position is not set to absolute in css)
++ pass in the element for the adjacent container on instantiation, and set/look up adjacent container by its id - DONE
 
 Partially fixed:
 + prevent multitouch !!! - The element will freeze and animate back if multi touch is detected. Find a way to simple ignore additional touches
