@@ -44,6 +44,8 @@ Roadmap:
 + recalculate adjInst(n).distanceTo & props.divWidth/divHeight on reLayout
 + loop over copy.adjInst(n) to be removed in setInstances
 + allow shuffle method with no parameters, otherwise should take an array of instances
++ add support for ordered list (ol)
++ add support for css counters, run relaoyt on drop and after cutoff to realign - not fixed yet
 
 
 Fixed:
