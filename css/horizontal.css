@@ -1,24 +1,22 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 60px;
+}
+
 #jMyPuzzleId5 {
-  margin: 0;
-  position: absolute;
-  width: inherit;
-  height: 60px;
-  display: none;
+    height: 42px;
+    grid-column: 1 / -1;
 }
 #jMyPuzzleId6 {
-  position: absolute;
-  width: inherit;
-  height: 60px;
-  margin-top: 70px;
-  display: none;
+    grid-column: 1 / -1;
+        height: 42px;
 }
 #jMyPuzzleId7 {
-  position: absolute;
-  width: inherit;
-  height: 60px;
-  margin-top: 140px;
-  display: none;
+    grid-column: 1 / -1;
+        height: 42px;
 }
+
 .splitList-horizontal {
   width: inherit;
   position: absolute;

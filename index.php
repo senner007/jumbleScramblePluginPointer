@@ -22,7 +22,9 @@ if(isset($_GET['p']) && strlen($_GET['p'])>0)
 	<div id="getPHP"><?php echo $server; ?></div>
 	<div class="container">
 	  <?php include 'examples_js/examples/vertical.php';?>
-  <?php include 'examples_js/examples/horizontal.php';?>
+     <div class="grid">
+       <?php include 'examples_js/examples/horizontal.php';?>
+	   </div>
 	</div>
  <button class="bodyButton" id="button1">vertical</button>
  <button class="bodyButton" id="button2">horizontal</button>
