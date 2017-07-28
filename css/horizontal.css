@@ -1,19 +1,19 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 60px;
+
+  grid-gap: 10px;
 }
 
 #jMyPuzzleId5 {
     height: 42px;
-    grid-column: 1 / -1;
+
 }
 #jMyPuzzleId6 {
-    grid-column: 1 / -1;
+
         height: 42px;
 }
 #jMyPuzzleId7 {
-    grid-column: 1 / -1;
+
         height: 42px;
 }
 
@@ -45,4 +45,3 @@
   margin-left: 4px;
   margin-right: 4px;
 }
-D
