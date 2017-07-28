@@ -23,7 +23,7 @@ var vertical = function () {
   //  console.log(elem.id)
 
     var winHeight = window.innerHeight - 50; // recalculate windows height for cutoff on resize.
-
+var containers = [];
     var cont1 = new JumbleScramble(elem1, {
       isVertical: true,
       cutOff: winHeight,
@@ -111,7 +111,7 @@ var vertical = function () {
   //  example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
     cont2.div.addEventListener('onLayoutAll', function () {
       //
-      // cont2.addLiElem("This element is added after the 'layoutCompleteAll' event.<span></br>This text <div class='blue'> This text is in a nested span element.</div>  is in a span element.</span>",0, {elt:true,elts:true},)
+     cont2.addLiElem("This element is added after the 'layoutCompleteAll' event.<span></br>This text <div class='blue'> This text is in a nested span element.</div>  is in a span element.</span>",0, {elt:true,elts:true},)
 
     })
     $(cont1.div).on('onReorder', function (ev, elt, elts) {
@@ -131,6 +131,26 @@ var vertical = function () {
       }
       //$(this).off('pointerdown.hello');
     })
+
+    cont1.div.addEventListener('onDrop', function (ev) {
+
+      //$(this).find('li').first().css('height', '50px');
+      $(this).find('li').addClass('trimText')
+      cont1.reLayout()
+    })
+var containers = [cont1,cont2,cont3,cont4,cont5]
+
+for (let i = 0; i<containers.length; i++) {
+  if (containers[i] != cont1) {
+
+    containers[i].div.addEventListener('onDrop', function (ev) {
+
+    containers[i].reLayout()
+    })
+  }
+}
+
+
 
   /*---------------------------------------------------------------------------------------------------------------------------------------*/
 

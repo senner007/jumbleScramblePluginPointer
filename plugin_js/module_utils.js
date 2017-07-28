@@ -27,6 +27,8 @@ var setEvents = {
         onLayoutAll: new Event('onLayoutAll'),
         onLayout : new Event('onLayout'),
         onReorder: new Event('onReorder'),
+        onDrop: new Event('onDrop')
+
 
   };
 

@@ -290,6 +290,7 @@ function _onStop(elt, thisInst) { // Stop
     thisInst.removeLiElem(elt, false); // the dragged elt from the previous/starting instance is deleted once animated to its position
     thisInst.unlock.call(thisInst.newInst);
     _scaleElems(_elemsToCut(thisInst, thisInst.newInst), thisInst);
+    thisInst.newInst.div.dispatchEvent(setEvents.onDrop);
 
 
     //    console.clear()
