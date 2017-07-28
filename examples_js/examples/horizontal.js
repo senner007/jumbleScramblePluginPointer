@@ -32,7 +32,7 @@ var horizontal = function () {
 
   var cont2 = new JumbleScramble(elem2, {
     isVertical: false,
-    cutOff: false,
+    cutOff: winWidth,
     adjIds: [
       elem.id,
       elem3.id
@@ -41,7 +41,7 @@ var horizontal = function () {
    })
    var cont3 = new JumbleScramble(elem3, {
      isVertical: false,
-     cutOff: false,
+     cutOff: winWidth,
      adjIds: [
        elem.id,
        elem2.id
@@ -66,12 +66,46 @@ var horizontal = function () {
      }
      //$(this).off('pointerdown.hello');
    })
+   var containers = [cont1,cont2,cont3]
+   //
+  //  for (let i = 0; i<containers.length; i++) {
+   //
+   //
+  //      containers[i].div.addEventListener('onDrop', function (ev) {
+  //            for (let i = 0; i<containers.length; i++) {
+  //              containers[i].reLayout()
+   //
+  //           }
+  //      })
+   //
+  //  }
+  cont1.div.addEventListener('afterCut', function (ev) {
+  console.log('cut 1 ')
+          cont1.reLayout()
+            cont2.reLayout()
+              cont3.reLayout()
+  })
+  cont2.div.addEventListener('afterCut', function (ev) {
+      console.log('cut 2')
+          cont1.reLayout()
+            cont2.reLayout()
+              cont3.reLayout()
+  })
+  cont3.div.addEventListener('afterCut', function (ev) {
+    console.log('cut 3 ')
+          cont1.reLayout()
+            cont2.reLayout()
+              cont3.reLayout()
+  })
+
 
    /*---------------------------------------------------------------------------------------------------------------------------------------*/
 
   cont1.init();
   cont2.init();
   cont3.init();
+
+
 
   $(window).on('resize', function() {
     var winWidth = window.innerWidth - 50;
