@@ -1,30 +1,38 @@
 .grid {
   display: grid;
-
   grid-gap: 10px;
+
+
 }
 
 #jMyPuzzleId5 {
     height: 42px;
+    grid-column: 1;
 
 }
 #jMyPuzzleId6 {
-
+    grid-column: 1;
         height: 42px;
+
 }
 #jMyPuzzleId7 {
-
+    grid-column: 1;
         height: 42px;
+
 }
 
 .splitList-horizontal {
   width: inherit;
   position: absolute;
   display: block;
+  
+        list-style-type: none;
+
 }
 .listItem-horizontal {
+
   position: absolute;
-  list-style: none;
+
   height: 42px;
   line-height: 40px;
   margin-left: 10px;
