@@ -63,6 +63,7 @@ ThisInst.left + thisInst.w /2 > thisInst[p].left && ThisInst.left + thisInst.w /
 + Put transition test and prefix functions on prototype
 + Put crossflag on instance object - not prototype
 + Set initial div.id on elt
++ namespace properties set on elt, use getter and setter to retrieve shorthand names and log changes ( oo js Zakas, N p.37 )
 
 Fixed:
 + allow dragging and dropping over other instances - Fixed
