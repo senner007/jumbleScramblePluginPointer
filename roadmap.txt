@@ -47,6 +47,24 @@ Roadmap:
 + add support for ordered list (ol)
 + add support for css counters, run relaoyt on drop and after cutoff to realign - not fixed yet
 
++ thisInst.collapsed should not be se set to false on line 76
++ only animate elements above insert position on line 168
++ No need to pass adjConElts to triggeroff function
++ Use normalize.css
++ Maybe refactor to only 1 trigger function and move logic to ondrag if statements
++ Check for insert position in triggerOff function
++ Use only one loop when setting divSwitch, save the position distance to a var and only run loop if outside the saved distance
+
++ update algorithm to allow for individual width of adjacent vertical instances : 
+ThisInst.left + thisInst.w /2 > thisInst[p].left && ThisInst.left + thisInst.w /2 < thisInst[p] + thisInst[p].w
+
++ Account for top and left position of div. Set with css grid or display: inline-block 
++ Allow vertical instances to be placed vertically above/under. Create example with 4 vertical instances aligned horizontally which then realigns to 2 above and 2 under in landscape mode.
++ Validate html with w3 
++ Optional sorting functionality - drag from but not reorder
++ Put transition test and prefix functions on prototype
++ Put crossflag on instance object - not prototype
++ Set initial div.id on elt
 
 Fixed:
 + allow dragging and dropping over other instances - Fixed
