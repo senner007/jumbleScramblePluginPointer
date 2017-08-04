@@ -48,11 +48,9 @@ Roadmap:
 + add support for css counters, run relaoyt on drop and after cutoff to realign - not fixed yet
 
 + thisInst.collapsed should not be se set to false on line 76
-+ only animate elements above insert position on line 168
 + No need to pass adjConElts to triggeroff function
 + Use normalize.css
 + Maybe refactor to only 1 trigger function and move logic to ondrag if statements
-+ Check for insert position in triggerOff function
 + Use only one loop when setting divSwitch, save the position distance to a var and only run loop if outside the saved distance
 
 + update algorithm to allow for individual width of adjacent vertical instances : 
