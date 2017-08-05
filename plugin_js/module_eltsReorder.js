@@ -73,14 +73,13 @@ function _onDrag(elt, thisInst) { // Drag
 
   if (dirSwitch && thisInst.crossFlag == false) {
 
-    thisInst.collapsed = false;
     //  if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= thisInst.adjInst.props.dropLimit) {
     // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
     if (thisInst.newInst.props.ulSize < thisInst.newInst.props.dropLimit || thisInst.newInst.props.dropLimit == false) {
 
       onTrigger.triggerOn(elt, adjConElts, elts, o, thisInst);
     }
-    //  }
+
   };
 
   var home = posObj[dir] > (  0 - thisInst.props[measure] /2   )  && posObj[dir] < (  thisInst.props[measure] /2)  ; // only execute if moving within home instance distance
@@ -89,6 +88,7 @@ function _onDrag(elt, thisInst) { // Drag
   if (!dirSwitch && thisInst.crossFlag == true) { // go back to originating container
 
     if (home) {
+      console.log('triggeroff')
 
       onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
     }
@@ -140,15 +140,12 @@ var onTrigger = { //These will trigger when the elt is crossing over to connecte
     // (dropped after last item)
     // reorder the elements in the originating container
 
-    if (thisInst.collapsed == false) {
-      for (var i = elt.n + 1; i < elts.length; i++) { // originating
 
+      for (var i = elt.n + 1; i < elts.length; i++) { // originating
         eltsReorder._eltsMoveBackOrUp(elt, elts, thisInst, true);
         // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
-
       }
-      thisInst.collapsed = true;
-    }
+
     thisInst.crossFlag = true;
     var display = 'none'
 
@@ -165,8 +162,9 @@ var onTrigger = { //These will trigger when the elt is crossing over to connecte
     thisInst.crossFlag = false;
     thisInst.removeLiElem.call(thisInst.newInst, thisInst.added, false)
 
-      for (var i = 0; i < elts.length - 1; i++) { // Loop over originating Container elements, animating them and updating their properties
+      for (var i = 0; i < elts.length; i++) { // Loop over originating Container elements, animating them and updating their properties
         eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
+
       }
     elt.hasCrossed = thisInst.crossFlag;
     delete thisInst.added
@@ -191,7 +189,6 @@ var eltsReorder = {
         elts[elt.n - 1] = elt;
         elts[elt.n].n = elt.n;
         elt.n = elt.n - 1;
-
         this.eltsAnimate(eltPrev, -(elt[dims]), thisInst)
       }
     }
