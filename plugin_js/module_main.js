@@ -43,7 +43,7 @@
     thisElts[n].n = n; // its current position (as per the other elements)
     thisElts[n].o = thisInst.options; // its current position (as per the other elements)
     thisElts[n].hasCrossed = false; // has the elt crossed over to the other container
-    thisElts[n].newPosSameCon = false; // has the element changed position but remained in the same container
+  //  thisElts[n].newPosSameCon = false; // has the element changed position but remained in the same container //  remove!
     // thisElts[n].belongsTo = thisInst.container;
     //thisElts[n].movesTo = thisInst.adjCon;
     thisElts[n].currentPos = {};
