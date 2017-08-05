@@ -90,7 +90,7 @@ function _onDrag(elt, thisInst) { // Drag
     if (home) {
       console.log('triggeroff')
 
-      onTrigger.triggerOff(elt, adjConElts, elts, o, thisInst);
+      onTrigger.triggerOff(elt, elts, thisInst);
     }
     else { return;}
   };
@@ -157,7 +157,7 @@ var onTrigger = { //These will trigger when the elt is crossing over to connecte
     elt.hasCrossed = thisInst.crossFlag;
 
   },
-  triggerOff: function(elt, adjConElts, elts, o, thisInst) { // going back to the originating container
+  triggerOff: function(elt, elts, thisInst) { // going back to the originating container
 
     thisInst.crossFlag = false;
     thisInst.removeLiElem.call(thisInst.newInst, thisInst.added, false)
