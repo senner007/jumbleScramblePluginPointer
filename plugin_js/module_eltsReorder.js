@@ -51,10 +51,7 @@ function _onDrag(elt, thisInst) { // Drag
         for (var ii = 0; ii < adjConLenght; ii++) {
 
           if (thisInst.adjCon[ii] != p && thisInst[thisInst.adjCon[ii]].currentlyIn == true) {  // all the instances that elt is currently not moving in that have their ptoperty currentlyIn set to true
-
-            thisInst.crossFlag = false;
-            thisInst.removeLiElem.call(thisInst.newInst, thisInst.added, false)
-            delete thisInst.added
+            onTrigger.triggerOff(thisInst);
             thisInst[thisInst.adjCon[ii]].currentlyIn = false;
             break;
           }
@@ -82,15 +79,18 @@ function _onDrag(elt, thisInst) { // Drag
 
   };
 
-  var home = posObj[dir] > (  0 - thisInst.props[measure] /2   )  && posObj[dir] < (  thisInst.props[measure] /2)  ; // only execute if moving within home instance distance
-                                                                                                                    // of home instance -/+ instance (width/height /2)
-
   if (!dirSwitch && thisInst.crossFlag == true) { // go back to originating container
 
+    var home = posObj[dir] > (  0 - thisInst.props[measure] /2   )  && posObj[dir] < (  thisInst.props[measure] /2)  ; // only execute if moving within home instance distance
+                                                                                                                      // of home instance -/+ instance (width/height /2)
     if (home) {
-      console.log('triggeroff')
 
-      onTrigger.triggerOff(elt, elts, thisInst);
+      onTrigger.triggerOff(thisInst);
+
+      for (var i = 0; i < elts.length; i++) { // Loop over originating Container elements, animating them and updating their properties
+        eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
+
+      }
     }
     else { return;}
   };
@@ -156,16 +156,12 @@ var onTrigger = { //These will trigger when the elt is crossing over to connecte
 
 
   },
-  triggerOff: function(elt, elts, thisInst) { // going back to the originating container
+  triggerOff: function(thisInst) { // going back to the originating container
 
     thisInst.crossFlag = false;
-    thisInst.removeLiElem.call(thisInst.newInst, thisInst.added, false)
-
-      for (var i = 0; i < elts.length; i++) { // Loop over originating Container elements, animating them and updating their properties
-        eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
-
-      }
+    thisInst.removeLiElem.call(thisInst.newInst, thisInst.added, false);
     delete thisInst.added
+
   },
 };
 
@@ -288,15 +284,15 @@ function _onStop(elt, thisInst) { // Stop
     thisInst.newInst.div.dispatchEvent(setEvents.onDrop);
 
 
-    //    console.clear()
-    //   var elts =  thisInst.newInst.elts
-    // for (var i =0; i < elts.length; i++) { // originating
-    //     console.log('- : ' + elts[i].n)
-    //     console.log('pos left: ' +  elts[i].pos.left)
-    //     console.log('style left: ' +   elts[i].style.left)
-    //     console.log('pos top: ' +  elts[i].pos.top)
-    //     console.log('style top: ' +  elts[i].style.top)
-    // };
+       console.clear()
+      var elts =  thisInst.newInst.elts
+    for (var i =0; i < elts.length; i++) { // originating
+        console.log('- : ' + elts[i].n)
+        console.log('pos left: ' +  elts[i].pos.left)
+        console.log('style left: ' +   elts[i].style.left)
+        console.log('pos top: ' +  elts[i].pos.top)
+        console.log('style top: ' +  elts[i].style.top)
+    };
 
 
   };
