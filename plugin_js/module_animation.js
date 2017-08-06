@@ -18,7 +18,8 @@ function _transToZero(elt, thisInst, speed) {
 
 };
 
-function _animateBack(elt, o, thisInst) {
+function _animateBack(elt, thisInst) {
+  var o = thisInst.options;
 
   var eltMarginLeft = o.isVertical ? 0 : elt.completeWidth - elt.offsetWidth; // set margin for horizontal
   if (thisInst.crossFlag) {
