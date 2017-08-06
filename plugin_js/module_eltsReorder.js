@@ -268,7 +268,8 @@ function _onStop(elt, thisInst) { // Stop
 
   } else { // staying in originating container
 
-    if (!elt.hasCrossed && (elt.nStart != elt.n)) { //(elt.nStart != elt.n) only run the code in the if statement if elt is in new position
+
+    if (elt.nStart != elt.n) { //(elt.nStart != elt.n) only run the code in the if statement if elt is in new position
       // insert the dragged element into its new position efter drop in originating container
       // on condition that it has changed its position
       thisInst.ul.insertBefore(elt, thisInst.elts[elt.n + 1]);
