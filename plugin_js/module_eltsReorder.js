@@ -227,7 +227,6 @@ var eltsReorder = {
 }
 
 function _onStop(elt, thisInst) { // Stop
-  var o = thisInst.options;
 
   elt.endDate = new Date();
   elt.dragSpeed = (elt.endDate.getTime() - elt.startDate.getTime()) / 1000;
@@ -274,7 +273,7 @@ function _onStop(elt, thisInst) { // Stop
     }
   }
 
-  _animateBack(elt, o, thisInst);
+  _animateBack(elt, thisInst);
   _transToZero(elt, thisInst, speed);
 
   thisInst.crossFlag = false;
@@ -282,7 +281,6 @@ function _onStop(elt, thisInst) { // Stop
   function appendRemove() {
 
     thisInst.added.style.display = 'block'
-    o.isVertical ? thisInst.added.style.top = elt.style.top : thisInst.added.style.left = elt.style.left;
     delete thisInst.added // the object that is a reference to the added object is deleted
     thisInst.removeLiElem(elt, false); // the dragged elt from the previous/starting instance is deleted once animated to its position
     thisInst.unlock.call(thisInst.newInst);
@@ -291,10 +289,13 @@ function _onStop(elt, thisInst) { // Stop
 
 
     //    console.clear()
-    // for (var i =0; i < thisInst.newInst.elts.length; i++) { // originating
-    //     console.log('- : ' + this.adjInst.elts[i].n)
-    //     console.log(this.adjInst.elts[i].pos.left)
-    //     console.log(this.adjInst.elts[i].style.left)
+    //   var elts =  thisInst.newInst.elts
+    // for (var i =0; i < elts.length; i++) { // originating
+    //     console.log('- : ' + elts[i].n)
+    //     console.log('pos left: ' +  elts[i].pos.left)
+    //     console.log('style left: ' +   elts[i].style.left)
+    //     console.log('pos top: ' +  elts[i].pos.top)
+    //     console.log('style top: ' +  elts[i].style.top)
     // };
 
 
