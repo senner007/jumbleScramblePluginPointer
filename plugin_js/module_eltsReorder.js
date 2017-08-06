@@ -154,7 +154,6 @@ var onTrigger = { //These will trigger when the elt is crossing over to connecte
       elts: true
     }, elt.completeHeight, elt.completeWidth, display);
 
-    elt.hasCrossed = thisInst.crossFlag;
 
   },
   triggerOff: function(elt, elts, thisInst) { // going back to the originating container
@@ -166,7 +165,6 @@ var onTrigger = { //These will trigger when the elt is crossing over to connecte
         eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
 
       }
-    elt.hasCrossed = thisInst.crossFlag;
     delete thisInst.added
   },
 };
@@ -252,7 +250,7 @@ function _onStop(elt, thisInst) { // Stop
   if (thisInst.crossFlag == true) { // going to new container
 
     thisInst.lock.call(thisInst.newInst);
-    thisInst.crossFlag = false;
+
     thisInst.newInst.ul.insertBefore(thisInst.added, thisInst.newInst.elts[thisInst.added.n + 1]);
     // The element (thisInst.added) is place on triggerOn,
     // but is not moved if the user subsequently reorders(by dragging) the elements.
@@ -279,6 +277,7 @@ function _onStop(elt, thisInst) { // Stop
   _animateBack(elt, o, thisInst);
   _transToZero(elt, thisInst, speed);
 
+  thisInst.crossFlag = false;
 
   function appendRemove() {
 
