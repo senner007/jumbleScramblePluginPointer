@@ -75,13 +75,16 @@
   font-style: italic;
 }
 
-.numberToFont {
+/*This (.numberToFont) causes randomly occurring  gaps between elements : */
+/*.numberToFont {
   font-size: 20px;
   padding: 3px;
   color: rgba(68, 68, 68, 1);
   font-family: 'UnderwoodChampionRegular';
 
-}
+}*/
+
+
 
 span .blue {
   color: #00A2CD;
