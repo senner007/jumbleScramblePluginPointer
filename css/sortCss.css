@@ -44,11 +44,12 @@ li {
 
 
 }
-li::before {
+/*This classcauses randomly occurring gaps between elements :*/
+/*li::before {
   counter-increment: section;
   content: counter(section);
 
-}
+}*/
 li:active {
   cursor: -webkit-grabbing;
   cursor: -moz-grabbing;
