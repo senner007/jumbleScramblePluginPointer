@@ -27,8 +27,9 @@ var setEvents = {
         onLayoutAll: new Event('onLayoutAll'),
         onLayout : new Event('onLayout'),
         onReorder: new Event('onReorder'),
-        onDrop: new Event('onDrop'),
-        afterCut: new Event('afterCut')
+        onDropTo: new Event('onDropTo'),
+        onDropFrom: new Event('onDropFrom')
+      //  afterDrop: new Event('afterDrop')
 
 
   };
@@ -39,13 +40,14 @@ function _elemsToCut(thisInst, adjInst) {
   }
 
   var elemsToCut = [],
-      size = thisInst.getUlSize.call(adjInst),
-      height = adjInst.options.isVertical ? 'completeHeight' : 'completeWidth',
+      ulSize = thisInst.getUlSize.call(adjInst),
       counter = -1;
 
-  while (size > adjInst.props.cutOff) {
+  //  console.log(size)
+  while (ulSize > adjInst.props.cutOff) {
+
     elemsToCut.push(adjInst.elts[adjInst.elts.length + counter])
-    size -= adjInst.elts[adjInst.elts.length + counter][height]
+    ulSize -= adjInst.elts[adjInst.elts.length + counter].props.size
     counter -= 1
   }
 
@@ -53,12 +55,16 @@ function _elemsToCut(thisInst, adjInst) {
   if (elemsToCut.length != 0) {
 
     for (var i = 0; i < elemsToCut.length; i++) {
-      addedElemsArray.push(thisInst.addLiElem(elemsToCut[i].innerHTML, 0, {elt: false, elts: true}, elemsToCut[i].completeHeight, elemsToCut[i].completeWidth))
+      let setHeight = {
+        completeHeight: elemsToCut[i].completeHeight,
+        completeWidth: elemsToCut[i].completeWidth
+      }
+      addedElemsArray.push(thisInst.addLiElem(elemsToCut[i].innerHTML, 0, {elt: false, elts: true}, setHeight))
       thisInst.removeLiElem.call(adjInst, adjInst.elts[adjInst.elts.length - 1], adjInst.transSupport, false)
     }
 
   }
-  thisInst.div.dispatchEvent(setEvents.afterCut);
+
   return addedElemsArray;
 
 }
@@ -146,5 +152,5 @@ var transSupport = (function() {
 
 var ifGpu = transSupport ? 'translate3d(0px,0px,0px) translateZ(0)' : 'translate(0px,0px)';
 var testElement = document.createElement('div');
-var transitionPrefix = "webkitTransition" in testElement.style ? "webkitTransition" : "transition";
-var transformPrefix = "webkitTransform" in testElement.style ? "webkitTransform" : "-ms-transform" in testElement.style && transSupport == false ? "-ms-transform" : "transform"; //if ie9
+var transitionPrefix = "webkitTransition" in testElement.style ? "-webkit-transition" : "transition";
+var transformPrefix = "webkitTransform" in testElement.style ? "-webkit-transform" : "-ms-transform" in testElement.style && transSupport == false ? "-ms-transform" : "transform"; //if ie9
