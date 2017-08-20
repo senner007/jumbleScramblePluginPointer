@@ -1,53 +1,44 @@
-.grid {
+.grid-horizontal {
   display: grid;
-  grid-gap: 10px;
-
-
+  grid-gap: 100px;
 }
 
-#jMyPuzzleId5 {
-    height: 42px;
-    grid-column: 1;
-
-}
-#jMyPuzzleId6 {
-    grid-column: 1;
-        height: 42px;
-
-}
-#jMyPuzzleId7 {
-    grid-column: 1;
-        height: 42px;
-
+#jMyPuzzleId5, #jMyPuzzleId6, #jMyPuzzleId7 {
+  grid-column: 1;
+  height: 42px;
 }
 
 .splitList-horizontal {
   width: inherit;
   position: absolute;
   display: block;
-  
-        list-style-type: none;
-
+  list-style-type: none;
 }
+
 .listItem-horizontal {
-
   position: absolute;
-
+  font-size: 18px;
+  text-align: center;
   height: 42px;
-  line-height: 40px;
+  line-height: 42px;
   margin-left: 10px;
   padding-left: 8px;
   padding-right: 8px;
   border: 1px solid black;
   white-space: nowrap;
 }
+
 .listItem-horizontal span {
-  font-size: 18px;
+  /*font-size: 40px;*/
   color: #00A2CD;
-  z-index: 210;
   font-style: italic;
   opacity: 1;
+  vertical-align: middle;
+  position: relative;
+  top: -4px;
+
 }
+
 .listItem-horizontal .liButton {
   width: 150px;
   margin-left: 4px;
