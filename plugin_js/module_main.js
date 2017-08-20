@@ -30,23 +30,54 @@
   export default JumbleScramble;
   // ES6 MODULE IMPORT/EXPORT
   ////////////////////////////
+  function Elt (n, thisHeight, thisWidth, thisInst, eltObj) {
+    var isVertical = thisInst.options.isVertical == true;
+
+    this.o = thisInst.options; // its current position (as per the other elements)
+    this.completeWidth = thisWidth || 0; // its width (with the margin)
+    this.completeHeight = thisHeight || 0; // its height (with the margin)
+    this.size;
+    this.pos = isVertical ? { top: eltObj.top, left: 0 } : {  top: 0, left: eltObj.left }; // its position (left and top position)
+    this.initN = n; // its initial position (as per the other elements)
+    this.n = n; // its current position (as per the other elements)
+    this.currentPos = {top:0, left:0};
+//    console.log(thisWidth)
+
+  }
+
+function setEltProto (param) {
+  Object.defineProperty(Elt.prototype, param, {
+  	get: function() { return this.size },
+  	set: function(value) { this.size = value }
+  })
+}
 
 
   function _addToObject(elt, n, thisHeight, thisWidth, thisInst, eltObj) {
     var thisElts = thisInst.elts
+    var isVertical = thisInst.options.isVertical == true;
     thisElts[n] = elt;
-    thisElts[n].completeWidth = thisWidth || 0; // its size (with the margin)
-    thisElts[n].completeHeight = thisHeight || 0; // its height (with the margin)
-    thisElts[n].pos = { top: eltObj.top, left: eltObj.left }; // its position (left and top position)
-    thisInst.options.isVertical == true ? thisInst.elts[n].pos = { top: eltObj.top, left: 0 } : thisElts[n].pos = {  top: 0, left: eltObj.left };
-    thisElts[n].initialN = n; // its initial position (as per the other elements)
-    thisElts[n].n = n; // its current position (as per the other elements)
-    thisElts[n].o = thisInst.options; // its current position (as per the other elements)
+    // thisElts[n].completeWidth = thisWidth || 0; // its width (with the margin)
+    // thisElts[n].completeHeight = thisHeight || 0; // its height (with the margin)
+  //  thisElts[n].size = thisInst.options.isVertical == true ? thisHeight : thisWidth
+  //  thisElts[n].pos = isVertical ? { top: eltObj.top, left: 0 } : {  top: 0, left: eltObj.left }; // its position (left and top position)
+//    thisElts[n].initN = n; // its initial position (as per the other elements)
+  //  thisElts[n].n = n; // its current position (as per the other elements)
+  //  thisElts[n].o = thisInst.options; // its current position (as per the other elements)
   //  thisElts[n].hasCrossed = false; // has the elt crossed over to the other container
   //  thisElts[n].newPosSameCon = false; // has the element changed position but remained in the same container //  remove!
     // thisElts[n].belongsTo = thisInst.container;
     //thisElts[n].movesTo = thisInst.adjCon;
-    thisElts[n].currentPos = {};
+    //thisElts[n].currentPos = {top:0, left:0};
+
+
+      var param = isVertical ? "completeHeight" : "completeWidth";
+      if (!(param in Elt.prototype)) {setEltProto(param);}
+
+
+    thisElts[n].props = new Elt(n, thisHeight, thisWidth, thisInst, eltObj)
+
+
   };
 
   function jsOffset(el) { // replaces jquery offset
@@ -60,17 +91,16 @@
   }
 
   function JumbleScramble(element, options) { // Constructor function
-    if (!window.temporaryInstanceArray) {
-      window.temporaryInstanceArray = [];
-    } // create the temporaryInstanceArray in the global scope
+    window.temporaryInstanceArray =  window.temporaryInstanceArray || [];
+     // create the temporaryInstanceArray in the global scope
     this.props = {}; // The values that are to remain a reference as a shallow copy and update accordingly in adjInst must reside in a nested oobject.
                     // it is a sideeffect of Object.assign :
                     //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
     this.div = element;
     this.id = this.div.id;
     this.props.divOffset = jsOffset(element);
-    this.props.divWidth = this.div.offsetWidth;
-    this.props.divHeight = this.div.offsetHeight;
+    this.props.divWidth = _outerWidth(this.div);
+    this.props.divHeight = _outerHeight(this.div);
     this.ul = this.div.querySelector('ul');
 
     this.props.locked = false;
@@ -80,18 +110,16 @@
     this.props.cutOff = this.options.cutOff
     this.props.dropLimit = this.options.dropLimit;
     this.ul.style[transformPrefix] = 'translate3d(0px,0px,0px)';
-    this.props.ulSize = this.options.ulSize;
+    this.props.ulSize = 0;
     this.transitionPrefix = transitionPrefix;
     this.transformPrefix = transformPrefix;
     this.ifGpu = ifGpu;
     this.transSupport = transSupport;
-
-
-
+    this.crossFlag = false;
     window.temporaryInstanceArray.push(this);
   };
 
-  JumbleScramble.prototype.crossFlag = false;
+
 
   JumbleScramble.prototype.setCutOff = function (cutOff){
 
@@ -118,35 +146,32 @@
 
   JumbleScramble.prototype.setInstances = function() {
 
-    var adjInstances = this.options.adjIds;
-    var adjConnected = [];
-    // console.log(adjInstances)
-    // console.log(temporaryInstanceArray.length)
+    var adjInstances = this.options.adjIds;                     //Refactor - too many loops
 
     for (var i= 0;i<temporaryInstanceArray.length; i++) {
-
-
 
         for (var n = 0; n<adjInstances.length; n++) {
 
            if (temporaryInstanceArray[i].id == adjInstances[n]) {
 
-                adjConnected.push(temporaryInstanceArray[i])
                 var copy = Object.assign({}, temporaryInstanceArray[i]);
-
-                delete copy.adjInst1;           // Refactor me!
-                delete copy.adjInst2;
-                delete copy.adjInst3;
-                delete copy.adjInst4;
+                for (let val of copy.adjCon) {
+                 delete copy[val]
+                }
                 delete copy.adjCon;
-                this['adjInst' + (n +1)] = copy; this.adjCon.push('adjInst' + (n +1))
+                this['adjInst' + (n +1)] = copy;
+                this.adjCon.push('adjInst' + (n +1))
 
                 copy.distanceTo = this.crossDistance(this, temporaryInstanceArray[i])
            }
         }
+
     }
 
+
   }
+
+
 
   JumbleScramble.prototype.getUlSize = function() {
     return this.props.ulSize;
@@ -165,6 +190,7 @@
     for (var i = 0; i < elts.length; i++) {
       var elt = elts[i];
 
+
       if (thisInst.options.isVertical) {
         elt.style.top = size + 'px'; // get each li height in case of individual heights.
         var thisHeight = _outerHeight(elt);
@@ -182,7 +208,7 @@
       _addToObject(elt, n, thisHeight, thisWidth, thisInst, {top:newPosTop, left:newPosLeft});
 
       n = n + 1;
-      elt.style[thisInst.transformPrefix] = 'translate3d(0px, 0px, 0px)';
+      //elt.style[thisInst.transformPrefix] = 'translate3d(0px, 0px, 0px)'; // must be off for scale to work
     };
     return size; // return the size of the ul
   };
@@ -209,8 +235,8 @@
 
     _addEventHandlers(this);
 
-    this.div.dispatchEvent(setEvents.onLayout) // example of sending the ul height as second parameter to the callback
     this.init = true;
+    this.div.dispatchEvent(setEvents.onLayout) // onLayout event
 
     var counter = 0;
 
@@ -227,6 +253,7 @@
 
         instance.div.dispatchEvent(setEvents.onLayoutAll)
       });
+
 
       //temporaryInstanceArray = null
       // delete the global instance array
@@ -258,7 +285,7 @@
   JumbleScramble.prototype.reLayout = function() {
 
 
-    _setUlSize(_setEltsProps(this.elts, this), this) //setting properties function return the ul size
+    _setUlSize(_setEltsProps(this.elts, this), this) //setting properties function returns the ul size
     this.props.divOffset = jsOffset(this.div)
 
 
@@ -268,7 +295,7 @@
 
   JumbleScramble.prototype.cutOffEnd = function() { // function to remove the items above cutoff limit and then prepend the adjacent container
 
-    _scaleElems( _elemsToCut(this, this.adjInst) , this); //_elemsToCut function return the elts to scale
+    _scaleElems( _elemsToCut(this, this.adjInst) , this); //_elemsToCut function returns the elts to scale
 
   };
 
@@ -277,38 +304,42 @@
 
 
 
-  JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans, completeHeight, completeWidth, display) { // Add new li to previous collection
+  JumbleScramble.prototype.addLiElem = function(liText, liPosition, addTrans, setHeight, opacity = 1) {
+
+    //display param has an ES6 default value
 
     var thisElts = this.elts;
     var liPosition = Math.min(Math.max(parseInt(liPosition), 0), thisElts.length); // this is to make sure that the insert position is not greater than the number of elts present.
-    if (!display) {display = 'block'}
     var n = thisElts.length,
       o = this.options,
       tempArr = [];
       var eltObj = {
-        'left': liPosition > 0 ? thisElts[liPosition - 1].pos.left + thisElts[liPosition - 1].completeWidth : 0,
-        'top': liPosition > 0 ? thisElts[liPosition - 1].pos.top + thisElts[liPosition - 1].completeHeight : 0
+        'left': liPosition > 0 ? thisElts[liPosition - 1].props.pos.left + thisElts[liPosition - 1].props.completeWidth : 0,
+        'top': liPosition > 0 ? thisElts[liPosition - 1].props.pos.top + thisElts[liPosition - 1].props.completeHeight : 0
       }
 
-    var item = ('<li style="display:' + display  +';left:' + eltObj.left + 'px;top:' + eltObj.top + 'px" class=' + (o.isVertical ? 'listItem' : 'listItem-horizontal') + '>' + liText + '</li>');
+    var item = ('<li style="opacity:' + opacity  +';left:' + eltObj.left + 'px;top:' + eltObj.top + 'px" class=' + (o.isVertical ? 'listItem' : 'listItem-horizontal') + '>' + liText + '</li>');
     var elt = document.createElement('li');
     elt.innerHTML = item;
     elt = elt.firstChild;
 
     // insert the elt before the current element at liPosition
-    this.ul.insertBefore(elt, thisElts[liPosition])
+    this.ul.insertBefore(elt, thisElts[liPosition]);
+
 
     // get its height and width
-    var thisWidth = completeWidth || (o.isVertical ? 0 : _outerWidth(elt)),
-      thisHeight = completeHeight || (o.isVertical ? _outerHeight(elt) : 0);
+    var completeWidth = setHeight.completeWidth || (o.isVertical ? 0 : _outerWidth(elt)),
+      completeHeight = setHeight.completeHeight || (o.isVertical ? _outerHeight(elt) : 0);
+
 
       //update the ul size
-    var ulSize = o.isVertical ? this.props.ulSize + thisHeight : this.props.ulSize + thisWidth;
+    var ulSize = o.isVertical ? this.props.ulSize + completeHeight : this.props.ulSize + completeWidth;
     _setUlSize(ulSize, this)
 
     // the elt is inserted at the specified liPosition-position but with the n-property set to the last position.
     // It is then moved up to its position by calling the eltsReorder [liPosition + 1] times
-    _addToObject(elt, n, thisHeight, thisWidth, this, eltObj);
+  //  console.log(eltObj)
+    _addToObject(elt, n, completeHeight, completeWidth, this, eltObj);
 
     //reorder the elts below its insert position(last) and update the elt properties(elt.n & elt.pos)
     //if the elt is added when crossing to adjacent instance, the elt will be referred to by the name of thisInst.added
@@ -334,10 +365,10 @@
   JumbleScramble.prototype.removeLiElem = function(elt, transition, callBack) { // Remove new li to previous collection
 
     if (elt == undefined) {return;} // if the requested elt to delete doesn't exist
-    var n = elt.n,
+    var n = elt.props.n,
       thisElts = this.elts,
-      eltHeight = thisElts[n].completeHeight,
-      eltWidth = thisElts[n].completeWidth;
+      eltHeight = thisElts[n].props.completeHeight,
+      eltWidth = thisElts[n].props.completeWidth;
 
     for (var i = n; i < thisElts.length; i++) {  // Loop over adjacent conatiner elements, animating them and updating their properties
       eltsReorder._eltsMoveBackOrUp(elt, thisElts,  this, true);
