@@ -39,6 +39,7 @@ var containers = [];
 
           var cont2 = new JumbleScramble(elem2, {
             isVertical: true,
+            dropLimit: 500,
             cutOff: winHeight,
             adjIds : [
               elem1.id,
@@ -109,11 +110,11 @@ var containers = [];
 
 
   //  example of firing the layoutCompleteAll callback, which can be set up on all instance.divs. It is fired whan all instances have been init
-    cont2.div.addEventListener('onLayoutAll', function () {
-      //
-     cont2.addLiElem("This element is added after the 'layoutCompleteAll' event.<span></br>This text <div class='blue'> This text is in a nested span element.</div>  is in a span element.</span>",0, {elt:true,elts:true},)
-
-    })
+    // cont2.div.addEventListener('onLayoutAll', function () {
+    //   //
+    //  cont2.addLiElem("<span class='special'></span>This element is added after the 'layoutCompleteAll' event.<span></br>This text <div class='blue'> This text is in a nested span element.</div>  is in a span element.</span>",0, {elt:true,elts:true},)
+    //
+    // })
     $(cont1.div).on('onReorder', function (ev, elt, elts) {
 
         // console.log('elt moved: ' + elt.n)
@@ -132,23 +133,48 @@ var containers = [];
       //$(this).off('pointerdown.hello');
     })
 
-    cont1.div.addEventListener('onDrop', function (ev) {
+    cont1.div.addEventListener('onDropTo', function (ev) {
 
       //$(this).find('li').first().css('height', '50px');
+         liInc(containers)
       $(this).find('li').addClass('trimText')
+
       cont1.reLayout()
     })
+
 var containers = [cont1,cont2,cont3,cont4,cont5]
 
 for (let i = 0; i<containers.length; i++) {
-  if (containers[i] != cont1) {
 
-    containers[i].div.addEventListener('onDrop', function (ev) {
-
-    containers[i].reLayout()
+    containers[i].div.addEventListener('onDropTo', function (ev) {
+       liInc(containers)
+      for (let i = 0; i<containers.length; i++) {
+              containers[i].reLayout()
+        }
     })
-  }
+
 }
+
+function liInc (containers) {
+  var counter = 1;
+  for (let el of containers) {
+
+    for (let i = 0; i<el.elts.length; i++) {
+      var myText = counter + 'th'
+      if (counter == 1) { myText = counter + 'st'}
+      if (counter == 2) { myText = counter + 'nd'}
+      if (counter == 3) { myText = counter + 'rd'}
+
+      el.elts[i].childNodes[0].textContent = myText
+      counter++;
+    }
+
+  };
+
+}
+
+
+
 
 
 

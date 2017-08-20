@@ -19,7 +19,7 @@ var horizontal = function () {
   var elem3 = document.getElementById('jMyPuzzleId7');
   elem3.style.display = 'block'
 
-  var winWidth = window.innerWidth - 50; // recalculate windows height for cutoff on resize. Also run cutoff on resize
+  var winWidth = window.innerWidth; // recalculate windows height for cutoff on resize. Also run cutoff on resize
 
   var cont1 = new JumbleScramble(elem, {
     isVertical: false,
@@ -41,7 +41,8 @@ var horizontal = function () {
    })
    var cont3 = new JumbleScramble(elem3, {
      isVertical: false,
-     cutOff: winWidth,
+    cutOff: winWidth,
+    dropLimit: winWidth- winWidth/4,
      adjIds: [
        elem.id,
        elem2.id
@@ -57,46 +58,120 @@ var horizontal = function () {
       cont1.addLiElem("Added after the 'layoutCompleteAll' event", 0, {elt:true,elts:true},)
    })
 
-   $('ul').on('pointerup.hello', function(ev) { // namespaced event added on top of events set in plugin. requires that stopPropagation is not used in plugin
-   //  ev.preventDefault()
-
-     if (ev.target.localName == 'button') {
-
-       cont1.shuffle(cont1, cont2)
-     }
-     //$(this).off('pointerdown.hello');
-   })
-   var containers = [cont1,cont2,cont3]
+  //  $('ul').on('pointerup.hello', function(ev) { // namespaced event added on top of events set in plugin. requires that stopPropagation is not used in plugin
+  //  //  ev.preventDefault()
    //
+  //    if (ev.target.localName == 'button') {
+   //
+  //      cont1.shuffle(cont1, cont2)
+  //    }
+  //    //$(this).off('pointerdown.hello');
+  //  })
+  //  var containers = [cont1,cont2,cont3]
+  //  //
   //  for (let i = 0; i<containers.length; i++) {
    //
    //
-  //      containers[i].div.addEventListener('onDrop', function (ev) {
+  //     //  containers[i].div.addEventListener('onDrop', function (ev) {
+  //     //        for (let i = 0; i<containers.length; i++) {
+  //     //          containers[i].reLayout()
+  //     //          console.log('relayout: ' + containers[i].id)
+  //      //
+  //     //       }
+  //     //  })
+   //
+  //      containers[i].div.addEventListener('afterDrop', function (ev) {
+  //     //   console.clear()
   //            for (let i = 0; i<containers.length; i++) {
   //              containers[i].reLayout()
+   //
+  //              console.log('relayout: ' + containers[i].id)
    //
   //           }
   //      })
    //
   //  }
-  cont1.div.addEventListener('afterCut', function (ev) {
-  console.log('cut 1 ')
-          cont1.reLayout()
-            cont2.reLayout()
-              cont3.reLayout()
+
+  var containers = [cont1,cont2,cont3]
+  function liInc (containers) {
+    var counter = 1;
+    for (let el of containers) {
+
+      for (let i = 0; i<el.elts.length; i++) {
+        var myText = counter + 'th'
+        if (counter == 1) { myText = counter + 'st'}
+        if (counter == 2) { myText = counter + 'nd'}
+        if (counter == 3) { myText = counter + 'rd'}
+
+        el.elts[i].childNodes[0].textContent = myText
+        counter++;
+      }
+
+    };
+
+  }
+
+  cont1.div.addEventListener('onDropFrom', function (ev) {
+    console.log('onDropFrom - 1')
+    liInc(containers)
+    cont1.reLayout()
+    cont2.reLayout()
+    cont3.reLayout()
   })
-  cont2.div.addEventListener('afterCut', function (ev) {
-      console.log('cut 2')
-          cont1.reLayout()
-            cont2.reLayout()
-              cont3.reLayout()
+  cont2.div.addEventListener('onDropFrom', function (ev) {
+      console.log('onDropFrom - 2')
+      liInc(containers)
+      cont1.reLayout()
+      cont2.reLayout()
+      cont3.reLayout()
   })
-  cont3.div.addEventListener('afterCut', function (ev) {
-    console.log('cut 3 ')
-          cont1.reLayout()
-            cont2.reLayout()
-              cont3.reLayout()
+  cont3.div.addEventListener('onDropFrom', function (ev) {
+    console.log('onDropFrom - 3')
+    liInc(containers)
+    cont1.reLayout()
+    cont2.reLayout()
+    cont3.reLayout()
+
   })
+
+    /*---------------------------------------------------------------------------------------------------------------------------------------*/
+
+  // cont1.div.addEventListener('onDropTo', function (ev) {
+  // console.log('onDropTo - 1')
+  //         cont1.reLayout()
+  //
+  // })
+  //
+  // cont2.div.addEventListener('onDropTo', function (ev) {
+  //       console.log('onDropTo - 2')
+  //         cont2.reLayout()
+  //
+  // })
+  // cont3.div.addEventListener('onDropTo', function (ev) {
+  //     console.log('onDropTo - 3')
+  //         cont3.reLayout()
+  //
+  //
+  // })
+
+
+  /*---------------------------------------------------------------------------------------------------------------------------------------*/
+
+  // cont1.div.addEventListener('afterDrop', function (ev) {
+  // console.log('afterDrop - 1')
+  //         cont1.reLayout()
+  // })
+  //
+  // cont2.div.addEventListener('afterDrop', function (ev) {
+  //       console.log('afterDrop - 2')
+  //         cont2.reLayout()
+  //
+  // })
+  // cont3.div.addEventListener('afterDrop', function (ev) {
+  //     console.log('afterDrop - 3')
+  //         cont3.reLayout()
+  //
+  // })
 
 
    /*---------------------------------------------------------------------------------------------------------------------------------------*/
