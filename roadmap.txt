@@ -1,6 +1,5 @@
 Roadmap:
 2.0
-+ Multiple container drop ( long term )
 + set up css in options overwritring the css in css file
 + optionally implement logic to calculate animation speed based on the position of the dropped item relative to its new position
 
@@ -16,11 +15,10 @@ Roadmap:
 + Add containment option to specify containment for the draggable elements.
 + add placeholder when dragging
 + maybe set {passive: true} as third argument on event start and event move - https://developers.google.com/web/updates/2017/01/scrolling-intervention
-+ allow individual width of each instance in vertical
 + if id is not passed in options, it will get the div id or assign a number based id based on the order of instantiation(default)
++ possibly eliminate the need for having both height and width property on elt.props
 
 0.1
-
 + REname the plugin
 + Refactor shuffle method to scale out and in use the _scaleElems method, call cutoff method after shuffle
 + setChars function should update elt object as well, it does not work when moving to another container. should probably work in conjunction with the relayout method.
@@ -38,28 +36,17 @@ Roadmap:
 + fix onReorder event to only show reorder on the desired instance
 + fix lock method
 + call scale method in removeLiElem
-+ fix z-index
 + allow option to cutoff to specified instance
 + recalculate adjInst(n).distanceTo & props.divWidth/divHeight on reLayout
-+ loop over copy.adjInst(n) to be removed in setInstances
 + allow shuffle method with no parameters, otherwise should take an array of instances
-+ add support for ordered list (ol)
-+ add support for css counters, run relaoyt on drop and after cutoff to realign - not fixed yet
 + Use normalize.css
-+ Maybe refactor to only 1 trigger function and move logic to ondrag if statements
-+ Use only one loop when setting divSwitch, save the position distance to a var and only run loop if outside the saved distance
-
-+ update algorithm to allow for individual width of adjacent vertical instances :
-ThisInst.left + thisInst.w /2 > thisInst[p].left && ThisInst.left + thisInst.w /2 < thisInst[p] + thisInst[p].w
-
-+ Account for top and left position of div. Set with css grid or display: inline-block
 + Allow vertical instances to be placed vertically above/under. Create example with 4 vertical instances aligned horizontally which then realigns to 2 above and 2 under in landscape mode.
 + Validate html with w3
 + Optional sorting functionality - drag from but not reorder
 + Put crossflag on instance object - not prototype
 + Set initial div.id on elt
-+ put elt on elt.node, use setter to log changes ( oo js Zakas, N p.37 )
-+ define getter and setter for position, currentPos, size(replacing completeHeight, completeWidth). Dtermine if isVertical on getter and setter.
++ return elt, elts, thisInst and thisInst.newInst with onDropTo, onDropFrom callbacks
++ allow user to specify delay before animating elements
 
 Fixed:
 + allow dragging and dropping over other instances - Fixed
@@ -94,6 +81,17 @@ Fixed:
 + fix shaking animation in edge - DONE (occurs when .container class position is not set to absolute in css)
 + pass in the element for the adjacent container on instantiation, and set/look up adjacent container by its id - DONE
 + No need to pass adjConElts and o to triggeroff function - DONE
++ loop over copy.adjInst(n) to be removed in setInstances -DONE
++ update algorithm to allow for individual width of adjacent vertical instances :
+ThisInst.left + thisInst.w /2 > thisInst[p].left && ThisInst.left + thisInst.w /2 < thisInst[p] + thisInst[p].w -DONE
++ Use only one loop when setting divSwitch, save the position distance to a var and only run loop if outside the saved distance -DONE
++ recalculate completeHeight/completeWidth when adding element dragged from container with a different width - DONE
++ correct bug causing cutOff to not calculate properly - DONE
++ fix z-index - DONE
++ Multiple container drop ( long term ) - DONE
++ allow individual width of each instance in vertical -DONE
++ Setup with css grid - DONE
++ define getter and setter for position, size -DONE
 
 Partially fixed:
 + prevent multitouch !!! - The element will freeze and animate back if multi touch is detected. Find a way to simple ignore additional touches
