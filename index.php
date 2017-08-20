@@ -21,8 +21,11 @@ if(isset($_GET['p']) && strlen($_GET['p'])>0)
 <body>
 	<div id="getPHP"><?php echo $server; ?></div>
 	<div class="container">
-	  <?php include 'examples_js/examples/vertical.php';?>
-     <div class="grid">
+		<div class="grid-vertical">
+	      <?php include 'examples_js/examples/vertical.php';?>
+		</div>
+
+		 <div class="grid-horizontal">
        <?php include 'examples_js/examples/horizontal.php';?>
 	   </div>
 	</div>
