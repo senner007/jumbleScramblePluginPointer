@@ -34,13 +34,13 @@ function _onDrag(elt, thisInst) { // Drag
 
   var dir = o.isVertical ? 'left' : 'top';
    ////////////////////////////////////////////////////////////////////////
-  // if (thisInst.emptySpace) {
-  //   var ePos = thisInst.props.divOffset[dir] + posObj[dir];
-  //   if (ePos < thisInst.emptySpace.max && ePos > thisInst.emptySpace.min) {
-  //     console.log('EMPTY SPACE!')
-  //     return;
-  //   }
-  // }
+  if (thisInst.emptySpace) {
+    var ePos = thisInst.props.divOffset[dir] + posObj[dir];
+    if (ePos < thisInst.emptySpace.max && ePos > thisInst.emptySpace.min) {
+      console.log('EMPTY SPACE!')
+      return;
+    }
+  }
    ////////////////////////////////////////////////////////////////////////
   var measure = o.isVertical ? 'divWidth' : 'divHeight',
     thisInstMid = posObj[dir] + thisInst.props[measure] / 2, // the middle point of the dragging element
@@ -50,7 +50,7 @@ function _onDrag(elt, thisInst) { // Drag
 
   if (home && thisInst.crossFlag == true) { // go back to originating container
   /////////////////////////////////
-  //  delete thisInst.emptySpace;
+   delete thisInst.emptySpace;
   ////////////////////////////////////
     onTrigger._deleteElt(thisInst);
     thisInst.crossFlag = false;
@@ -58,7 +58,7 @@ function _onDrag(elt, thisInst) { // Drag
 
   } else if (inNewInst) { // still in new instance container
     /////////////////////////////////
-    //  delete thisInst.emptySpace;
+     delete thisInst.emptySpace;
     ////////////////////////////////////
     var adjConElts = thisInst.newInst.elts;
 
@@ -82,59 +82,59 @@ function _onDrag(elt, thisInst) { // Drag
     }
     if (adjConElts == undefined) { // in empty space
          /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      // thisInst.emptySpace = {};
-      //
-      // if (posObj[dir] < 0) {
-      //
-      //   for (let val of thisInst.adjCon) {
-      //     if (thisInst[val].props.divOffset[dir] < (thisInst.props.divOffset[dir] + posObj[dir])) {
-      //       var min = min || thisInst[val];
-      //       if (thisInst[val].props.divOffset[dir] > min.props.divOffset[dir]) {
-      //         min = thisInst[val];
-      //       }
-      //     }
-      //   }
-      //
-      //   var max = thisInst;
-      //   var minOffset = min ? min.props.divOffset[dir] : Number.NEGATIVE_INFINITY;
-      //
-      //   for (let val of thisInst.adjCon) {
-      //     var valOffset = thisInst[val].props.divOffset[dir];
-      //     if (valOffset > minOffset) {
-      //       if (valOffset < max.props.divOffset[dir]) {
-      //         max = thisInst[val];
-      //       }
-      //     }
-      //   }
-      //
-      //   thisInst.emptySpace.min = min != undefined ? min.props.divOffset[dir] + min.props[measure] / 2 : Number.NEGATIVE_INFINITY
-      //   thisInst.emptySpace.max = max.props.divOffset[dir] - max.props[measure] / 2
-      //
-      //
-      // } else {
-      //   for (let val of thisInst.adjCon) {
-      //     if (thisInst[val].props.divOffset[dir] > (thisInst.props.divOffset[dir] + posObj[dir])) {
-      //       var max = max || thisInst[val];
-      //       if (thisInst[val].props.divOffset[dir] < max.props.divOffset[dir]) {
-      //         max = thisInst[val];
-      //       }
-      //     }
-      //   }
-      //   var min = thisInst;
-      //   var maxOffset = max ? max.props.divOffset[dir] : Number.POSITIVE_INFINITY
-      //   for (let val of thisInst.adjCon) {
-      //     var valOffset = thisInst[val].props.divOffset[dir];
-      //     if (valOffset < maxOffset) {
-      //       if (valOffset > min.props.divOffset[dir]) {
-      //         min = thisInst[val];
-      //       }
-      //     }
-      //   }
-      //
-      //   thisInst.emptySpace.min = min.props.divOffset[dir] + min.props[measure] - thisInst.props[measure] / 2;
-      //   thisInst.emptySpace.max = max != undefined ? max.props.divOffset[dir] - thisInst.props[measure] / 2 : Number.POSITIVE_INFINITY
-      //
-      // }
+      thisInst.emptySpace = {};
+
+      if (posObj[dir] < 0) {
+
+        for (let val of thisInst.adjCon) {
+          if (thisInst[val].props.divOffset[dir] < (thisInst.props.divOffset[dir] + posObj[dir])) {
+            var min = min || thisInst[val];
+            if (thisInst[val].props.divOffset[dir] > min.props.divOffset[dir]) {
+              min = thisInst[val];
+            }
+          }
+        }
+
+        var max = thisInst;
+        var minOffset = min ? min.props.divOffset[dir] : Number.NEGATIVE_INFINITY;
+
+        for (let val of thisInst.adjCon) {
+          var valOffset = thisInst[val].props.divOffset[dir];
+          if (valOffset > minOffset) {
+            if (valOffset < max.props.divOffset[dir]) {
+              max = thisInst[val];
+            }
+          }
+        }
+
+        thisInst.emptySpace.min = min != undefined ? min.props.divOffset[dir] + min.props[measure] / 2 : Number.NEGATIVE_INFINITY
+        thisInst.emptySpace.max = max.props.divOffset[dir] - max.props[measure] / 2
+
+
+      } else {
+        for (let val of thisInst.adjCon) {
+          if (thisInst[val].props.divOffset[dir] > (thisInst.props.divOffset[dir] + posObj[dir])) {
+            var max = max || thisInst[val];
+            if (thisInst[val].props.divOffset[dir] < max.props.divOffset[dir]) {
+              max = thisInst[val];
+            }
+          }
+        }
+        var min = thisInst;
+        var maxOffset = max ? max.props.divOffset[dir] : Number.POSITIVE_INFINITY
+        for (let val of thisInst.adjCon) {
+          var valOffset = thisInst[val].props.divOffset[dir];
+          if (valOffset < maxOffset) {
+            if (valOffset > min.props.divOffset[dir]) {
+              min = thisInst[val];
+            }
+          }
+        }
+
+        thisInst.emptySpace.min = min.props.divOffset[dir] + min.props[measure] - thisInst.props[measure] / 2;
+        thisInst.emptySpace.max = max != undefined ? max.props.divOffset[dir] - thisInst.props[measure] / 2 : Number.POSITIVE_INFINITY
+
+      }
       ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       onTrigger._homeEltsClose(elt, elts, thisInst);
       onTrigger._deleteElt(thisInst);
@@ -304,7 +304,7 @@ var eltsReorder = {
 function _onStop(elt, thisInst) { // Stop
 
   /////////////////////////////////
-  //  delete thisInst.emptySpace;
+   delete thisInst.emptySpace;
   ////////////////////////////////////
   elt.endDate = new Date();
   elt.dragSpeed = (elt.endDate.getTime() - elt.startDate.getTime()) / 1000;
