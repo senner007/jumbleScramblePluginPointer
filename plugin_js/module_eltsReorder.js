@@ -18,106 +18,151 @@ import {
 // ES6 MODULE IMPORT/EXPORT
 ////////////////////////////
 
+
 var posObj = {}
 
 function _onDrag(elt, thisInst) { // Drag
 
   var elts = thisInst.elts,
     o = thisInst.options,
-    eltPos = {
-      top: elt.currentPos.top,
-      left: elt.currentPos.left
-    }
+    oldPos = posObj; //find the old position stored on the object
 
-  //must be saved to a global object. (Possibly to avoid random
-  // occurrences of non moving objects on ipad)
-  var oldPos = posObj; //find the old position stored on the object
+  posObj = {
+    top: elt.props.currentPos.top,
+    left: elt.props.currentPos.left
+  }; //the elt current position
 
-  posObj = eltPos; //its current position derived from $draggable object
+  var dir = o.isVertical ? 'left' : 'top';
+   ////////////////////////////////////////////////////////////////////////
+  // if (thisInst.emptySpace) {
+  //   var ePos = thisInst.props.divOffset[dir] + posObj[dir];
+  //   if (ePos < thisInst.emptySpace.max && ePos > thisInst.emptySpace.min) {
+  //     console.log('EMPTY SPACE!')
+  //     return;
+  //   }
+  // }
+   ////////////////////////////////////////////////////////////////////////
+  var measure = o.isVertical ? 'divWidth' : 'divHeight',
+    thisInstMid = posObj[dir] + thisInst.props[measure] / 2, // the middle point of the dragging element
+    home = thisInstMid > 0 && thisInstMid < thisInst.props[measure], // when the element is within its own instance(thisInst)
+    inNewInst = thisInst.newInst && thisInstMid > thisInst.newInst.distanceTo && thisInstMid < thisInst.newInst.distanceTo + thisInst.newInst.props[measure];
 
-  if (thisInst.adjInst1) { //if it has adjacent instances and is vertical
 
-    var dir = o.isVertical ? 'left' : 'top',
-        measure = o.isVertical ? 'divWidth' : 'divHeight',
-        adjConLenght = thisInst.adjCon.length;
+  if (home && thisInst.crossFlag == true) { // go back to originating container
+  /////////////////////////////////
+  //  delete thisInst.emptySpace;
+  ////////////////////////////////////
+    onTrigger._deleteElt(thisInst);
+    thisInst.crossFlag = false;
+    onTrigger._homeEltsOpen(elt, elts, thisInst);
 
+  } else if (inNewInst) { // still in new instance container
+    /////////////////////////////////
+    //  delete thisInst.emptySpace;
+    ////////////////////////////////////
+    var adjConElts = thisInst.newInst.elts;
 
-    for (var i = 0; i < adjConLenght; i++) {
+  } else if (thisInst.adjInst1 && !home) { // if the element has moved to a new instance and no longer within home distance
+
+    thisInst.crossFlag = true;
+
+    for (var i = 0, adjLenght = thisInst.adjCon.length; i < adjLenght; i++) {
       var p = thisInst.adjCon[i];
-      //  console.log(posObj[dir])
-
-      if (posObj[dir] <= (  thisInst[p].distanceTo + thisInst[p].props[measure] / 2  ) && posObj[dir] >= ( thisInst[p].distanceTo - thisInst[p].props[measure] / 2 )   ) {
-
-        for (var ii = 0; ii < adjConLenght; ii++) {
-
-          if (thisInst.adjCon[ii] != p && thisInst[thisInst.adjCon[ii]].currentlyIn == true) {  // all the instances that elt is currently not moving in that have their ptoperty currentlyIn set to true
-            onTrigger.triggerOff(thisInst);
-            thisInst[thisInst.adjCon[ii]].currentlyIn = false;
-            break;
-          }
-
-        }
-        var adjConElts = thisInst[p].elts;
-        thisInst.newInst = thisInst[p]
-        thisInst[p].currentlyIn = true;
-        var dirSwitch = true;
+      var dropLimit = thisInst[p].props.ulSize < thisInst[p].props.dropLimit || thisInst[p].props.dropLimit == false;
+      if (thisInstMid < thisInst[p].distanceTo + thisInst[p].props[measure] && thisInstMid > thisInst[p].distanceTo && dropLimit) { // found new instance
+        onTrigger._deleteElt(thisInst); // delete element from prvious instance(thisInst.newInst) and animate
+        thisInst.newInst = thisInst[p];
+        var adjConElts = thisInst.newInst.elts;
+        onTrigger._addElt(elt, adjConElts, elts, o, thisInst);
+        onTrigger._homeEltsClose(elt, elts, thisInst);
 
         break;
       }
+
     }
+    if (adjConElts == undefined) { // in empty space
+         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      // thisInst.emptySpace = {};
+      //
+      // if (posObj[dir] < 0) {
+      //
+      //   for (let val of thisInst.adjCon) {
+      //     if (thisInst[val].props.divOffset[dir] < (thisInst.props.divOffset[dir] + posObj[dir])) {
+      //       var min = min || thisInst[val];
+      //       if (thisInst[val].props.divOffset[dir] > min.props.divOffset[dir]) {
+      //         min = thisInst[val];
+      //       }
+      //     }
+      //   }
+      //
+      //   var max = thisInst;
+      //   var minOffset = min ? min.props.divOffset[dir] : Number.NEGATIVE_INFINITY;
+      //
+      //   for (let val of thisInst.adjCon) {
+      //     var valOffset = thisInst[val].props.divOffset[dir];
+      //     if (valOffset > minOffset) {
+      //       if (valOffset < max.props.divOffset[dir]) {
+      //         max = thisInst[val];
+      //       }
+      //     }
+      //   }
+      //
+      //   thisInst.emptySpace.min = min != undefined ? min.props.divOffset[dir] + min.props[measure] / 2 : Number.NEGATIVE_INFINITY
+      //   thisInst.emptySpace.max = max.props.divOffset[dir] - max.props[measure] / 2
+      //
+      //
+      // } else {
+      //   for (let val of thisInst.adjCon) {
+      //     if (thisInst[val].props.divOffset[dir] > (thisInst.props.divOffset[dir] + posObj[dir])) {
+      //       var max = max || thisInst[val];
+      //       if (thisInst[val].props.divOffset[dir] < max.props.divOffset[dir]) {
+      //         max = thisInst[val];
+      //       }
+      //     }
+      //   }
+      //   var min = thisInst;
+      //   var maxOffset = max ? max.props.divOffset[dir] : Number.POSITIVE_INFINITY
+      //   for (let val of thisInst.adjCon) {
+      //     var valOffset = thisInst[val].props.divOffset[dir];
+      //     if (valOffset < maxOffset) {
+      //       if (valOffset > min.props.divOffset[dir]) {
+      //         min = thisInst[val];
+      //       }
+      //     }
+      //   }
+      //
+      //   thisInst.emptySpace.min = min.props.divOffset[dir] + min.props[measure] - thisInst.props[measure] / 2;
+      //   thisInst.emptySpace.max = max != undefined ? max.props.divOffset[dir] - thisInst.props[measure] / 2 : Number.POSITIVE_INFINITY
+      //
+      // }
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      onTrigger._homeEltsClose(elt, elts, thisInst);
+      onTrigger._deleteElt(thisInst);
+
+      return;
+    }
+
   }
-/*-------------------------------------------------------------------------------------------------------------*/
 
-  if (dirSwitch && thisInst.crossFlag == false) {
-
-    //  if (o.dropLimit == false || !adjConElts[adjConElts.length - 1] || adjConElts[adjConElts.length - 1].pos.top + adjConElts[adjConElts.length - 1].completeHeight <= thisInst.adjInst.props.dropLimit) {
-    // if droplimit is false - or - if the adjacent container is empty  - or - if the last items position is not above dropLimit then move to new container. Otherwise go back
-    if (thisInst.newInst.props.ulSize < thisInst.newInst.props.dropLimit || thisInst.newInst.props.dropLimit == false) {
-
-      onTrigger.triggerOn(elt, adjConElts, elts, o, thisInst);
-    }
-
-  };
-
-  if (!dirSwitch && thisInst.crossFlag == true) { // go back to originating container
-
-    var home = posObj[dir] > (  0 - thisInst.props[measure] /2   )  && posObj[dir] < (  thisInst.props[measure] /2)  ; // only execute if moving within home instance distance
-                                                                                                                      // of home instance -/+ instance (width/height /2)
-    if (home) {
-
-      onTrigger.triggerOff(thisInst);
-
-      for (var i = 0; i < elts.length; i++) { // Loop over originating Container elements, animating them and updating their properties
-        eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
-
-      }
-    }
-    else { return;}
-  };
 
   /*-------------------------------------------------------------------------------------------------------------*/
-  var move;
-  if (!o.isVertical && posObj.left != oldPos.left) { // check whether the move is
-    move = (posObj.left > oldPos.left ? 'forward' : 'backward'); // forward, backward, up or down
-  } else if (o.isVertical && posObj.top != oldPos.top) {
-    move = (posObj.top > oldPos.top ? "down" : "up");
-  } else {
-    return;
-  } // doing nothing
-
-  /*-------------------------------------------------------------------------------------------------------------*/
-
-  if (thisInst.crossFlag) {
+  if (thisInst.crossFlag == true) {
     elts = adjConElts;
-    thisInst.added.currentPos = elt.currentPos
-    elt = thisInst.added
+    thisInst.added.props.currentPos = elt.props.currentPos;
+    elt = thisInst.added;
   }
-  if (move == 'forward' || move == 'down') {
-    eltsReorder._eltsMoveBackOrUp(elt, elts, thisInst);
-  };
-  if (move == "backward" || move == 'up') {
-    eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
+
+  if (!o.isVertical && posObj.left != oldPos.left) { // move horizontally
+
+    posObj.left > oldPos.left ? eltsReorder._eltsMoveBackOrUp(elt, elts, thisInst) : eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
+
+  } else if (o.isVertical && posObj.top != oldPos.top) { // move vertically
+    posObj.top > oldPos.top ? eltsReorder._eltsMoveBackOrUp(elt, elts, thisInst) : eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
+
+  } else { // doing nothing
+    return;
   }
+
 
 };
 /*----------------------------------------------------------------------------------------------------------------*/
@@ -125,105 +170,142 @@ function _onDrag(elt, thisInst) { // Drag
 
 var onTrigger = { //These will trigger when the elt is crossing over to connected adjacent container/instance
 
-  triggerOn: function(elt, adjConElts, elts, o, thisInst) {
+  _addElt: function(elt, adjConElts, elts, o, thisInst) {
     var objOffset = o.isVertical ? 'top' : 'left',
-      dims = o.isVertical ? 'completeHeight' : 'completeWidth';
+      adjEltsLength = adjConElts.length,
+      insertPos = adjEltsLength;
 
-    for (var i = 0; i < adjConElts.length; i++) { //Loop the array
-      if (elt.currentPos[objOffset] < adjConElts[i].pos[objOffset] + adjConElts[i][dims] / 2) {
-        var firstInLoop = i;
+    for (let i = 0; i < adjEltsLength; i++) { //Loop the array
+      if (elt.props.currentPos[objOffset] < adjConElts[i].props.pos[objOffset] + adjConElts[i].props.size / 2) {
+        insertPos = i;
         break;
       };
     };
-    firstInLoop = (firstInLoop >= 0) ? firstInLoop : adjConElts.length; // firstInLoop is the insert position
-    // check if firstInLoop is set, if not, set it to the length of the container
-    // (dropped after last item)
+    // initially set insertPos to the length of elts (dropped after last item);
     // reorder the elements in the originating container
+    var opacity = 0
 
+    ///////////////////////////////////////////////////////////
+    // optionally set elt to animate to the new width
+    // elt.style[thisInst.transitionPrefix] = 'width 100ms';
+    // elt.style.width = thisInst.newInst.props.divWidth + 'px'
+      ///////////////////////////////////////////////////////////
 
-      for (var i = elt.n + 1; i < elts.length; i++) { // originating
-        eltsReorder._eltsMoveBackOrUp(elt, elts, thisInst, true);
-        // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
+    // get the difference between the thisInst width and newInst width
+    var diff = Math.abs ( thisInst.props.divWidth - thisInst.newInst.props.divWidth)
+
+    // if new width is not same - set to undefined if in vertical
+    var setHeight = {
+      completeHeight: diff < 2  ? elt.props.completeHeight: o.isVertical ? undefined : elt.props.completeHeight,
+      completeWidth: elt.props.completeWidth
       }
 
-    thisInst.crossFlag = true;
-    var display = 'none'
 
-    thisInst.added = thisInst.addLiElem.call(thisInst.newInst, elt.innerHTML, firstInLoop, {
+
+    thisInst.added = thisInst.addLiElem.call(thisInst.newInst, elt.innerHTML, insertPos, {
       elt: false,
       elts: true
-    }, elt.completeHeight, elt.completeWidth, display);
+    }, setHeight, opacity);
 
 
   },
-  triggerOff: function(thisInst) { // going back to the originating container
+  _deleteElt: function(thisInst) { // going back to the originating container
 
-    thisInst.crossFlag = false;
     thisInst.removeLiElem.call(thisInst.newInst, thisInst.added, false);
     delete thisInst.added
+    delete thisInst.newInst;
 
   },
+  _homeEltsOpen: function(elt, elts, thisInst) {
+    for (var i = 0; i < elts.length; i++) { // Loop over originating Container elements, animate and update their properties
+      eltsReorder._eltsMoveForwardOrDown(elt, elts, thisInst);
+    }
+  },
+  _homeEltsClose: function(elt, elts, thisInst) {
+    for (let i = elt.props.n + 1; i < elts.length; i++) { // originating
+
+      eltsReorder._eltsMoveBackOrUp(elt, elts, thisInst, true);
+      // third argument is a flag to override pos check in eltsMoveDown/eltsMoveForward function
+    }
+  }
 };
 
 var eltsReorder = {
   _eltsMoveForwardOrDown: function(elt, elts, thisInst, flag) {
 
-    var dims = thisInst.options.isVertical ? 'completeHeight' : 'completeWidth';
+
     var plane = thisInst.options.isVertical ? 'top' : 'left';
+    var eltn = elt.props.n;
+    if (eltn > 0) {
 
-    if (elt.n > 0) {
+      var eltPrev = elts[eltn - 1];
+      var eltPrevMid = eltPrev.props.pos[plane] + eltPrev.props.size / 2;
+      if (elt.props.currentPos[plane] < eltPrevMid || flag) {
 
-      var eltPrev = elts[elt.n - 1];
-      var eltPrevBound = eltPrev.pos[plane] + eltPrev[dims] / 2;
-      if (elt.currentPos[plane] < eltPrevBound || flag) {
+        elt.props.pos[plane] = eltPrev.props.pos[plane]; // swap position property
+        eltPrev.props.pos[plane] += elt.props.size;
+        elts[eltn] = eltPrev; // swap index in elts array
+        elts[eltn - 1] = elt;
+        // elts[elt.props.n].props.n = elt.props.n;
+        // elt.props.n = elt.props.n - 1;
+        eltPrev.props.n++; // swap n property
+        elt.props.n--;
 
-        elt.pos[plane] = eltPrev.pos[plane];
-        eltPrev.pos[plane] += elt[dims];
-        elts[elt.n] = eltPrev;
-        elts[elt.n - 1] = elt;
-        elts[elt.n].n = elt.n;
-        elt.n = elt.n - 1;
-        this.eltsAnimate(eltPrev, -(elt[dims]), thisInst)
+        this.eltsAnimate(eltPrev, -(elt.props.size), thisInst)
       }
     }
   },
   _eltsMoveBackOrUp: function(elt, elts, thisInst, flag) { // flag disregards elt position check.
 
-    var dims = thisInst.options.isVertical ? 'completeHeight' : 'completeWidth';
+
     var plane = thisInst.options.isVertical ? 'top' : 'left';
+    var eltn = elt.props.n;
+    if (eltn < elts.length - 1) {
 
-    if (elt.n < elts.length - 1) {
+      var eltNext = elts[eltn + 1];
+      var eltNextMid = eltNext.props.pos[plane] + eltNext.props.size / 2;
+      if (elt.props.currentPos[plane] + elt.props.size > eltNextMid || flag) {
 
-      var eltNext = elts[elt.n + 1];
-      var eltNextBound = eltNext.pos[plane] + eltNext[dims] / 2;
-      if (elt.currentPos[plane] + elt[dims] > eltNextBound || flag) {
+        eltNext.props.pos[plane] = elt.props.pos[plane]; // swap position property
+        elt.props.pos[plane] += eltNext.props.size;
+        elts[eltn] = eltNext; // swap index in elts array
+        elts[eltn + 1] = elt;
+        // elts[elt.props.n].props.n = elt.props.n;
+        // elt.props.n = elt.props.n + 1;
+        eltNext.props.n--; // swap n property
+        elt.props.n++;
 
-        eltNext.pos[plane] = elt.pos[plane];
-        elt.pos[plane] += eltNext[dims];
-        elts[elt.n] = eltNext;
-        elts[elt.n + 1] = elt;
-        elts[elt.n].n = elt.n;
-        elt.n = elt.n + 1;
-
-        this.eltsAnimate(eltNext, elt[dims], thisInst)
+        this.eltsAnimate(eltNext, elt.props.size, thisInst)
       }
     }
   },
   eltsAnimate: function(elem, eltDimension, thisInst) {
 
     thisInst.div.dispatchEvent(setEvents.onReorder);
+    var o = thisInst.options;
+    var plane = o.isVertical ? 'top' : 'left';
 
-    var plane = elem.o.isVertical ? 'top' : 'left';
+    //  elem.style[thisInst.transitionPrefix] = '0s';
+    //  elem.style[plane] = elem.pos[plane] + 'px';
+    //  elem.style[thisInst.transformPrefix] = o.isVertical ? 'translate3d(0px,' + eltDimension + 'px, 0px)' : 'translate3d(' + eltDimension + 'px, 0px, 0px)';
 
-    elem.style[thisInst.transitionPrefix] = '0s';
-    elem.style[plane] = elem.pos[plane] + 'px';
-    elem.style[thisInst.transformPrefix] = elem.o.isVertical ? 'translate3d(0px,' + eltDimension + 'px, 0px)' : 'translate3d(' + eltDimension + 'px, 0px, 0px)'
+
+    // this replaces the above for performance
+    var stringCss = o.isVertical ? 'translate3d(0px,' + eltDimension + 'px, 0px)' : 'translate3d(' + eltDimension + 'px, 0px, 0px)';
+    elem.style.cssText = thisInst.transitionPrefix + ":0s;" + plane + ":" + elem.props.pos[plane] + "px;" + thisInst.transformPrefix + ':' + stringCss;
+
+
+
+
     _transToZero(elem, thisInst);
   },
 }
 
 function _onStop(elt, thisInst) { // Stop
 
+  /////////////////////////////////
+  //  delete thisInst.emptySpace;
+  ////////////////////////////////////
   elt.endDate = new Date();
   elt.dragSpeed = (elt.endDate.getTime() - elt.startDate.getTime()) / 1000;
   // elt.dragSpeed measuresthe time it takes to initialize the drag to when it is dropped. A smaller difference
@@ -242,11 +324,12 @@ function _onStop(elt, thisInst) { // Stop
   // (If the difference in time between the initialized drag and the release is less than specified,
   // it will increase the transition speed of the dropped item going to its new position)
 
-  if (thisInst.crossFlag == true) { // going to new container
+
+  if (thisInst.crossFlag == true && thisInst.newInst) { // going to new container
 
     thisInst.lock.call(thisInst.newInst);
 
-    thisInst.newInst.ul.insertBefore(thisInst.added, thisInst.newInst.elts[thisInst.added.n + 1]);
+    thisInst.newInst.ul.insertBefore(thisInst.added, thisInst.newInst.elts[thisInst.added.props.n + 1]);
     // The element (thisInst.added) is place on triggerOn,
     // but is not moved if the user subsequently reorders(by dragging) the elements.
     // Therefore it must be inserted/repositioned again
@@ -262,10 +345,22 @@ function _onStop(elt, thisInst) { // Stop
   } else { // staying in originating container
 
 
-    if (elt.nStart != elt.n) { //(elt.nStart != elt.n) only run the code in the if statement if elt is in new position
+    if (elt.nStart != elt.props.n) { //(elt.nStart != elt.n) only run the code in the if statement if elt is in new position
       // insert the dragged element into its new position efter drop in originating container
       // on condition that it has changed its position
-      thisInst.ul.insertBefore(elt, thisInst.elts[elt.n + 1]);
+
+      thisInst.ul.insertBefore(elt, thisInst.elts[elt.props.n + 1]);
+
+      elt.addEventListener('transitionend', _callback);
+
+      function _callback() {
+        console.log('afterDrop - no cut');
+        thisInst.div.dispatchEvent(setEvents.onDropTo);
+        thisInst.div.dispatchEvent(setEvents.onDropFrom);
+
+        this.removeEventListener('transitionend', _callback);
+      }
+
     }
   }
 
@@ -276,25 +371,35 @@ function _onStop(elt, thisInst) { // Stop
 
   function appendRemove() {
 
-    thisInst.added.style.display = 'block'
+    thisInst.added.style.opacity = 1
+    thisInst.options.isVertical ? thisInst.added.style.top = thisInst.added.props.pos.top + 'px' : thisInst.added.style.left = thisInst.added.props.pos.left + 'px';
     delete thisInst.added // the object that is a reference to the added object is deleted
     thisInst.removeLiElem(elt, false); // the dragged elt from the previous/starting instance is deleted once animated to its position
     thisInst.unlock.call(thisInst.newInst);
-    _scaleElems(_elemsToCut(thisInst, thisInst.newInst), thisInst);
-    thisInst.newInst.div.dispatchEvent(setEvents.onDrop);
+
+    var elmsCut = _elemsToCut(thisInst, thisInst.newInst);
+
+    thisInst.div.dispatchEvent(setEvents.onDropFrom);
+    thisInst.newInst.div.dispatchEvent(setEvents.onDropTo);
+
+    _scaleElems(elmsCut, thisInst);
 
 
-       console.clear()
-      var elts =  thisInst.newInst.elts
-    for (var i =0; i < elts.length; i++) { // originating
-        console.log('- : ' + elts[i].n)
-        console.log('pos left: ' +  elts[i].pos.left)
-        console.log('style left: ' +   elts[i].style.left)
-        console.log('pos top: ' +  elts[i].pos.top)
-        console.log('style top: ' +  elts[i].style.top)
-    };
 
 
+    // console.clear()
+    // var elts =  thisInst.newInst.elts
+    // for (var i =0; i < elts.length; i++) { // originating
+    //   console.log('- : ' + elts[i].props.n)
+    //   console.log('pos left: ' +  elts[i].pos.left)
+    //   console.log('style left: ' +   elts[i].style.left)
+    //   console.log('pos top: ' +  elts[i].pos.top)
+    //   console.log('style top: ' +  elts[i].style.top)
+    //   console.log('size: ' +  elts[i].props.size)
+    //   console.log('ulSize: ' +  thisInst.newInst.props.ulSize)
+    // };
+
+    delete thisInst.newInst
   };
 
 };
