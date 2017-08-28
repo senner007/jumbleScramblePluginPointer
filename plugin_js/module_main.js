@@ -2,7 +2,6 @@
     _shuffle,
     setEvents,
     defaults,
-    _setChars,
     transSupport,
     transitionPrefix,
     transformPrefix,

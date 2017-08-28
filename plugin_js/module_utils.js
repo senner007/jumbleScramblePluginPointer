@@ -3,7 +3,6 @@ export {
   _elemsToCut,
   setEvents,
   defaults,
-  _setChars,
   transSupport,
   transitionPrefix,
   transformPrefix,
@@ -30,9 +29,21 @@ var setEvents = {
         onDropTo: new Event('onDropTo'),
         onDropFrom: new Event('onDropFrom')
       //  afterDrop: new Event('afterDrop')
-
-
   };
+
+function _findNext(thisInst, adjInst) {   // find instance by offset which is after the instance with elements to cut
+  var plane = thisInst.options.isVertical ? 'left' : 'top';
+  var next;
+  for (let i = 0; i< thisInst.adjCon.length + 1; i++) {
+    let inst = i != thisInst.adjCon.length ? thisInst[thisInst.adjCon[i]] : thisInst;
+    if (inst.props.divOffset[plane] > adjInst.props.divOffset[plane] ) {
+      if (next == undefined || inst.props.divOffset[plane] < next.props.divOffset[plane]) {
+          next = inst;
+      }
+    }
+  }
+  return next;
+}
 
 function _elemsToCut(thisInst, adjInst) {
   if (adjInst.props.cutOff == false) {
@@ -50,6 +61,8 @@ function _elemsToCut(thisInst, adjInst) {
     ulSize -= adjInst.elts[adjInst.elts.length + counter].props.size
     counter -= 1
   }
+  var next = _findNext(thisInst, adjInst);
+  var instToAddTo = next != undefined ? next : thisInst;
 
   var addedElemsArray = [];
   if (elemsToCut.length != 0) {
@@ -59,7 +72,8 @@ function _elemsToCut(thisInst, adjInst) {
         completeHeight: elemsToCut[i].completeHeight,
         completeWidth: elemsToCut[i].completeWidth
       }
-      addedElemsArray.push(thisInst.addLiElem(elemsToCut[i].innerHTML, 0, {elt: false, elts: true}, setHeight))
+
+      addedElemsArray.push(thisInst.addLiElem.call(instToAddTo, elemsToCut[i].innerHTML, 0, {elt: false, elts: true}, setHeight))
       thisInst.removeLiElem.call(adjInst, adjInst.elts[adjInst.elts.length - 1], adjInst.transSupport, false)
     }
 
@@ -112,25 +126,25 @@ function _shuffle() {
 
 
 
-function _setChars(elt) {
-  var left = 0;
-  $.each(this.elts, function(i, e) {
-    var v = this.text();
-    if (this.hasClass('lower')) {
-      // v = v.replace( v.charAt(0), v.charAt(0).toLowerCase());
-      this.text(v.replace(v.charAt(0), v.charAt(0).toLowerCase()));
-    };
-    if (i == 0) {
-      //v = v.replace( v.charAt(0), v.charAt(0).toUpperCase() );
-      this.text(v.replace(v.charAt(0), v.charAt(0).toUpperCase()));
-    };
-    this.animate({
-      left: left + 'px',
-      top: 0
-    }, 100);
-    left += this.outerWidth(true);
-  });
-};
+// function _setChars(elt) {
+//   var left = 0;
+//   $.each(this.elts, function(i, e) {
+//     var v = this.text();
+//     if (this.hasClass('lower')) {
+//       // v = v.replace( v.charAt(0), v.charAt(0).toLowerCase());
+//       this.text(v.replace(v.charAt(0), v.charAt(0).toLowerCase()));
+//     };
+//     if (i == 0) {
+//       //v = v.replace( v.charAt(0), v.charAt(0).toUpperCase() );
+//       this.text(v.replace(v.charAt(0), v.charAt(0).toUpperCase()));
+//     };
+//     this.animate({
+//       left: left + 'px',
+//       top: 0
+//     }, 100);
+//     left += this.outerWidth(true);
+//   });
+// };
 
 var transSupport = (function() {
   var b = document.body || document.documentElement,
